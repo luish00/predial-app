@@ -1,19 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, View } from 'react-native';
+import { NavigationProp } from '@react-navigation/core';
 
 import { InputWithImage } from '../common/inputs/InputWithImage';
 import { Label } from '../common/grids/Label';
-import { Row } from '../common/Row';
 
 import { accountIcon, passwordIcon } from '../../assets/login';
 
-import styles from './login.style';
+import styles from './loginScreen.style';
 import { Container } from '../common/grids/Container';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 
-const LoginScreenScreen = () => {
+interface Porps {
+  navigation: NavigationProp<any>;
+}
+
+const LoginScreenScreen = ({ navigation }: Porps) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const onPress = () => {
     console.log('clic;');
+  };
+
+  const onForgotPassword = () => {
+    navigation.navigate('RecoveryPassword');
   };
 
   return (
@@ -26,20 +37,27 @@ const LoginScreenScreen = () => {
 
       <View style={styles.containerInputs}>
         <InputWithImage
-          keyboardType="email-address"
           image={accountIcon}
+          keyboardType="email-address"
           label="Usuario"
+          onChangeText={value => setEmail(value)}
+          placeholder="usario@gmail.com"
+          required
+          value={email}
         />
 
         <InputWithImage
-          secureTextEntry
           image={passwordIcon}
           label="Contraseña"
+          onChangeText={setPassword}
+          placeholder="*********"
+          secureTextEntry
+          value={password}
         />
 
         <PrimaryButton onPress={onPress}>Login</PrimaryButton>
 
-        <PrimaryButton borderLess onPress={onPress}>
+        <PrimaryButton borderLess onPress={onForgotPassword}>
           ¿Olvidaste tu contraseña?
         </PrimaryButton>
       </View>

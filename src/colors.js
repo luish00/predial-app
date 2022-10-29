@@ -7,4 +7,5 @@ export default {
   secondaryDark: '#004c40',
   textPriary: '#212529',
   textDar: '#212529',
+  inputError: '#dd3030',
 };

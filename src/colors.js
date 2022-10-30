@@ -5,7 +5,7 @@ export default {
   secondary: '#00796b',
   secondaryLigth: '#48a999',
   secondaryDark: '#004c40',
-  textPriary: '#212529',
-  textDar: '#212529',
+  textPrimary: '#7f888f',
+  textPrimeryDark: '#212529',
   inputError: '#dd3030',
 };

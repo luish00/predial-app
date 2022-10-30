@@ -7,6 +7,9 @@ export default StyleSheet.create({
   container: {
     padding: 16,
   },
+  containerButtons: {
+    paddingTop: 50,
+  },
   containerInputs: {
     paddingHorizontal: 30,
   },
@@ -16,5 +19,8 @@ export default StyleSheet.create({
     marginTop: 8,
     marginBottom: 32,
     width: '98%',
+  },
+  forgotButton: {
+    marginTop: 16,
   },
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ButtonProps,
+  ViewStyle,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
@@ -9,19 +9,31 @@ import {
 import colors from '../../../colors';
 
 interface Props {
+  alignSelf?:
+  | 'auto'
+  | 'center'
+  | 'flex-start'
+  | 'flex-end'
+  | 'stretch'
+  | 'baseline';
   children: string;
-  style?: ButtonProps;
+  style?: ViewStyle;
   borderLess?: boolean;
-  onPress: () => void;
+  onPress?: () => void;
+  disabled?: boolean;
+  size?: 'auto' | 'big' | 'mid' | 'small';
+  textColor?: string;
 }
 
 const stylesPrimary = StyleSheet.create({
   container: {
     alignItems: 'center',
     backgroundColor: colors.secondary,
+    borderRadius: 8,
     height: 52,
     justifyContent: 'center',
     marginVertical: 1,
+    paddingHorizontal: 8,
   },
   text: {
     color: '#fff',
@@ -35,25 +47,47 @@ const stylesBorderLess = StyleSheet.create({
     height: 52,
     justifyContent: 'center',
     marginVertical: 1,
+    minWidth: 100,
+    paddingHorizontal: 8,
   },
   text: {
     color: colors.primaryDark,
     fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
+const sizes = { auto: 'auto', big: '100%', mid: '80%', small: '60%' };
+
 const PrimaryButton: React.FC<Props> = ({
-  children,
-  style,
+  alignSelf = 'auto',
   borderLess,
+  children,
+  disabled = false,
   onPress,
+  style,
+  size = 'auto',
+  textColor,
 }) => {
   const styles = borderLess ? stylesBorderLess : stylesPrimary;
 
+  const customColor = React.useMemo(() => {
+    if (!textColor) {
+      return null;
+    }
+
+    return { color: textColor };
+  }, [textColor]);
+
   return (
-    <TouchableNativeFeedback onPress={onPress}>
-      <View style={styles.container}>
-        <Text style={styles.text}>{children}</Text>
+    <TouchableNativeFeedback onPress={onPress} disabled={disabled}>
+      <View
+        style={[
+          styles.container,
+          { alignSelf: alignSelf, width: sizes[size] },
+          style,
+        ]}>
+        <Text style={[styles.text, customColor]}>{children}</Text>
       </View>
     </TouchableNativeFeedback>
   );

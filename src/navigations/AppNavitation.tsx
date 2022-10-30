@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PrivateNavigation } from './PrivateNavigation';
 import { PublicNavigation } from './PublicNavigation';
 
-import { useAuthContext } from '../contexts/useAuthContext.js';
+import { useAuthContext } from '../contexts/useAuthContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,10 +17,10 @@ const defaultTheme = {
   },
 };
 
-const AppNavitation = ({ userToken = false }) => {
-  const { authState } = useAuthContext();
-
-  console.log('context', authState);
+const AppNavitation = () => {
+  const {
+    authState: { userToken },
+  } = useAuthContext();
 
   return (
     <NavigationContainer theme={defaultTheme}>

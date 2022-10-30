@@ -1,11 +1,72 @@
-import React, { PropsWithChildren } from 'react';
-import { Text, View } from 'react-native';
+import React, { PropsWithChildren, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import { Container } from '../common/grids/Container';
+import { Label } from '../common/grids/Label';
+import { InputWithImage } from '../common/inputs/InputWithImage';
+import { emailIcon } from '../../assets/icons';
+import { PrimaryButton } from '../common/buttons/PrimaryButton';
+import { validateEmail } from '../../utilities/utils';
+import { AlertModal } from '../common/modals/AlertModal';
+
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  formContainer: { paddingHorizontal: 44, paddingTop: 50, paddingBottom: 50 },
+});
 
 const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
+  const [value, setValue] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+
+  const toogleAlert = React.useCallback(() => {
+    setShowAlert(prev => !prev);
+  }, []);
+
+  const onForgotPassword = React.useCallback(() => {
+    if (validateEmail(value)) {
+      console.log('send', value);
+      toogleAlert();
+    }
+  }, [toogleAlert, value]);
+
   return (
-    <View>
-      <Text>Recovery Password</Text>
-    </View>
+    <>
+      <AlertModal
+        body="Se ha enviado un correo de recuperación de contraseña"
+        handlePrimaryButtonPress={toogleAlert}
+        handleSecondaryButtonPress={toogleAlert}
+        primaryText="Aceptar"
+        secondaryText="Cancelar"
+        title="Recuperación de contraseña"
+        visible={showAlert}
+      />
+
+      <Container style={styles.container}>
+        <Label textAlign="center" fontSize={30}>
+          Olvidaste tu contraseña
+        </Label>
+
+        <View style={styles.formContainer}>
+          <InputWithImage
+            image={emailIcon}
+            keyboardType="email-address"
+            label="Correo"
+            onChangeText={setValue}
+            required
+            placeholder="usuario@gmail.com"
+            returnKeyType="go"
+            value={value}
+          />
+        </View>
+
+        <PrimaryButton
+          size="small"
+          alignSelf="center"
+          onPress={onForgotPassword}>
+          Enviar
+        </PrimaryButton>
+      </Container>
+    </>
   );
 };
 

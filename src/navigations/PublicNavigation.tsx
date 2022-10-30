@@ -20,6 +20,7 @@ const PublicNavigation = () => {
       <Stack.Screen
         name="RecoveryPassword"
         component={RecoveryPasswordScreen}
+        options={{ title: 'Recuperar contraseña' }}
       />
     </>
   );

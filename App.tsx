@@ -11,7 +11,7 @@
 import React from 'react';
 
 import { AppNavitation } from './src/navigations/AppNavitation';
-import { AuthProvider } from './src/contexts/useAuthContext.js';
+import { AuthProvider } from './src/contexts/useAuthContext';
 
 const userToken = false;
 

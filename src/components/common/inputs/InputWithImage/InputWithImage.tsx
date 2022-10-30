@@ -2,71 +2,64 @@ import React, { useState } from 'react';
 import {
   ImageSourcePropType,
   KeyboardTypeOptions,
-  NativeSyntheticEvent,
-  SetStateAction,
-  StyleSheet,
   TextInput,
-  TextInputTextInputEventData,
+  ReturnKeyTypeOptions,
+  TextInputProps,
   View,
+  Text,
 } from 'react-native';
-import colors from '../../../colors';
-import { ImageIcon } from '../ImageIcon';
 
-import { Label } from '../grids/Label';
-import { Row } from '../Row';
+import { ImageIcon } from '../../ImageIcon';
 
-interface Props {
+import { Label } from '../../grids/Label';
+import { Row } from '../../Row';
+
+import styles from './InputWithImage.style';
+import { validateEmail } from '../../../../utilities/utils';
+import colors from '../../../../colors';
+
+interface Props extends TextInputProps {
+  autoFocus?: boolean;
   image?: ImageSourcePropType;
   keyboardType?: KeyboardTypeOptions | undefined;
   label: string;
   onChangeText?: React.Dispatch<React.SetStateAction<string>> | (() => void);
   placeholder?: string;
+  required?: boolean;
+  returnKeyType: ReturnKeyTypeOptions;
   secureTextEntry?: boolean;
   value: string;
-  required?: boolean;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    paddingVertical: 8,
-  },
-  inputContainer: {
-    width: '100%',
-  },
-  input: {
-    borderBottomColor: colors.secondaryDark,
-    borderBottomWidth: 2,
-    flex: 1,
-  },
-  inputError: {
-    borderBottomColor: colors.inputError,
-  },
-  imageContainer: {
-    borderBottomColor: colors.secondaryDark,
-    borderBottomWidth: 2,
-  },
-});
-
 const InputWithImage: React.FC<Props> = ({
+  autoFocus = false,
   image,
   keyboardType = 'default',
   label,
-  onChangeText,
-  placeholder,
   required,
-  secureTextEntry = false,
+  onChangeText,
   value,
+  ...rest
 }) => {
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState(false);
+  const [messageError, setMessageError] = useState('');
+
   const handleBlur = React.useCallback(() => {
-    console.log('blur', value);
     if (!required) {
       return;
     }
 
-    setError(!value || value?.trim().length === 0);
-  }, [required, value]);
+    let validations = !value || value?.trim().length === 0;
+    let message = validations ? 'Requerido' : '';
+
+    if (keyboardType === 'email-address') {
+      validations = validations || !validateEmail(value);
+      message = validations ? 'Formato de email incorrecto' : message;
+    }
+
+    setError(validations);
+    setMessageError(message);
+  }, [keyboardType, required, value]);
 
   const handleFocus = React.useCallback(() => {
     setError(false);
@@ -78,20 +71,20 @@ const InputWithImage: React.FC<Props> = ({
 
       <Row style={styles.inputContainer}>
         <TextInput
-          keyboardType={keyboardType}
+          autoFocus={autoFocus}
           onBlur={handleBlur}
           onChangeText={onChangeText}
           onFocus={handleFocus}
-          placeholder={placeholder}
-          secureTextEntry={secureTextEntry}
           style={[styles.input, error && styles.inputError]}
-          value={value}
+          {...rest}
         />
 
         <View style={[styles.imageContainer, error && styles.inputError]}>
           <ImageIcon source={image} width={30} height={30} />
         </View>
       </Row>
+
+      <Label color={colors.inputError}>{messageError}</Label>
     </View>
   );
 };

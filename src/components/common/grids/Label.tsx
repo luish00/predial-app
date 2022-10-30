@@ -11,7 +11,7 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  text: { color: colors.textPriary, fontSize: 16 },
+  text: { color: colors.textPrimary, fontSize: 16 },
 });
 
 const Label: React.FC<Props> = ({

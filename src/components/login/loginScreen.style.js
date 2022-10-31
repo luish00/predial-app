@@ -8,7 +8,7 @@ export default StyleSheet.create({
     padding: 16,
   },
   containerButtons: {
-    paddingTop: 50,
+    paddingTop: 20,
   },
   containerInputs: {
     paddingHorizontal: 30,

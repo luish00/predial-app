@@ -23,7 +23,9 @@ interface Props extends TextInputProps {
   image?: ImageSourcePropType;
   keyboardType?: KeyboardTypeOptions | undefined;
   label: string;
-  onChangeText?: React.Dispatch<React.SetStateAction<string>> | (() => void);
+  onChangeText?:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((value: string) => void);
   placeholder?: string;
   required?: boolean;
   returnKeyType: ReturnKeyTypeOptions;
@@ -84,7 +86,7 @@ const InputWithImage: React.FC<Props> = ({
         </View>
       </Row>
 
-      <Label color={colors.inputError}>{messageError}</Label>
+      {messageError && <Label color={colors.inputError}>{messageError}</Label>}
     </View>
   );
 };

@@ -10,3 +10,11 @@ export function validateEmail(email: string): boolean {
 
   return regex.test(String(email).toLowerCase());
 }
+
+export function isNumber(value: string) {
+  if (!value) {
+    return false;
+  }
+
+  return /\d/.test(value);
+}

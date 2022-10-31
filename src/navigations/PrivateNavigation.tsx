@@ -7,7 +7,11 @@ const Stack = createNativeStackNavigator();
 const PrivateNavigation = () => {
   return (
     <>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen
+        name="Home"
+        options={{ title: 'Oidem' }}
+        component={HomeScreen}
+      />
     </>
   );
 };

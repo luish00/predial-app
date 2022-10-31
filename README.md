@@ -18,3 +18,6 @@ the project directory, you can run:
 
 Run react native server
 > ### `yarn android`
+
+Clean proyect
+> ### `yarn clean`

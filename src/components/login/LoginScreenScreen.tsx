@@ -70,7 +70,7 @@ const LoginScreenScreen = ({ navigation }: Porps) => {
           onChangeText={setPassword}
           placeholder="*********"
           required
-          returnKeyType="send"
+          returnKeyType="go"
           secureTextEntry
           value={password}
         />

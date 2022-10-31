@@ -13,12 +13,10 @@ import React from 'react';
 import { AppNavitation } from './src/navigations/AppNavitation';
 import { AuthProvider } from './src/contexts/useAuthContext';
 
-const userToken = false;
-
 const App = () => {
   return (
     <AuthProvider>
-      <AppNavitation userToken={userToken} />
+      <AppNavitation />
     </AuthProvider>
   );
 };

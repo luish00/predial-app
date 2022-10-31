@@ -4,8 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreenScreen } from '../components/login/LoginScreenScreen';
 import { RecoveryPasswordScreen } from '../components/recoveryPassword/RecoveryPasswordScreen';
 
-import { NoTitleHeader } from './navigationUtils';
-
 const Stack = createNativeStackNavigator();
 
 const PublicNavigation = () => {
@@ -14,7 +12,7 @@ const PublicNavigation = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreenScreen}
-        options={NoTitleHeader}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen

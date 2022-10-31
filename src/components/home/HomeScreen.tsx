@@ -1,21 +1,29 @@
 import React, { PropsWithChildren } from 'react';
-import { Text, View } from 'react-native';
-import { useAuthContext } from '../../contexts/useAuthContext';
-import { PrimaryButton } from '../common/buttons/PrimaryButton';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+import { MyAccountsScreen } from '../myAccounts/MyAccountsScreen';
+import { MyRoutesScreen } from '../myRoutes/MyRoutesScreen';
+
+const Tab = createMaterialTopTabNavigator();
 
 const HomeScreen: React.FC<PropsWithChildren> = () => {
-  const {
-    authFunctions: { signOut },
-  } = useAuthContext();
-
   return (
-    <View>
-      <Text>HomeScreen</Text>
-      <PrimaryButton onPress={signOut}>Log out</PrimaryButton>
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="myAccounts"
+        options={{ title: 'Mis cuentas' }}
+        component={MyAccountsScreen}
+      />
+
+      <Tab.Screen
+        name="myRoutes"
+        options={{ title: 'Mi ruta' }}
+        component={MyRoutesScreen}
+      />
+    </Tab.Navigator>
   );
 };
 
-export const StackName: string = 'Home';
+export const StackName: string = 'home';
 
 export { HomeScreen };

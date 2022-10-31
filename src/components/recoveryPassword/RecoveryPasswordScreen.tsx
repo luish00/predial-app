@@ -24,7 +24,6 @@ const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
 
   const onForgotPassword = React.useCallback(() => {
     if (validateEmail(value)) {
-      console.log('send', value);
       toogleAlert();
     }
   }, [toogleAlert, value]);

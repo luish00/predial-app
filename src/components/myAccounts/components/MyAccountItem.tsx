@@ -1,5 +1,5 @@
-import { NavigationProp } from '@react-navigation/native';
 import React from 'react';
+import { NavigationProp } from '@react-navigation/native';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { AccountType } from '../../../types';
 import { Col } from '../../common/grids/Col';
@@ -22,7 +22,10 @@ interface Props {
 const MyAccountItem: React.FC<Props> = ({ item, navigation }) => {
   const onItemPress = React.useCallback(() => {
     console.log('click', item);
-  }, [item]);
+
+    // navigation.navigate('accountDetailsTab', { account: item });
+    navigation.navigate('accountDetailsTab');
+  }, [item, navigation]);
 
   return (
     <TouchableOpacity onPress={onItemPress}>

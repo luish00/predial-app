@@ -4,12 +4,12 @@ import { FlatList, View } from 'react-native';
 import { searchIcon } from '../../assets/icons';
 import { AccountType } from '../../types';
 import { InputWithImage } from '../common/inputs/InputWithImage';
-import { MyAccountItem } from './compoents/MyAccountItem';
+import { MyAccountItem } from './components/MyAccountItem';
 import { isNumber } from '../../utilities/utils';
-import { MyAccountListEmpty } from './compoents/MyAccountListEmpty';
+import { MyAccountListEmpty } from './components/MyAccountListEmpty';
 
 interface Props {
-  navigation: NavigationProp<any>;
+  tabNavigation: NavigationProp<any>;
 }
 
 const DATA_DUMMY: AccountType[] = [
@@ -35,7 +35,7 @@ const DATA_DUMMY: AccountType[] = [
   },
 ];
 
-const MyAccountsScreen: React.FC<Props> = ({ navigation }) => {
+const MyAccountsScreen: React.FC<Props> = ({ tabNavigation }) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState<AccountType[]>([]);
   const [dataFilter, setDataFilter] = useState<AccountType[]>([]);
@@ -81,7 +81,7 @@ const MyAccountsScreen: React.FC<Props> = ({ navigation }) => {
       <FlatList
         data={dataFilter}
         renderItem={({ item }) => (
-          <MyAccountItem item={item} navigation={navigation} />
+          <MyAccountItem item={item} navigation={tabNavigation} />
         )}
         keyExtractor={item => item.id}
         ListEmptyComponent={MyAccountListEmpty}

@@ -1,49 +1,30 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { NavigationProp } from '@react-navigation/native';
 import { FlatList, View } from 'react-native';
+
 import { searchIcon } from '../../assets/icons';
-import { AccountType } from '../../types';
+
+import { AccountDetailsProp } from '../../types';
+import { isNumber } from '../../utilities/utils';
+
 import { InputWithImage } from '../common/inputs/InputWithImage';
 import { MyAccountItem } from './components/MyAccountItem';
-import { isNumber } from '../../utilities/utils';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
+import { HomeTabChildernProps } from '../home/homeTab';
 
-interface Props {
-  tabNavigation: NavigationProp<any>;
-}
+// eslint-disable-next-line prettier/prettier
+interface Props extends HomeTabChildernProps { }
 
-const DATA_DUMMY: AccountType[] = [
-  {
-    id: '013',
-    name: 'Juanito peres',
-    address: 'addres 1',
-  },
-  {
-    id: '02',
-    name: 'María la del barrio',
-    address: 'addres 2',
-  },
-  {
-    id: '03',
-    name: 'Checo peres',
-    address: 'addres 3',
-  },
-  {
-    id: '042',
-    name: 'Don juan',
-    address: 'addres 4',
-  },
-];
-
-const MyAccountsScreen: React.FC<Props> = ({ tabNavigation }) => {
+const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
   const [search, setSearch] = useState('');
-  const [data, setData] = useState<AccountType[]>([]);
-  const [dataFilter, setDataFilter] = useState<AccountType[]>([]);
+  const [data, setData] = useState<AccountDetailsProp[]>([]);
+  const [dataFilter, setDataFilter] = useState<AccountDetailsProp[]>([]);
 
   useEffect(() => {
-    setData(DATA_DUMMY);
-    setDataFilter(DATA_DUMMY);
-  }, []);
+    if (accounts.length > 0) {
+      setData(accounts);
+      setDataFilter(accounts);
+    }
+  }, [accounts]);
 
   const handleChangeSarch = useCallback(
     (value: string) => {
@@ -54,13 +35,15 @@ const MyAccountsScreen: React.FC<Props> = ({ tabNavigation }) => {
         return;
       }
 
-      const newData = data.filter(({ id, name }) => {
-        const isNum = isNumber(value[0]);
+      const newData = data.filter(
+        ({ AccountNumber, FirstName, MiddleName, LastName }) => {
+          const isNum = isNumber(value[0]);
+          const fullNmae = `${FirstName} ${MiddleName} ${LastName}`;
 
-        return isNum
-          ? id.includes(value)
-          : name.toLowerCase().includes(value.toLowerCase());
-      });
+          return isNum
+            ? AccountNumber.includes(value)
+            : fullNmae.toLowerCase().includes(value.toLowerCase());
+        });
 
       setDataFilter(newData);
     },
@@ -81,9 +64,9 @@ const MyAccountsScreen: React.FC<Props> = ({ tabNavigation }) => {
       <FlatList
         data={dataFilter}
         renderItem={({ item }) => (
-          <MyAccountItem item={item} navigation={tabNavigation} />
+          <MyAccountItem item={item} navigation={homeNavigation} />
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.AccountNumber}
         ListEmptyComponent={MyAccountListEmpty}
       />
     </View>

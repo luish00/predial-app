@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavigationProp } from '@react-navigation/native';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { AccountType } from '../../../types';
+import { AccountDetailsProp } from '../../../types';
 import { Col } from '../../common/grids/Col';
 import { Label } from '../../common/grids/Label';
+import { useAccountUtils } from '../../../hooks/account/useAccountUtils';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,15 +16,16 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  item: AccountType;
+  item: AccountDetailsProp;
   navigation: NavigationProp<any>;
 }
 
 const MyAccountItem: React.FC<Props> = ({ item, navigation }) => {
+  const { fullAccountName, fullAccountAddress } = useAccountUtils(item);
+
   const onItemPress = React.useCallback(() => {
     console.log('click', item);
 
-    // navigation.navigate('accountDetailsTab', { account: item });
     navigation.navigate('accountDetailsTab');
   }, [item, navigation]);
 
@@ -31,10 +33,10 @@ const MyAccountItem: React.FC<Props> = ({ item, navigation }) => {
     <TouchableOpacity onPress={onItemPress}>
       <Col style={styles.container}>
         <Label fontSize={20} fontWeight="bold">
-          {item.id}
+          {item.AccountNumber}
         </Label>
-        <Label fontSize={15}>{item.name}</Label>
-        <Label fontSize={15}>{item.address}</Label>
+        <Label fontSize={15}>{fullAccountName}</Label>
+        <Label fontSize={15}>{fullAccountAddress}</Label>
       </Col>
     </TouchableOpacity>
   );

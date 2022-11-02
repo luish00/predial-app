@@ -16,7 +16,6 @@ interface ActionStateProps {
   userToken: string | null | undefined;
 }
 
-
 const AUTH_STATE = {
   isLoading: true,
   isSignout: false,
@@ -33,7 +32,7 @@ const defaultContext = {
   authFunctions: {
     signIn: async (_data: string) => { },
     signOut: () => { },
-    signUp: async () => { },
+    signUp: async (_data: string) => { },
   },
   authState: AUTH_STATE,
 };

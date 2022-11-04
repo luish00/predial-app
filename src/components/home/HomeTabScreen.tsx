@@ -80,7 +80,7 @@ const HomeTabScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         />
       </Tab.Navigator>
     </>
-  )
+  );
 };
 
 export const StackName: string = 'home';

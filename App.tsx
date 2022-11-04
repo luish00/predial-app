@@ -10,13 +10,13 @@
 
 import React from 'react';
 
-import { AppNavitation } from './src/navigations/AppNavitation';
+import { AppNavigation } from './src/navigations/AppNavigation';
 import { AuthProvider } from './src/contexts/useAuthContext';
 
 const App = () => {
   return (
     <AuthProvider>
-      <AppNavitation />
+      <AppNavigation />
     </AuthProvider>
   );
 };

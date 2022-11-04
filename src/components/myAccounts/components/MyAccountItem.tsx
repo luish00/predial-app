@@ -16,24 +16,22 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  item: AccountDetailsProp;
+  account: AccountDetailsProp;
   navigation: NavigationProp<any>;
 }
 
-const MyAccountItem: React.FC<Props> = ({ item, navigation }) => {
-  const { fullAccountName, fullAccountAddress } = useAccountUtils(item);
+const MyAccountItem: React.FC<Props> = ({ account, navigation }) => {
+  const { fullAccountName, fullAccountAddress } = useAccountUtils(account);
 
   const onItemPress = React.useCallback(() => {
-    console.log('click', item);
-
-    navigation.navigate('accountDetailsTab');
-  }, [item, navigation]);
+    navigation.navigate('accountDetailsTab', { account });
+  }, [account, navigation]);
 
   return (
     <TouchableOpacity onPress={onItemPress}>
       <Col style={styles.container}>
         <Label fontSize={20} fontWeight="bold">
-          {item.AccountNumber}
+          {account.AccountNumber}
         </Label>
         <Label fontSize={15}>{fullAccountName}</Label>
         <Label fontSize={15}>{fullAccountAddress}</Label>

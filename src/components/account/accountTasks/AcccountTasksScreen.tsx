@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-const AcccountTasksScreen: React.FC = () => {
+const AccountTasksScreen: React.FC = () => {
   return (
     <View>
-      <Text>AcccountTasksScreen</Text>
+      <Text>AccountTasksScreen</Text>
     </View>
   );
 };
 
-export { AcccountTasksScreen };
+export { AccountTasksScreen };

@@ -1,4 +1,8 @@
-import { NavigationProp } from '@react-navigation/native';
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+} from '@react-navigation/native';
 
 export interface AccountType {
   id: string;
@@ -8,6 +12,7 @@ export interface AccountType {
 
 export interface NavigationPropBase {
   navigation: NavigationProp<any>;
+  route?: RouteProp;
 }
 
 export interface AccountDetailsProp {

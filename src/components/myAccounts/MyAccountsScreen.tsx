@@ -63,9 +63,9 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
 
       <FlatList
         data={dataFilter}
-        renderItem={({ item }) => (
-          <MyAccountItem item={item} navigation={homeNavigation} />
-        )}
+        renderItem={({ item }) => {
+          return <MyAccountItem account={item} navigation={homeNavigation} />;
+        }}
         keyExtractor={item => item.AccountNumber}
         ListEmptyComponent={MyAccountListEmpty}
       />

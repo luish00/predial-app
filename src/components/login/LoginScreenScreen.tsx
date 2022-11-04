@@ -13,11 +13,11 @@ import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
 import { useAuthContext } from '../../contexts/useAuthContext';
 
-interface Porps {
+interface Props {
   navigation: NavigationProp<any>;
 }
 
-const LoginScreenScreen = ({ navigation }: Porps) => {
+const LoginScreenScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

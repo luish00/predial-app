@@ -17,7 +17,7 @@ const defaultTheme = {
   },
 };
 
-const AppNavitation = () => {
+const AppNavigation = () => {
   const {
     authState: { userToken },
   } = useAuthContext();
@@ -31,4 +31,4 @@ const AppNavitation = () => {
   );
 };
 
-export { AppNavitation };
+export { AppNavigation };

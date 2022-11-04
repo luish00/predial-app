@@ -16,7 +16,7 @@ interface ActionStateProps {
   userToken: string | null | undefined;
 }
 
-const AUTH_STATE = {
+const AUTH_STATE: ActionStateProps = {
   isLoading: true,
   isSignout: false,
   userToken: null,

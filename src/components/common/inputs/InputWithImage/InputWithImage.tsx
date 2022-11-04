@@ -9,7 +9,7 @@ import {
   Text,
 } from 'react-native';
 
-import { ImageIcon } from '../../ImageIcon';
+import { ImageIcon } from '../../images/ImageIcon';
 
 import { Label } from '../../grids/Label';
 import { Row } from '../../Row';
@@ -30,7 +30,7 @@ interface Props extends TextInputProps {
   required?: boolean;
   returnKeyType: ReturnKeyTypeOptions;
   secureTextEntry?: boolean;
-  value: string;
+  value?: string;
 }
 
 const InputWithImage: React.FC<Props> = ({
@@ -40,7 +40,7 @@ const InputWithImage: React.FC<Props> = ({
   label,
   required,
   onChangeText,
-  value,
+  value = '',
   ...rest
 }) => {
   const [error, setError] = useState(false);
@@ -78,6 +78,7 @@ const InputWithImage: React.FC<Props> = ({
           onChangeText={onChangeText}
           onFocus={handleFocus}
           style={[styles.input, error && styles.inputError]}
+          value={value}
           {...rest}
         />
 

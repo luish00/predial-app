@@ -25,8 +25,8 @@ export interface AccountDetailsProp {
   City?: string;
   State?: string;
   Country?: string;
-  Latitud?: number;
-  Latitud?: number;
+  Latitud?: string;
+  Longitud?: string;
   Amount?: number;
   Phone?: string;
   Mobile?: string;

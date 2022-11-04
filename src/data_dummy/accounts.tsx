@@ -1,0 +1,46 @@
+import { AccountDetailsProp } from '../types';
+
+export const DATA_DUMMY: AccountDetailsProp[] = [
+  {
+    AccountNumber: '013',
+    FirstName: 'Juanito',
+    LastName: 'Perez',
+    Street: 'Calle 1',
+    State: 'Culicán',
+    Latitud: '24.8070705',
+    Longitud: '-107.3918727',
+  },
+  {
+    AccountNumber: '023',
+    FirstName: 'Maria',
+    MiddleName: 'la del barrio',
+    LastName: 'Ochoa',
+    Street: 'Calle 2',
+    State: 'Culicán',
+    PostalCode: '80450',
+    Latitud: '24.8070705',
+    Longitud: '-107.3918727',
+  },
+  {
+    AccountNumber: '03',
+    FirstName: 'Checo',
+    MiddleName: 'del barrio',
+    LastName: 'Perez',
+    Street: 'Calle 3',
+    State: 'Navolato',
+    PostalCode: '80450',
+    Latitud: '24.8070705',
+    Longitud: '-107.3918727',
+  },
+  {
+    AccountNumber: '042',
+    FirstName: 'Jose',
+    MiddleName: 'Mario',
+    LastName: 'Medina',
+    Street: 'Calle 4',
+    State: 'Culicán',
+    PostalCode: '80450',
+    Latitud: '24.8070705',
+    Longitud: '-107.3918727',
+  },
+];

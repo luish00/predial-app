@@ -18,8 +18,8 @@ interface Props {
 }
 
 const LoginScreenScreen = ({ navigation }: Props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test@asd.com');
+  const [password, setPassword] = useState('123');
 
   const authContext = useAuthContext();
   const {

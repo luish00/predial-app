@@ -70,7 +70,7 @@ function authReducer(prevState: ActionStateProps, action: ActionProp): ActionSta
   }
 }
 
-export function useProviderAuth() {
+function useProviderAuth() {
   const [state, dispatch] = useReducer(authReducer, AUTH_STATE);
 
   const authFunctions = useMemo(

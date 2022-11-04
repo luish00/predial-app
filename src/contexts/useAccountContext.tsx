@@ -8,11 +8,11 @@ interface Props {
 
 interface ActionProp {
   type: ACTIONS;
-  payload?: AccountDetailsProp;
+  payload?: AccountDetailsProp | null | undefined;
 }
 
 interface ActionStateProps {
-  account: AccountDetailsProp | undefined | null;
+  account: AccountDetailsProp | null | undefined;
 }
 
 const INITIAL_STATE: ActionStateProps = {
@@ -20,18 +20,17 @@ const INITIAL_STATE: ActionStateProps = {
 };
 
 enum ACTIONS {
-  loadAccount = 'LOAD_ACCOUNT',
+  loadAccount = 'ACCOUNT_LOADED',
 }
 
 const defaultContext = {
   accountFunctions: {
     loadAccount: async (_data: AccountDetailsProp) => { },
-    signIn: async (_data: string) => { },
   },
   accountState: INITIAL_STATE,
 };
 
-export const AccountContext = createContext(defaultContext);
+const AccountContext = createContext(defaultContext);
 
 export function useAccountContext() {
   return useContext(AccountContext);
@@ -51,7 +50,7 @@ function reducer(prevState: ActionStateProps, action: ActionProp): ActionStatePr
   }
 }
 
-export function useProviderAccount() {
+function useProvider() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   const accountFunctions = useMemo(
@@ -63,11 +62,11 @@ export function useProviderAccount() {
     [],
   );
 
-  return { accountFunctions, accountStat0e: state };
+  return { accountFunctions, accountState: state };
 }
 
 export const AccountProvider: React.FC<Props> = ({ children }) => {
-  const account = useProviderAccount();
+  const account = useProvider();
 
   return <AccountContext.Provider value={account}>{children}</AccountContext.Provider>;
 };

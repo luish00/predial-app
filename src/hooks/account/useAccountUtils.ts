@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { AccountDetailsProp } from '../../types';
 
-const useAccountUtils = (account: AccountDetailsProp) => {
+const useAccountUtils = (account: AccountDetailsProp | null | undefined) => {
   const fullAccountName = useMemo(() => {
     if (!account) {
       return '';

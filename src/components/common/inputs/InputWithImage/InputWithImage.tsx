@@ -23,12 +23,13 @@ interface Props extends TextInputProps {
   image?: ImageSourcePropType;
   keyboardType?: KeyboardTypeOptions | undefined;
   label: string;
+  minLength?: number;
   onChangeText?:
-    | React.Dispatch<React.SetStateAction<string>>
-    | ((value: string) => void);
+  | React.Dispatch<React.SetStateAction<string>>
+  | ((value: string) => void);
   placeholder?: string;
   required?: boolean;
-  returnKeyType: ReturnKeyTypeOptions;
+  returnKeyType: ReturnKeyTypeOptions | undefined;
   secureTextEntry?: boolean;
   value?: string;
 }
@@ -38,7 +39,9 @@ const InputWithImage: React.FC<Props> = ({
   image,
   keyboardType = 'default',
   label,
+  minLength,
   required,
+  returnKeyType = 'default',
   onChangeText,
   value = '',
   ...rest
@@ -47,24 +50,32 @@ const InputWithImage: React.FC<Props> = ({
   const [messageError, setMessageError] = useState('');
 
   const handleBlur = React.useCallback(() => {
-    if (!required) {
-      return;
+    let validations = false;
+    let message = '';
+
+    if ((required || value.length) && minLength) {
+      const minLengthValidation = minLength >= value.length;
+      validations = validations || minLengthValidation;
+      message = minLengthValidation ? `Tamaño minimo ${minLength}` : message;
     }
 
-    let validations = !value || value?.trim().length === 0;
-    let message = validations ? 'Requerido' : '';
-
-    if (keyboardType === 'email-address') {
+    if ((required || value.length) && keyboardType === 'email-address') {
       validations = validations || !validateEmail(value);
       message = validations ? 'Formato de email incorrecto' : message;
     }
 
+    if (required) {
+      validations = !value || value?.trim().length === 0;
+      message = validations ? 'Requerido' : '';
+    }
+
     setError(validations);
     setMessageError(message);
-  }, [keyboardType, required, value]);
+  }, [keyboardType, minLength, required, value]);
 
   const handleFocus = React.useCallback(() => {
     setError(false);
+    setMessageError('');
   }, []);
 
   return (
@@ -77,6 +88,8 @@ const InputWithImage: React.FC<Props> = ({
           onBlur={handleBlur}
           onChangeText={onChangeText}
           onFocus={handleFocus}
+          returnKeyType={returnKeyType}
+          keyboardType={keyboardType}
           style={[styles.input, error && styles.inputError]}
           value={value}
           {...rest}

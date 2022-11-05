@@ -6,6 +6,6 @@ export default {
   secondaryLigth: '#48a999',
   secondaryDark: '#004c40',
   textPrimary: '#7f888f',
-  textPrimeryDark: '#212529',
+  textPrimaryDark: '#212529',
   inputError: '#dd3030',
 };

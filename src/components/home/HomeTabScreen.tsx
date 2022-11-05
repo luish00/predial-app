@@ -4,11 +4,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { MyAccountsScreen } from '../myAccounts/MyAccountsScreen';
 import { MyRoutesScreen } from '../myRoutes/MyRoutesScreen';
 import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
-import {
-  AccountDetailsProp,
-  ContactProp,
-  NavigationPropBase,
-} from '../../types';
+import { AccountDetailsProp, NavigationPropBase } from '../../types';
 import { DATA_DUMMY } from '../../data_dummy/accounts';
 
 const Tab = createMaterialTopTabNavigator();
@@ -16,7 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 const HomeTabScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const [accounts, setAccounts] = useState<AccountDetailsProp[]>([]);
 
-  const MyAccountWraper: React.FC = () => {
+  const MyAccountWrapper: React.FC = () => {
     return <MyAccountsScreen accounts={accounts} homeNavigation={navigation} />;
   };
 
@@ -38,9 +34,8 @@ const HomeTabScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         <Tab.Screen
           name="myAccounts"
           options={{ title: 'Mis cuentas' }}
-          component={MyAccountWraper}
+          component={MyAccountWrapper}
         />
-
         <Tab.Screen
           name="myRoutes"
           options={{ title: 'Mi ruta' }}

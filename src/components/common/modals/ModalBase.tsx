@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Children } from 'react';
 import { Modal, Text, View } from 'react-native';
-import colors from '../../../../colors';
-import { PrimaryButton } from '../../buttons/PrimaryButton';
 
-import styles from './Alertmodal.style';
+import colors from '../../../colors';
+import styles from './ModalBase.style';
+
+import { PrimaryButton } from '../buttons/PrimaryButton';
 
 interface SecondaryButtonProps {
   secondaryText?: string | null;
@@ -11,7 +12,7 @@ interface SecondaryButtonProps {
 }
 
 interface AlertModalProps {
-  body: string;
+  children: React.ReactNode;
   handlePrimaryButtonPress: () => void;
   handleSecondaryButtonPress?: () => void;
   primaryText: string;
@@ -40,8 +41,8 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   );
 };
 
-const AlertModal: React.FC<AlertModalProps> = ({
-  body,
+export const ModalBase: React.FC<AlertModalProps> = ({
+  children,
   handlePrimaryButtonPress,
   handleSecondaryButtonPress,
   primaryText,
@@ -50,12 +51,12 @@ const AlertModal: React.FC<AlertModalProps> = ({
   title,
   visible,
 }) => (
-  <Modal animationType="fade" transparent visible={visible}>
+  <Modal animationType="slide" transparent visible={visible}>
     <View style={styles.overlay}>
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
 
-        <Text style={styles.body}>{body}</Text>
+        {children}
 
         <View style={styles.buttonsContainer}>
           <SecondaryButton
@@ -73,5 +74,3 @@ const AlertModal: React.FC<AlertModalProps> = ({
     </View>
   </Modal>
 );
-
-export { AlertModal };

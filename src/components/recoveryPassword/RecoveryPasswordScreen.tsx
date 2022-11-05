@@ -7,7 +7,7 @@ import { InputWithImage } from '../common/inputs/InputWithImage';
 import { emailIcon } from '../../assets/icons';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
-import { AlertModal } from '../common/modals/AlertModal';
+import { AlertModal } from '../common/modals';
 
 const styles = StyleSheet.create({
   container: { padding: 16 },

@@ -1,31 +1,24 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../../../colors';
+import colors from '../../../colors';
 
 export default StyleSheet.create({
   alignTextCenter: {
     alignItems: 'center',
   },
 
-  body: {
-    color: colors.textPrimary,
-    fontSize: 17,
-    lineHeight: 24,
-    marginTop: 20,
-    textAlign: 'center',
-  },
-
   buttonsContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     marginTop: 25,
   },
 
   content: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 8,
     paddingVertical: 24,
     paddingHorizontal: 16,
+    width: '100%',
   },
 
   overlay: {
@@ -45,6 +38,7 @@ export default StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     lineHeight: 24,
+    paddingBottom: 16,
     textAlign: 'center',
   },
 });

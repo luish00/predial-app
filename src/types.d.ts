@@ -1,8 +1,4 @@
-import {
-  NavigationProp,
-  ParamListBase,
-  RouteProp,
-} from '@react-navigation/native';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
 
 export interface AccountType {
   id: string;

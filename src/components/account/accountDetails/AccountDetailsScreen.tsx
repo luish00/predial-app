@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
   editButton: {
     paddingVertical: 16,
   },
+  cancelButton: {
+    marginRight: 16,
+  },
 });
 
 const AccountDetailsScreen: React.FC = () => {
@@ -32,8 +35,9 @@ const AccountDetailsScreen: React.FC = () => {
   } = useAccountContext();
   const [editMode, setEditMode] = useState(false);
 
-  const { accountReducer, onChangeTextAccount, initAccountReducer } =
-    useAccountState(accountState.account);
+  const { accountReducer, onChangeTextAccount } = useAccountState(
+    accountState.account,
+  );
   const { fullAccountName, fullAccountAddress } = useAccountUtils(
     accountState.account,
   );
@@ -189,7 +193,11 @@ const AccountDetailsScreen: React.FC = () => {
       <Row style={styles.editButton} justifyContent="flex-end">
         {editMode ? (
           <>
-            <PrimaryButton borderLess onPress={onEditMode}>
+            <PrimaryButton
+              style={styles.cancelButton}
+              borderLess
+              onPress={onEditMode}
+              textColor="#222">
               Cancelar
             </PrimaryButton>
 

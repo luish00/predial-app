@@ -44,7 +44,7 @@ export interface AttachmentProp {
 
 export interface ContactProp {
   IsOwner: boolean;
-  Name: string;
+  Name?: string;
   Relationship: string;
   FirstName: string;
   MiddleName?: string;

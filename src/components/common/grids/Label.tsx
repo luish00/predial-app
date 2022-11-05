@@ -3,7 +3,7 @@ import { Text, StyleSheet, TextStyle } from 'react-native';
 import colors from '../../../colors';
 
 interface Props {
-  children: string;
+  children: string | null | undefined;
   style?: TextStyle;
   fontSize?: number;
   fontWeight?:

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { AccountDetailsProp } from '../../types';
+import { AccountDetailsProp, ContactProp } from '../../types';
 
 const useAccountUtils = (account: AccountDetailsProp | null | undefined) => {
   const fullAccountName = useMemo(() => {
@@ -30,4 +30,18 @@ const useAccountUtils = (account: AccountDetailsProp | null | undefined) => {
   return { fullAccountName, fullAccountAddress };
 };
 
-export { useAccountUtils };
+const useAccountContactUtils = (contact: ContactProp | null | undefined) => {
+  const fullContactsName = useMemo(() => {
+    if (!contact) {
+      return '';
+    }
+
+    const value = [contact.FirstName, contact.MiddleName, contact.LastName];
+
+    return value.filter(item => !!item).join(' ');
+  }, [contact]);
+
+  return { fullContactsName };
+};
+
+export { useAccountUtils, useAccountContactUtils };

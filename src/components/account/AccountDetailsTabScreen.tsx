@@ -12,6 +12,8 @@ import {
   useAccountContext,
 } from '../../contexts/useAccountContext';
 
+import { CONTACTS_DUMMY } from '../../data_dummy/contacts';
+
 const Tab = createMaterialTopTabNavigator();
 
 const AccountDetailsTabWrapperScreen: React.FC<NavigationPropBase> = () => (
@@ -28,6 +30,7 @@ const AccountDetailsTabScreen: React.FC = () => {
 
   useEffect(() => {
     accountFunctions.loadAccount(account);
+    accountFunctions.loadContacts(CONTACTS_DUMMY);
   }, [account, accountFunctions]);
 
   return (

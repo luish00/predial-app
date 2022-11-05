@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
-import { AccountDetailsProp } from '../types';
+import { AccountDetailsProp, ContactProp } from '../types';
 
 interface Props {
   children: React.ReactNode;
@@ -9,23 +9,28 @@ interface Props {
 interface ActionProp {
   type: ACTIONS;
   payload?: AccountDetailsProp | null | undefined;
+  contacts?: ContactProp[] | null | undefined;
 }
 
 interface ActionStateProps {
   account: AccountDetailsProp | null | undefined;
+  contacts: ContactProp[] | null | undefined;
 }
 
 const INITIAL_STATE: ActionStateProps = {
   account: null,
+  contacts: [],
 };
 
 enum ACTIONS {
   loadAccount = 'ACCOUNT_LOADED',
+  loadContacts = 'CONTACTS_LOADED'
 }
 
 const defaultContext = {
   accountFunctions: {
     loadAccount: async (_data: AccountDetailsProp) => { },
+    loadContacts: async (_data: ContactProp[]) => { },
   },
   accountState: INITIAL_STATE,
 };
@@ -45,6 +50,11 @@ function reducer(prevState: ActionStateProps, action: ActionProp): ActionStatePr
         ...prevState,
         account: payload,
       };
+    case ACTIONS.loadContacts:
+      return {
+        ...prevState,
+        contacts: action.contacts,
+      };
     default:
       return prevState;
   }
@@ -57,6 +67,9 @@ function useProvider() {
     () => ({
       loadAccount: async (data: AccountDetailsProp) => {
         dispatch({ type: ACTIONS.loadAccount, payload: data });
+      },
+      loadContacts: async (data: ContactProp[]) => {
+        dispatch({ type: ACTIONS.loadContacts, contacts: data });
       },
     }),
     [],

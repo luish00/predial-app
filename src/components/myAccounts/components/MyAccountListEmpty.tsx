@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import { Label } from '../../common/grids/Label';
 
 const MyAccountListEmpty: React.FC = () => (

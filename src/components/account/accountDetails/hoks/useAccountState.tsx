@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useState, useCallback } from 'react';
-import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+// import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { AccountDetailsProp } from '../../../../types';
 
 const useAccountState = (account: AccountDetailsProp | null | undefined) => {
@@ -21,15 +21,6 @@ const useAccountState = (account: AccountDetailsProp | null | undefined) => {
     }
   }, []);
 
-  const initAccountReducer = useCallback(
-    (initialState: AccountDetailsProp) => {
-      if (!state) {
-        setState(initialState);
-      }
-    },
-    [state],
-  );
-
   useEffect(() => {
     if (state) {
       return;
@@ -41,7 +32,6 @@ const useAccountState = (account: AccountDetailsProp | null | undefined) => {
   return {
     accountReducer: state,
     onChangeTextAccount: onChangeText,
-    initAccountReducer,
   };
 };
 

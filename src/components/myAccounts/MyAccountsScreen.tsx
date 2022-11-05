@@ -26,7 +26,7 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
     }
   }, [accounts]);
 
-  const handleChangeSarch = useCallback(
+  const handleChangeSearch = useCallback(
     (value: string) => {
       setSearch(value);
 
@@ -38,11 +38,11 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
       const newData = data.filter(
         ({ AccountNumber, FirstName, MiddleName, LastName }) => {
           const isNum = isNumber(value[0]);
-          const fullNmae = `${FirstName} ${MiddleName} ${LastName}`;
+          const fullName = `${FirstName} ${MiddleName} ${LastName}`;
 
           return isNum
             ? AccountNumber.includes(value)
-            : fullNmae.toLowerCase().includes(value.toLowerCase());
+            : fullName.toLowerCase().includes(value.toLowerCase());
         });
 
       setDataFilter(newData);
@@ -57,7 +57,7 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
         placeholder="buscar"
         returnKeyType="search"
         value={search}
-        onChangeText={handleChangeSarch}
+        onChangeText={handleChangeSearch}
         image={searchIcon}
       />
 

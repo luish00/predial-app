@@ -4,7 +4,11 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { MyAccountsScreen } from '../myAccounts/MyAccountsScreen';
 import { MyRoutesScreen } from '../myRoutes/MyRoutesScreen';
 import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
-import { AccountDetailsProp, NavigationPropBase } from '../../types';
+import {
+  AccountDetailsProp,
+  ContactProp,
+  NavigationPropBase,
+} from '../../types';
 import { DATA_DUMMY } from '../../data_dummy/accounts';
 
 const Tab = createMaterialTopTabNavigator();

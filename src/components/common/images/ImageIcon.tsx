@@ -13,16 +13,23 @@ interface Props {
   source?: ImageSourcePropType | undefined;
   style?: ImageStyle;
   width: number;
+  tintColor?: string;
 }
 
 const styles = StyleSheet.create({
   tinColor: { tintColor: colors.secondary },
 });
 
-const ImageIcon: React.FC<Props> = ({ height, source, style, width }) => {
+const ImageIcon: React.FC<Props> = ({
+  height,
+  source,
+  style,
+  tintColor = colors.secondary,
+  width,
+}) => {
   return (
     <Image
-      style={[{ width, height }, styles.tinColor, style]}
+      style={[{ height, tintColor: tintColor, width }, style]}
       source={source}
     />
   );

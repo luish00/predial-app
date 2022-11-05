@@ -18,9 +18,9 @@ const useAccountUtils = (account: AccountDetailsProp | null | undefined) => {
     }
 
     const value = [
-      account.Street,
       account.State,
       account.City,
+      account.Street,
       account.PostalCode,
     ];
 

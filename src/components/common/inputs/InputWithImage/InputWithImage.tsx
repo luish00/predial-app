@@ -12,7 +12,7 @@ import {
 import { ImageIcon } from '../../images/ImageIcon';
 
 import { Label } from '../../grids/Label';
-import { Row } from '../../Row';
+import { Row } from '../../grids/Row';
 
 import styles from './InputWithImage.style';
 import { validateEmail } from '../../../../utilities/utils';

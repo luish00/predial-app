@@ -1,63 +1,68 @@
 import React from 'react';
 import {
-  ViewStyle,
-  StyleSheet,
+  ImageSourcePropType,
   Text,
+  TextStyle,
   TouchableNativeFeedback,
   View,
+  ViewStyle,
 } from 'react-native';
-import colors from '../../../colors';
+import { Row } from '../grids';
+import { ImageIcon } from '../images';
+import { stylesBorderLess, stylesPrimary } from './primaryButton.styles';
 
 interface Props {
   alignSelf?:
-  | 'auto'
-  | 'center'
-  | 'flex-start'
-  | 'flex-end'
-  | 'stretch'
-  | 'baseline';
-  children: string;
-  style?: ViewStyle;
+    | 'auto'
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'stretch'
+    | 'baseline';
   borderLess?: boolean;
-  onPress?: () => void;
+  children: string;
   disabled?: boolean;
+  icon?: ImageSourcePropType | undefined;
+  minWidth?: number;
+  onPress?: () => void;
   size?: 'auto' | 'big' | 'mid' | 'small';
+  style?: ViewStyle;
   textColor?: string;
 }
 
-const stylesPrimary = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: colors.secondary,
-    borderRadius: 8,
-    height: 52,
-    justifyContent: 'center',
-    marginVertical: 1,
-    paddingHorizontal: 8,
-  },
-  text: {
-    color: '#fff',
-    fontSize: 20,
-  },
-});
-
-const stylesBorderLess = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    height: 52,
-    justifyContent: 'center',
-    marginVertical: 1,
-    minWidth: 100,
-    paddingHorizontal: 8,
-  },
-  text: {
-    color: colors.primaryDark,
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});
+interface InnerButtonProps {
+  styles?: typeof stylesPrimary | typeof stylesBorderLess;
+  customColor?: TextStyle | null | undefined;
+  icon?: ImageSourcePropType | undefined;
+  text: string;
+}
 
 const sizes = { auto: 'auto', big: '100%', mid: '80%', small: '60%' };
+
+const TextButton: React.FC<InnerButtonProps> = ({
+  styles,
+  customColor,
+  text,
+}) => <Text style={[styles?.text, customColor]}>{text}</Text>;
+
+const IconTextButton: React.FC<InnerButtonProps> = ({
+  text,
+  customColor,
+  icon,
+  styles,
+}) => (
+  <Row>
+    <ImageIcon
+      style={{ marginRight: 8 }}
+      width={30}
+      height={30}
+      source={icon}
+      tintColor="#fff"
+    />
+
+    <TextButton customColor={customColor} styles={styles} text={text} />
+  </Row>
+);
 
 const PrimaryButton: React.FC<Props> = ({
   alignSelf = 'auto',
@@ -67,7 +72,9 @@ const PrimaryButton: React.FC<Props> = ({
   onPress,
   style,
   size = 'auto',
+  icon,
   textColor,
+  minWidth,
 }) => {
   const styles = borderLess ? stylesBorderLess : stylesPrimary;
 
@@ -84,10 +91,24 @@ const PrimaryButton: React.FC<Props> = ({
       <View
         style={[
           styles.container,
-          { alignSelf: alignSelf, width: sizes[size] },
+          { alignSelf: alignSelf, width: sizes[size], minWidth: minWidth },
           style,
         ]}>
-        <Text style={[styles.text, customColor]}>{children}</Text>
+        {icon ? (
+          <IconTextButton
+            text={children}
+            icon={icon}
+            customColor={customColor}
+            styles={styles}
+          />
+        ) : (
+          <TextButton
+            text={children}
+            icon={icon}
+            customColor={customColor}
+            styles={styles}
+          />
+        )}
       </View>
     </TouchableNativeFeedback>
   );

@@ -62,12 +62,10 @@ function reducer(prevState: ActionStateProps, action: ActionProp): ActionStatePr
         contacts: action.contacts,
       };
     case ACTIONS.updateContact:
-      console.log('reducer', { contacs: prevState.contacts, action })
       return {
         ...prevState,
         contacts: prevState.contacts && prevState.contacts.map(item => {
           if (item.Id === action.updatedContact?.Id) {
-            console.log('updated', action.updatedContact)
             return action.updatedContact;
           }
 

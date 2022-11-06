@@ -8,7 +8,7 @@ import { ModalBase } from '../../../common/modals/ModalBase';
 interface Props {
   item: ContactProp;
   onDismiss: () => void;
-  onSave: () => void;
+  onSave: (item: ContactProp) => void;
   visible: boolean;
 }
 
@@ -34,13 +34,14 @@ export const ContactModal: React.FC<Props> = ({
       secondaryText="Cancelar"
       title="Contacto"
       handleSecondaryButtonPress={onDismiss}
-      handlePrimaryButtonPress={onSave}
+      handlePrimaryButtonPress={() => onSave(state)}
       visible={visible}>
       <Container>
         <InputWithImage
           label="Nombre/s"
           nativeID="FirstName"
           onChange={onChangeInput}
+          required
           returnKeyType="next"
           value={state.FirstName}
         />
@@ -62,12 +63,22 @@ export const ContactModal: React.FC<Props> = ({
         />
 
         <InputWithImage
+          label="Parentesco"
+          nativeID="Relationship"
+          onChange={onChangeInput}
+          required
+          returnKeyType="next"
+          value={state.Relationship}
+        />
+
+        <InputWithImage
           keyboardType="number-pad"
           label="Celular"
           maxLength={10}
           minLength={10}
           nativeID="Mobile"
           onChange={onChangeInput}
+          required
           returnKeyType="next"
           value={state.Mobile}
         />

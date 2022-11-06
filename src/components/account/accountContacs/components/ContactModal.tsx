@@ -23,14 +23,10 @@ export const ContactModal: React.FC<Props> = ({
   const { state, onChangeInput } = useInputReducerState<ContactProp>(contact);
 
   React.useEffect(() => {
-    if (!visible) {
-      return;
+    if (visible) {
+      setContact(item);
     }
-
-    setContact(item);
   }, [item, visible]);
-
-  console.log('state', item)
 
   return (
     <ModalBase
@@ -42,7 +38,7 @@ export const ContactModal: React.FC<Props> = ({
       visible={visible}>
       <Container>
         <InputWithImage
-          label="Apellido Paterno"
+          label="Nombre/s"
           nativeID="FirstName"
           onChange={onChangeInput}
           returnKeyType="next"
@@ -58,7 +54,7 @@ export const ContactModal: React.FC<Props> = ({
         />
 
         <InputWithImage
-          label="Propietario"
+          label="Apelligto paterno"
           nativeID="LastName"
           onChange={onChangeInput}
           returnKeyType="next"

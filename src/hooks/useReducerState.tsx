@@ -25,13 +25,8 @@ export function useInputReducerState<T>(
   }, []);
 
   useEffect(() => {
-    console.log('effect', { model, state })
-    if (Object.keys(state).length > 0) {
-      return;
-    }
-
     setState(model);
-  }, [model, state]);
+  }, [model]);
 
   return { state, onChangeInput };
 }

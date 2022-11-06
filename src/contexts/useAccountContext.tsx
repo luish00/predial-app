@@ -7,9 +7,11 @@ interface Props {
 }
 
 interface ActionProp {
-  type: ACTIONS;
-  payload?: AccountDetailsProp | null | undefined;
+  addContact?: ContactProp | null | undefined;
   contacts?: ContactProp[] | null | undefined;
+  payload?: AccountDetailsProp | null | undefined;
+  type: ACTIONS;
+  updatedContact?: ContactProp | null | undefined;
 }
 
 interface ActionStateProps {
@@ -23,14 +25,18 @@ const INITIAL_STATE: ActionStateProps = {
 };
 
 enum ACTIONS {
+  addContact = 'CONTACTS_ADDED',
   loadAccount = 'ACCOUNT_LOADED',
-  loadContacts = 'CONTACTS_LOADED'
+  loadContacts = 'CONTACTS_LOADED',
+  updateContact = 'CONTACTS_UPDATED',
 }
 
 const defaultContext = {
   accountFunctions: {
+    addContact: async (_data: ContactProp) => { },
     loadAccount: async (_data: AccountDetailsProp) => { },
     loadContacts: async (_data: ContactProp[]) => { },
+    updateAccount: async (_data: ContactProp) => { },
   },
   accountState: INITIAL_STATE,
 };
@@ -55,6 +61,24 @@ function reducer(prevState: ActionStateProps, action: ActionProp): ActionStatePr
         ...prevState,
         contacts: action.contacts,
       };
+    case ACTIONS.updateContact:
+      console.log('reducer', { contacs: prevState.contacts, action })
+      return {
+        ...prevState,
+        contacts: prevState.contacts && prevState.contacts.map(item => {
+          if (item.Id === action.updatedContact?.Id) {
+            console.log('updated', action.updatedContact)
+            return action.updatedContact;
+          }
+
+          return item;
+        }),
+      };
+    case ACTIONS.addContact:
+      return {
+        ...prevState,
+        contacts: [...prevState.contacts, action.updatedContact],
+      };
     default:
       return prevState;
   }
@@ -70,6 +94,12 @@ function useProvider() {
       },
       loadContacts: async (data: ContactProp[]) => {
         dispatch({ type: ACTIONS.loadContacts, contacts: data });
+      },
+      updateAccount: async (data: ContactProp) => {
+        dispatch({ type: ACTIONS.updateContact, updatedContact: data });
+      },
+      addContact: async (data: ContactProp) => {
+        dispatch({ type: ACTIONS.addContact, updatedContact: data });
       },
     }),
     [],

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { useAccountContext } from '../../../contexts/useAccountContext';
 import { ContactProp } from '../../../types';
@@ -10,14 +10,15 @@ import { ContactModal } from './components/ContactModal';
 
 const newContact: ContactProp = {};
 
+let isNewContact = false;
+
 const AccountContactsScreen: React.FC = () => {
   const {
     accountState: { contacts },
+    accountFunctions: { addContact, updateAccount },
   } = useAccountContext();
   const [visible, setVisible] = useState(false);
-  const [contactModal, setContactModal] = useState<ContactProp>(
-    newContact,
-  );
+  const [contactModal, setContactModal] = useState<ContactProp>(newContact);
 
   const onDismissModal = React.useCallback(() => {
     setVisible(false);
@@ -27,7 +28,24 @@ const AccountContactsScreen: React.FC = () => {
   const onItemPress = useCallback((item: ContactProp) => {
     setVisible(true);
     setContactModal(item);
+    isNewContact = false;
   }, []);
+
+  const onSaveContact = useCallback(
+    (item: ContactProp) => {
+      const action = isNewContact ? addContact : updateAccount;
+
+      action(item);
+      setVisible(false);
+    },
+    [addContact, updateAccount],
+  );
+
+  useEffect(() => {
+    if (visible) {
+      isNewContact = false;
+    }
+  }, [visible]);
 
   return (
     <>
@@ -45,6 +63,7 @@ const AccountContactsScreen: React.FC = () => {
       <ContactModal
         item={contactModal}
         onDismiss={onDismissModal}
+        onSave={onSaveContact}
         visible={visible}
       />
     </>

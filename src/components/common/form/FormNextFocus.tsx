@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTextInputNext } from '../../../hooks';
+import { useTextInputNext } from './hooks';
 import { FormProvider, useFormContext } from './form.context';
 
 interface Props {
@@ -59,8 +59,6 @@ const FormNextFocusBase: React.FC<Props> = ({ children, inputKeys }) => {
     setOldState(focusPocus);
     onNextFocus(focusPocus);
   }, [oldState, focusPocus, onNextFocus]);
-
-  console.log('render 5')
 
   return <>{children}</>;
 };

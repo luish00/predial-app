@@ -7,7 +7,7 @@ import { toCurrency } from '../../../utilities/utils';
 
 import { Container } from '../../common/grids';
 import { StaticMapImage } from '../../common/images';
-import { InputWithImage } from '../../common/inputs/InputWithImage';
+import { InputWithImage } from '../../common/inputs';
 import { Row } from '../../common/grids';
 import { PrimaryButton } from '../../common/buttons/PrimaryButton';
 

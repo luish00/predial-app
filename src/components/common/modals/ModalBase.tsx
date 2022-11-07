@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { Modal, Text, View } from 'react-native';
 
 import colors from '../../../colors';

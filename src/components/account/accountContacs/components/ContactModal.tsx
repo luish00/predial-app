@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-import { useInputReducerState, useTextInputNext } from '../../../../hooks';
+import { useInputReducerState } from '../../../../hooks';
 import { ContactProp } from '../../../../types';
 
+import { FormNextFocus } from '../../../common/form/FormNextFocus';
 import { Container } from '../../../common/grids';
-import { InputWithImage } from '../../../common/inputs/InputWithImage';
+import { InputForm } from '../../../common/inputs';
 import { ModalBase } from '../../../common/modals/ModalBase';
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
   visible: boolean;
 }
 
-const InputFormFocus = [
+const InputFormKeysFocus = [
   'FirstName',
   'MiddleName',
   'LastName',
@@ -32,7 +33,6 @@ export const ContactModal: React.FC<Props> = ({
   const [contact, setContact] = useState<ContactProp>(item);
 
   const { state, onChangeInput } = useInputReducerState<ContactProp>(contact);
-  const { onSubmitEditing, focusPocus } = useTextInputNext(InputFormFocus);
 
   React.useEffect(() => {
     if (visible) {
@@ -49,71 +49,63 @@ export const ContactModal: React.FC<Props> = ({
       handlePrimaryButtonPress={() => onSave(state)}
       visible={visible}>
       <Container>
-        <InputWithImage
-          label="Nombre/s"
-          nativeID="FirstName"
-          onChange={onChangeInput}
-          onSubmitEditing={onSubmitEditing}
-          required
-          returnKeyType="next"
-          value={state.FirstName}
-        />
+        <FormNextFocus inputKeys={InputFormKeysFocus}>
+          <InputForm
+            autoFocus={true}
+            label="Nombre/s"
+            nativeID="FirstName"
+            onChange={onChangeInput}
+            required
+            returnKeyType="next"
+            value={state.FirstName}
+          />
 
-        <InputWithImage
-          focus={focusPocus['MiddleName']}
-          label="Apellido materno"
-          nativeID="MiddleName"
-          onChange={onChangeInput}
-          onSubmitEditing={onSubmitEditing}
-          returnKeyType="next"
-          value={state.MiddleName}
-        />
+          <InputForm
+            label="Apellido materno"
+            nativeID="MiddleName"
+            onChange={onChangeInput}
+            returnKeyType="next"
+            value={state.MiddleName}
+          />
 
-        <InputWithImage
-          focus={focusPocus['LastName']}
-          label="Apelligto paterno"
-          nativeID="LastName"
-          onChange={onChangeInput}
-          onSubmitEditing={onSubmitEditing}
-          returnKeyType="next"
-          value={state.LastName}
-        />
+          <InputForm
+            label="Apellido paterno"
+            nativeID="LastName"
+            onChange={onChangeInput}
+            returnKeyType="next"
+            value={state.LastName}
+          />
 
-        <InputWithImage
-          focus={focusPocus['Relationship']}
-          label="Parentesco"
-          nativeID="Relationship"
-          onChange={onChangeInput}
-          onSubmitEditing={onSubmitEditing}
-          required
-          returnKeyType="next"
-          value={state.Relationship}
-        />
+          <InputForm
+            label="Parentesco"
+            nativeID="Relationship"
+            onChange={onChangeInput}
+            required
+            returnKeyType="next"
+            value={state.Relationship}
+          />
 
-        <InputWithImage
-          focus={focusPocus['Mobile']}
-          keyboardType="number-pad"
-          label="Celular"
-          maxLength={10}
-          minLength={10}
-          nativeID="Mobile"
-          onChange={onChangeInput}
-          onSubmitEditing={onSubmitEditing}
-          required
-          returnKeyType="next"
-          value={state.Mobile}
-        />
+          <InputForm
+            keyboardType="number-pad"
+            label="Celular"
+            maxLength={10}
+            minLength={10}
+            nativeID="Mobile"
+            onChange={onChangeInput}
+            required
+            returnKeyType="next"
+            value={state.Mobile}
+          />
 
-        <InputWithImage
-          focus={focusPocus['Email']}
-          keyboardType="email-address"
-          label="Correo"
-          nativeID="Email"
-          onChange={onChangeInput}
-          onSubmitEditing={onSubmitEditing}
-          returnKeyType="done"
-          value={state.Email}
-        />
+          <InputForm
+            keyboardType="email-address"
+            label="Correo"
+            nativeID="Email"
+            onChange={onChangeInput}
+            returnKeyType="done"
+            value={state.Email}
+          />
+        </FormNextFocus>
       </Container>
     </ModalBase>
   );

@@ -16,25 +16,9 @@ import { Row } from '../../grids/Row';
 import styles from './InputWithImage.style';
 import { validateEmail } from '../../../../utilities/utils';
 import colors from '../../../../colors';
+import { InputProps } from '../input';
 
-interface Props extends TextInputProps {
-  focus?: boolean;
-  image?: ImageSourcePropType;
-  keyboardType?: KeyboardTypeOptions | undefined;
-  label: string;
-  minLength?: number;
-  nativeID: string;
-  onChangeText?:
-    | React.Dispatch<React.SetStateAction<string>>
-    | ((value: string) => void);
-  placeholder?: string;
-  required?: boolean;
-  returnKeyType: ReturnKeyTypeOptions | undefined;
-  secureTextEntry?: boolean;
-  value?: string;
-}
-
-const InputWithImage: React.FC<Props> = ({
+const InputWithImage: React.FC<InputProps> = ({
   focus,
   image,
   keyboardType = 'default',

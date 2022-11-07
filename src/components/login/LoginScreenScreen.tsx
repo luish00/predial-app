@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, View } from 'react-native';
 import { NavigationProp } from '@react-navigation/core';
 
-import { InputWithImage } from '../common/inputs/InputWithImage';
+import { InputWithImage } from '../common/inputs';
 import { Label } from '../common/grids/Label';
 
 import { accountIcon, passwordIcon } from '../../assets/icons';

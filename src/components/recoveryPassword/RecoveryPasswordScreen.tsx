@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { Container } from '../common/grids/Container';
 import { Label } from '../common/grids/Label';
-import { InputWithImage } from '../common/inputs/InputWithImage';
+import { InputWithImage } from '../common/inputs';
 import { emailIcon } from '../../assets/icons';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';

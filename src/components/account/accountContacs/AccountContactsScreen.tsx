@@ -60,12 +60,14 @@ const AccountContactsScreen: React.FC = () => {
         ItemSeparatorComponent={ListSeparator}
       />
 
-      <ContactModal
-        item={contactModal}
-        onDismiss={onDismissModal}
-        onSave={onSaveContact}
-        visible={visible}
-      />
+      {visible && (
+        <ContactModal
+          item={contactModal}
+          onDismiss={onDismissModal}
+          onSave={onSaveContact}
+          visible={true}
+        />
+      )}
 
       <FabButton onPress={onAddContact} />
     </>

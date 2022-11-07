@@ -37,6 +37,7 @@ export const useTextInputNext = (keys: string[]) => {
     } = event;
 
     const { nativeID } = memoizedProps;
+    console.log('onSubmitEditing', nativeID)
 
     setInputFocus((prev: FocusModelProp[]) => {
       const nextFocusIndex = keys.findIndex(item => item === nativeID) + 1;

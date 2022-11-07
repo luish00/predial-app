@@ -6,7 +6,7 @@ import { searchIcon } from '../../assets/icons';
 import { AccountDetailsProp } from '../../types';
 import { isNumber } from '../../utilities/utils';
 
-import { InputWithImage } from '../common/inputs/InputWithImage';
+import { InputWithImage } from '../common/inputs';
 import { MyAccountItem } from './components/MyAccountItem';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
 import { HomeTabChildernProps } from '../home/homeTab';

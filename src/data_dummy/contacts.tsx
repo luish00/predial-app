@@ -8,7 +8,7 @@ export const CONTACTS_DUMMY: ContactProp[] = [
     FirstName: 'Contact 1',
     MiddleName: 'midle',
     LastName: '',
-    Relationship: 'propietario',
+    Relationship: 'Propietario',
     Phone: '6677112233',
   },
   {
@@ -18,7 +18,7 @@ export const CONTACTS_DUMMY: ContactProp[] = [
     FirstName: 'Contact 2',
     MiddleName: '',
     LastName: 'last',
-    Relationship: 'hija',
+    Relationship: 'Hija',
     Phone: '6677223344',
   },
   {
@@ -28,7 +28,7 @@ export const CONTACTS_DUMMY: ContactProp[] = [
     FirstName: 'Contact 3',
     MiddleName: '',
     LastName: '',
-    Relationship: 'hijo',
+    Relationship: 'Hijo',
     Phone: '6677334455',
   },
 ];

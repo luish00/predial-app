@@ -5,6 +5,7 @@ import { ContactProp } from '../../../../types';
 
 import { FormNextFocus } from '../../../common/form/FormNextFocus';
 import { InputForm } from '../../../common/inputs';
+import { DropdownForm } from '../../../common/inputs/Dropdown/DropdownForm';
 import { ModalScreen } from '../../../common/modals/ModalBase';
 
 interface Props {
@@ -24,6 +25,16 @@ const InputFormKeysFocus = [
   'Email',
 ];
 
+const dataRelationship = [
+  { label: 'Propietario', value: 'Propietario' },
+  { label: 'Hijo', value: 'Hijo' },
+  { label: 'Hija', value: 'Hija' },
+  { label: 'Esposo', value: 'Esposo' },
+  { label: 'Esposa', value: 'Esposa' },
+  { label: 'Hermano', value: 'Hermano' },
+  { label: 'Hermana', value: 'Hermana' },
+];
+
 export const ContactModal: React.FC<Props> = ({
   isNewContact,
   item,
@@ -32,7 +43,17 @@ export const ContactModal: React.FC<Props> = ({
   onSave,
 }) => {
   const [contact, setContact] = useState<ContactProp>(item);
-  const { state, onChangeInput } = useInputReducerState<ContactProp>(contact);
+  const { state, onChangeInput, setItemState } =
+    useInputReducerState<ContactProp>(contact);
+
+  const handleSave = React.useCallback(() => {
+    const newState: ContactProp = {
+      ...state,
+      IsOwner: state.Relationship === 'Propietario',
+    };
+
+    onSave(newState);
+  }, [onSave, state]);
 
   React.useEffect(() => {
     if (visible) {
@@ -46,7 +67,7 @@ export const ContactModal: React.FC<Props> = ({
       secondaryText="Cancelar"
       title={isNewContact ? 'Agregar contacto' : 'Editar contacto'}
       handleSecondaryButtonPress={onDismiss}
-      handlePrimaryButtonPress={() => onSave(state)}
+      handlePrimaryButtonPress={handleSave}
       visible={visible}>
       <FormNextFocus inputKeys={InputFormKeysFocus}>
         <InputForm
@@ -68,6 +89,7 @@ export const ContactModal: React.FC<Props> = ({
         />
 
         <InputForm
+          blurOnSubmit={true}
           label="Apellido paterno"
           nativeID="LastName"
           onChange={onChangeInput}
@@ -75,12 +97,12 @@ export const ContactModal: React.FC<Props> = ({
           value={state.LastName}
         />
 
-        <InputForm
-          label="Parentesco"
-          nativeID="Relationship"
-          onChange={onChangeInput}
-          required
-          returnKeyType="next"
+        <DropdownForm
+          title="Parentesco"
+          data={dataRelationship}
+          onChange={itemRelationship => {
+            setItemState('Relationship', itemRelationship.value);
+          }}
           value={state.Relationship}
         />
 

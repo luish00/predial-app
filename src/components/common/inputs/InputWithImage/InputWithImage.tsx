@@ -86,7 +86,11 @@ const InputWithImage: React.FC<InputProps> = ({
           onChangeText={onChangeText}
           onFocus={handleFocus}
           returnKeyType={returnKeyType}
-          style={[styles.input, error && styles.inputError]}
+          style={[
+            styles.input,
+            // focus && styles.inputFocused,
+            error && styles.inputError,
+          ]}
           testID={nativeID}
           blurOnSubmit={returnKeyType !== 'next'}
           value={value}

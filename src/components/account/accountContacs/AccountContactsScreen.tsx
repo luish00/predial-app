@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
 import { useAccountContext } from '../../../contexts/useAccountContext';
 import { ContactProp } from '../../../types';

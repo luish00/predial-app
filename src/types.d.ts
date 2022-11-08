@@ -66,8 +66,8 @@ export interface UserProp {
 }
 
 export interface TaskProp {
-  PersonalNotification: string;
-  InstructionNotification: string;
+  PersonalNotification: boolean;
+  InstructionNotification: boolean;
   PaymentPromise: string;
   Phone?: string;
   Mobile?: string;

@@ -62,6 +62,7 @@ const AccountContactsScreen: React.FC = () => {
 
       {visible && (
         <ContactModal
+          isNewContact={isNewContact}
           item={contactModal}
           onDismiss={onDismissModal}
           onSave={onSaveContact}

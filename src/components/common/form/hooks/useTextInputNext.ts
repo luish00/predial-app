@@ -31,13 +31,11 @@ export const useTextInputNext = (keys: string[]) => {
     return focus;
   }, [inputFocus]);
 
-  const onSubmitEditing = useCallback(event => {
+  const onSubmitEditing = useCallback((event: any) => {
     const {
       _dispatchInstances: { memoizedProps },
     } = event;
-
     const { nativeID } = memoizedProps;
-    console.log('onSubmitEditing', nativeID)
 
     setInputFocus((prev: FocusModelProp[]) => {
       const nextFocusIndex = keys.findIndex(item => item === nativeID) + 1;

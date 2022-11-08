@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, View } from 'react-native';
 import { NavigationProp } from '@react-navigation/core';
 
-import { InputWithImage } from '../common/inputs';
+import { InputForm } from '../common/inputs';
 import { Label } from '../common/grids/Label';
 
 import { accountIcon, passwordIcon } from '../../assets/icons';
@@ -12,10 +12,13 @@ import { Container } from '../common/grids/Container';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
 import { useAuthContext } from '../../contexts/useAuthContext';
+import { FormNextFocus } from '../common/form/FormNextFocus';
 
 interface Props {
   navigation: NavigationProp<any>;
 }
+
+const FORM_KEYS = ['email', 'password'];
 
 const LoginScreenScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('test@asd.com');
@@ -52,28 +55,32 @@ const LoginScreenScreen = ({ navigation }: Props) => {
       <Image style={styles.image} />
 
       <View style={styles.containerInputs}>
-        <InputWithImage
-          autoFocus
-          image={accountIcon}
-          keyboardType="email-address"
-          label="Usuario"
-          onChangeText={value => setEmail(value)}
-          placeholder="usario@gmail.com"
-          required
-          returnKeyType="next"
-          value={email}
-        />
+        <FormNextFocus inputKeys={FORM_KEYS}>
+          <InputForm
+            autoFocus
+            image={accountIcon}
+            keyboardType="email-address"
+            label="Usuario"
+            nativeID={'email'}
+            onChangeText={(value: string) => setEmail(value)}
+            placeholder="usario@gmail.com"
+            required
+            returnKeyType="next"
+            value={email}
+          />
 
-        <InputWithImage
-          image={passwordIcon}
-          label="Contraseña"
-          onChangeText={setPassword}
-          placeholder="*********"
-          required
-          returnKeyType="go"
-          secureTextEntry
-          value={password}
-        />
+          <InputForm
+            image={passwordIcon}
+            label="Contraseña"
+            nativeID="password"
+            onChangeText={setPassword}
+            placeholder="*********"
+            required
+            returnKeyType="done"
+            secureTextEntry
+            value={password}
+          />
+        </FormNextFocus>
 
         <View style={styles.containerButtons}>
           <PrimaryButton alignSelf="center" size="mid" onPress={onPress}>

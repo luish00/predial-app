@@ -1,4 +1,10 @@
-import { TextInputProps } from 'react-native';
+import {
+  Dispatch,
+  KeyboardTypeOptions,
+  ReturnKeyTypeOptions,
+  SetStateAction,
+  TextInputProps,
+} from 'react-native';
 
 export interface InputProps extends TextInputProps {
   focus?: boolean;
@@ -7,9 +13,7 @@ export interface InputProps extends TextInputProps {
   label: string;
   minLength?: number;
   nativeID: string;
-  onChangeText?:
-    | React.Dispatch<React.SetStateAction<string>>
-    | ((value: string) => void);
+  onChangeText?: Dispatch<SetStateAction<string>> | ((value: string) => void);
   placeholder?: string;
   required?: boolean;
   returnKeyType: ReturnKeyTypeOptions | undefined;

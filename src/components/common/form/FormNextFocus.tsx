@@ -5,7 +5,7 @@ import { FormProvider, useFormContext } from './form.context';
 
 interface Props {
   children: React.ReactNode;
-  inputKeys?: string[];
+  inputKeys: string[];
 }
 
 const FormNextFocus: React.FC<Props> = ({ children, inputKeys }) => {

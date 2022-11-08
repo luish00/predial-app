@@ -75,3 +75,11 @@ export interface TaskProp {
   AccountId: string;
   ContactId: string;
 }
+
+type TaskListStatusType = 1 | 2 | 3;
+// no existe en back aun
+export interface TaskListProps {
+  date: string;
+  isComplete: boolean;
+  type: TaskListStatusType;
+}

@@ -4,8 +4,8 @@ import { useRoute } from '@react-navigation/native';
 
 import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
 import { AccountDetailsScreen } from './accountDetails/AccountDetailsScreen';
-import { AccountContactsScreen } from './accountContacs/AccountContactsScreen';
-import { AccountTasksScreen } from './accountTasks/AcccountTasksScreen';
+import { AccountContactsScreen } from './accountContacs';
+import { AccountTasksScreen } from './accountTasks';
 import { NavigationPropBase } from '../../types';
 import {
   AccountProvider,
@@ -13,20 +13,27 @@ import {
 } from '../../contexts/useAccountContext';
 
 import { CONTACTS_DUMMY } from '../../data_dummy/contacts';
+import { HomeTabNavigationProp } from '../home/homeTab';
 
 const Tab = createMaterialTopTabNavigator();
 
-const AccountDetailsTabWrapperScreen: React.FC<NavigationPropBase> = () => (
+const AccountDetailsTabWrapperScreen: React.FC<NavigationPropBase> = props => (
   <AccountProvider>
-    <AccountDetailsTabScreen />
+    <AccountDetailsTabScreen {...props} />
   </AccountProvider>
 );
 
-const AccountDetailsTabScreen: React.FC = () => {
+const AccountDetailsTabScreen: React.FC<NavigationPropBase> = ({
+  navigation,
+}) => {
   const route = useRoute();
 
   const { account } = route?.params;
   const { accountFunctions } = useAccountContext();
+
+  const AccountTaskScreenWrapper: React.FC = () => (
+    <AccountTasksScreen homeNavigation={navigation} />
+  );
 
   useEffect(() => {
     accountFunctions.loadAccount(account);
@@ -54,7 +61,7 @@ const AccountDetailsTabScreen: React.FC = () => {
       <Tab.Screen
         name="accountTask"
         options={{ title: 'Tareas' }}
-        component={AccountTasksScreen}
+        component={AccountTaskScreenWrapper}
       />
     </Tab.Navigator>
   );

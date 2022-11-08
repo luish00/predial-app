@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { HomeTabChildernProps } from '../home/homeTab';
+import { HomeTabChildrenProps } from '../home/homeTab';
 
-interface Props extends HomeTabChildernProps { }
+interface Props extends HomeTabChildrenProps { }
 
 const MyRoutesScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
   return (

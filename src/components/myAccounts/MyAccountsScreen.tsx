@@ -9,10 +9,10 @@ import { isNumber } from '../../utilities/utils';
 import { InputWithImage } from '../common/inputs';
 import { MyAccountItem } from './components/MyAccountItem';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
-import { HomeTabChildernProps } from '../home/homeTab';
+import { HomeTabChildrenProps } from '../home/homeTab';
 
 // eslint-disable-next-line prettier/prettier
-interface Props extends HomeTabChildernProps { }
+interface Props extends HomeTabChildrenProps { }
 
 const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
   const [search, setSearch] = useState('');
@@ -54,6 +54,7 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
     <View>
       <InputWithImage
         label=""
+        nativeID="search"
         placeholder="buscar"
         returnKeyType="search"
         value={search}

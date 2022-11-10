@@ -8,8 +8,8 @@ export const stylesPrimary = StyleSheet.create({
     borderRadius: 8,
     height: 52,
     justifyContent: 'center',
-    marginVertical: 1,
-    paddingHorizontal: 8,
+    marginVertical: 3,
+    paddingHorizontal: 21,
   },
   text: {
     color: '#fff',

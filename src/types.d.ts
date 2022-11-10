@@ -79,6 +79,7 @@ export interface TaskProp {
 type TaskListStatusType = 1 | 2 | 3;
 // no existe en back aun
 export interface TaskListProps {
+  id: string;
   date: string;
   isComplete: boolean;
   type: TaskListStatusType;

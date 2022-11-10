@@ -7,7 +7,8 @@ import { Label } from '../../../common/grids';
 
 interface Props {
   item: TaskListProps;
-  onPress: (item: TaskListProps) => void;
+  onPress?: (item: TaskListProps) => void;
+  disabled?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -24,8 +25,14 @@ function getTitle(index: number) {
   return title || '';
 }
 
-const AccountTaskItem: React.FC<Props> = ({ item, onPress }) => (
-  <TouchableNativeFeedback onPress={() => onPress(item)}>
+const AccountTaskItem: React.FC<Props> = ({
+  disabled = false,
+  item,
+  onPress,
+}) => (
+  <TouchableNativeFeedback
+    disabled={disabled}
+    onPress={() => onPress && onPress(item)}>
     <View style={styles.container}>
       <Label fontWeight="bold" fontSize={20}>{`Entrega ${getTitle(
         item.type,

@@ -3,7 +3,7 @@ import { View, StyleSheet, ViewStyle } from 'react-native';
 
 interface Props {
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: ViewStyle | ViewStyle[];
   justifyContent?:
     | 'flex-start'
     | 'flex-end'

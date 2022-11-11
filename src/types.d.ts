@@ -70,6 +70,7 @@ export interface TaskProp {
   InstructionNotification: boolean;
   PaymentPromise: string;
   Phone?: string;
+  Name?: string; // no bsck
   Mobile?: string;
   Email?: string;
   AccountId: string;

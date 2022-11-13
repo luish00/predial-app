@@ -22,6 +22,9 @@ export default StyleSheet.create({
   inputError: {
     borderBottomColor: colors.inputError,
   },
+  inputDisabled: {
+    borderBottomColor: '#222',
+  },
   imageContainer: {
     borderBottomColor: colors.secondaryDark,
     borderBottomWidth: 2.5,

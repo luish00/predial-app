@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 export interface InputProps extends TextInputProps {
+  disabled?: boolean;
   focus?: boolean;
   image?: ImageSourcePropType;
   keyboardType?: KeyboardTypeOptions | undefined;

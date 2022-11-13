@@ -15,6 +15,9 @@ export const stylesPrimary = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
   },
+  buttonDisabled: {
+    opacity: 0.4,
+  },
 });
 
 export const stylesBorderLess = StyleSheet.create({
@@ -30,5 +33,8 @@ export const stylesBorderLess = StyleSheet.create({
     color: colors.primaryDark,
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  buttonDisabled: {
+    opacity: 0.4,
   },
 });

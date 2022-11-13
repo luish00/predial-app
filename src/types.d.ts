@@ -53,8 +53,10 @@ export interface ContactProp {
 }
 
 export interface UserProp {
+  Id: number;
   IsActive: boolean;
   FirstName: string;
+  Address: string;
   MiddleName?: string;
   LastName?: string;
   UserName: string;
@@ -62,7 +64,7 @@ export interface UserProp {
   Phone?: string;
   Mobile?: string;
   Email?: string;
-  // Password?: string;
+  access_token: string;
 }
 
 export interface TaskProp {

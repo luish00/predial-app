@@ -57,11 +57,14 @@ export const TaskScreen: React.FC<NavigationPropBase> = () => {
     console.log('save', state);
   }, [state]);
 
-  const onConfirmPicker = useCallback((date: Date) => {
-    setOpenPicker(false);
+  const onConfirmPicker = useCallback(
+    (date: Date) => {
+      setOpenPicker(false);
 
-    setItemState('PaymentPromise', date.toUTCString());
-  }, []);
+      setItemState('PaymentPromise', date.toUTCString());
+    },
+    [setItemState],
+  );
 
   const onCancelPicker = useCallback(() => {
     setOpenPicker(false);

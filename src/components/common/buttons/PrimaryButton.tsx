@@ -28,11 +28,13 @@ interface Props {
   size?: 'auto' | 'big' | 'mid' | 'small';
   style?: ViewStyle;
   textColor?: string;
+  textFontSize?: number;
 }
 
 interface InnerButtonProps {
   styles?: typeof stylesPrimary | typeof stylesBorderLess;
   customColor?: TextStyle | null | undefined;
+  customFontSize?: TextStyle | null | undefined;
   icon?: ImageSourcePropType | undefined;
   text: string;
 }
@@ -42,8 +44,9 @@ const sizes = { auto: 'auto', big: '100%', mid: '80%', small: '60%' };
 const TextButton: React.FC<InnerButtonProps> = ({
   styles,
   customColor,
+  customFontSize,
   text,
-}) => <Text style={[styles?.text, customColor]}>{text}</Text>;
+}) => <Text style={[styles?.text, customColor, customFontSize]}>{text}</Text>;
 
 const IconTextButton: React.FC<InnerButtonProps> = ({
   text,
@@ -74,6 +77,7 @@ const PrimaryButton: React.FC<Props> = ({
   size = 'auto',
   icon,
   textColor,
+  textFontSize,
   minWidth,
 }) => {
   const styles = borderLess ? stylesBorderLess : stylesPrimary;
@@ -85,6 +89,14 @@ const PrimaryButton: React.FC<Props> = ({
 
     return { color: textColor };
   }, [textColor]);
+
+  const customFontSize = React.useMemo(() => {
+    if (!textFontSize) {
+      return null;
+    }
+
+    return { fontSize: textFontSize };
+  }, [textFontSize]);
 
   return (
     <TouchableNativeFeedback onPress={onPress} disabled={disabled}>
@@ -106,6 +118,7 @@ const PrimaryButton: React.FC<Props> = ({
             text={children}
             icon={icon}
             customColor={customColor}
+            customFontSize={customFontSize}
             styles={styles}
           />
         )}

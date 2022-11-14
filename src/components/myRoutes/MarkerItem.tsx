@@ -1,12 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Callout, Marker } from 'react-native-maps';
-import { MarkerProp } from '../../types';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { Label } from '../common/grids';
 import { styles } from './MyRoutesScreen.style';
 
-interface Props extends MarkerProp {}
+interface Props {
+  buttonText?: string;
+  description?: string;
+  draggable?: boolean;
+  latitude: number;
+  longitude: number;
+  onDragEnd?: () => {};
+  onPressDescription?: () => void;
+  title?: string;
+}
 
 const MarkerItem: React.FC<Props> = ({
   buttonText,

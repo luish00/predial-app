@@ -77,17 +77,6 @@ export interface TaskProp {
   ContactId: string;
 }
 
-export interface MarkerProp {
-  buttonText?: string;
-  description?: string;
-  draggable?: boolean;
-  latitude: number;
-  longitude: number;
-  onDragEnd?: () => {};
-  onPressDescription?: () => void;
-  title?: string;
-}
-
 type TaskListStatusType = 1 | 2 | 3;
 // no existe en back aun
 export interface TaskListProps {

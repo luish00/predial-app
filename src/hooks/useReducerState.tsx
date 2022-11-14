@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 interface InputReducerType<T> {
   state: T;
   onChangeInput: (_event: object) => void;
+  setItemState: (key: string, value: string | any) => void;
 }
 
 export function useInputReducerState<T>(
@@ -11,7 +12,7 @@ export function useInputReducerState<T>(
 ): InputReducerType<T> {
   const [state, setState] = useState<T | null | undefined>(model);
 
-  const onChangeInput = useCallback(event => {
+  const onChangeInput = useCallback((event: any) => {
     const {
       nativeEvent: { text },
       _dispatchInstances: { memoizedProps },
@@ -24,9 +25,13 @@ export function useInputReducerState<T>(
     }
   }, []);
 
+  const setItemState = useCallback((key: string, value: string | any) => {
+    setState(prev => (prev ? { ...prev, [key]: value } : prev));
+  }, []);
+
   useEffect(() => {
     setState(model);
   }, [model]);
 
-  return { state, onChangeInput };
+  return { onChangeInput, setItemState, state };
 }

@@ -10,7 +10,7 @@ import { MarkerItem } from './MarkerItem';
 
 import { mapStyle, styles } from './MyRoutesScreen.style';
 
-interface Props extends HomeTabChildrenProps {}
+interface Props extends HomeTabChildrenProps { }
 interface LocationProps extends Geolocation.GeoPosition {
   coords: Geolocation.GeoCoordinates;
 }

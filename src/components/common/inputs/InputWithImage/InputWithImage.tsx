@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   ImageSourcePropType,
   KeyboardTypeOptions,
@@ -6,7 +6,6 @@ import {
   ReturnKeyTypeOptions,
   TextInputProps,
   View,
-  Text,
 } from 'react-native';
 
 import { ImageIcon } from '../../images/ImageIcon';
@@ -17,37 +16,25 @@ import { Row } from '../../grids/Row';
 import styles from './InputWithImage.style';
 import { validateEmail } from '../../../../utilities/utils';
 import colors from '../../../../colors';
+import { InputProps } from '../input';
 
-interface Props extends TextInputProps {
-  autoFocus?: boolean;
-  image?: ImageSourcePropType;
-  keyboardType?: KeyboardTypeOptions | undefined;
-  label: string;
-  minLength?: number;
-  onChangeText?:
-  | React.Dispatch<React.SetStateAction<string>>
-  | ((value: string) => void);
-  placeholder?: string;
-  required?: boolean;
-  returnKeyType: ReturnKeyTypeOptions | undefined;
-  secureTextEntry?: boolean;
-  value?: string;
-}
-
-const InputWithImage: React.FC<Props> = ({
-  autoFocus = false,
+const InputWithImage: React.FC<InputProps> = ({
+  focus,
   image,
   keyboardType = 'default',
   label,
   minLength,
+  nativeID,
+  onChangeText,
   required,
   returnKeyType = 'default',
-  onChangeText,
   value = '',
   ...rest
 }) => {
   const [error, setError] = useState(false);
   const [messageError, setMessageError] = useState('');
+
+  const refInput = useRef(null);
 
   const handleBlur = React.useCallback(() => {
     let validations = false;
@@ -56,7 +43,7 @@ const InputWithImage: React.FC<Props> = ({
     if ((required || value.length) && minLength) {
       const minLengthValidation = minLength >= value.length;
       validations = validations || minLengthValidation;
-      message = minLengthValidation ? `Tamaño minimo ${minLength}` : message;
+      message = minLengthValidation ? `Tamaño mínimo ${minLength}` : message;
     }
 
     if ((required || value.length) && keyboardType === 'email-address') {
@@ -78,19 +65,34 @@ const InputWithImage: React.FC<Props> = ({
     setMessageError('');
   }, []);
 
+  React.useEffect(() => {
+    if (!focus || !refInput) {
+      return;
+    }
+
+    refInput.current?.focus();
+  }, [focus, refInput]);
+
   return (
     <View style={styles.container}>
       <Label>{label}</Label>
 
       <Row style={styles.inputContainer}>
         <TextInput
-          autoFocus={autoFocus}
+          ref={refInput}
+          keyboardType={keyboardType}
+          nativeID={nativeID}
           onBlur={handleBlur}
           onChangeText={onChangeText}
           onFocus={handleFocus}
           returnKeyType={returnKeyType}
-          keyboardType={keyboardType}
-          style={[styles.input, error && styles.inputError]}
+          style={[
+            styles.input,
+            // focus && styles.inputFocused,
+            error && styles.inputError,
+          ]}
+          testID={nativeID}
+          blurOnSubmit={returnKeyType !== 'next'}
           value={value}
           {...rest}
         />

@@ -66,10 +66,11 @@ export interface UserProp {
 }
 
 export interface TaskProp {
-  PersonalNotification: string;
-  InstructionNotification: string;
+  PersonalNotification: boolean;
+  InstructionNotification: boolean;
   PaymentPromise: string;
   Phone?: string;
+  Name?: string; // no bsck
   Mobile?: string;
   Email?: string;
   AccountId: string;
@@ -85,4 +86,13 @@ export interface MarkerProp {
   onDragEnd?: () => {};
   onPressDescription?: () => void;
   title?: string;
+}
+
+type TaskListStatusType = 1 | 2 | 3;
+// no existe en back aun
+export interface TaskListProps {
+  id: string;
+  date: string;
+  isComplete: boolean;
+  type: TaskListStatusType;
 }

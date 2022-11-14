@@ -1,5 +1,11 @@
 import React from 'react';
-import { ScrollView, ViewStyle, View } from 'react-native';
+import { ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
+
+const styles = StyleSheet.create({
+  scrollView: {
+    marginBottom: 50,
+  },
+});
 
 interface Props {
   children: React.ReactNode;
@@ -8,7 +14,7 @@ interface Props {
 
 const Container: React.FC<Props> = ({ children, style }) => {
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollView}>
       <View style={style}>{children}</View>
     </ScrollView>
   );

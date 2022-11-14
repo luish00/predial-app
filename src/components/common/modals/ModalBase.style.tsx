@@ -6,6 +6,14 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
+  body: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    lineHeight: 24,
+    marginTop: 10,
+    textAlign: 'left',
+  },
+
   buttonsContainer: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -39,6 +47,6 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 24,
     paddingBottom: 16,
-    textAlign: 'center',
+    textAlign: 'left',
   },
 });

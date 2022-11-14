@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { Container } from '../common/grids/Container';
 import { Label } from '../common/grids/Label';
-import { InputWithImage } from '../common/inputs/InputWithImage';
+import { InputWithImage } from '../common/inputs';
 import { emailIcon } from '../../assets/icons';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
@@ -18,22 +18,22 @@ const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
   const [value, setValue] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
-  const toogleAlert = React.useCallback(() => {
+  const toggleAlert = React.useCallback(() => {
     setShowAlert(prev => !prev);
   }, []);
 
   const onForgotPassword = React.useCallback(() => {
     if (validateEmail(value)) {
-      toogleAlert();
+      toggleAlert();
     }
-  }, [toogleAlert, value]);
+  }, [toggleAlert, value]);
 
   return (
     <>
       <AlertModal
         body="Se ha enviado un correo de recuperación de contraseña"
-        handlePrimaryButtonPress={toogleAlert}
-        handleSecondaryButtonPress={toogleAlert}
+        handlePrimaryButtonPress={toggleAlert}
+        handleSecondaryButtonPress={toggleAlert}
         primaryText="Aceptar"
         secondaryText="Cancelar"
         title="Recuperación de contraseña"
@@ -53,6 +53,7 @@ const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
             onChangeText={setValue}
             required
             placeholder="usuario@gmail.com"
+            nativeID="value"
             returnKeyType="go"
             value={value}
           />
@@ -68,7 +69,5 @@ const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
     </>
   );
 };
-
-export const StackName: string = 'RecoveryPassword';
 
 export { RecoveryPasswordScreen };

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useAccountContext } from '../../../contexts/useAccountContext';
@@ -7,7 +7,7 @@ import { toCurrency } from '../../../utilities/utils';
 
 import { Container } from '../../common/grids';
 import { StaticMapImage } from '../../common/images';
-import { InputWithImage } from '../../common/inputs/InputWithImage';
+import { InputWithImage } from '../../common/inputs';
 import { Row } from '../../common/grids';
 import { PrimaryButton } from '../../common/buttons/PrimaryButton';
 

@@ -16,6 +16,9 @@ export default StyleSheet.create({
     paddingBottom: 4,
     fontSize: 18,
   },
+  inputFocused: {
+    borderBottomColor: colors.primaryDark,
+  },
   inputError: {
     borderBottomColor: colors.inputError,
   },

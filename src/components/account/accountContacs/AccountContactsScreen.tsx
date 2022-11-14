@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
 import { useAccountContext } from '../../../contexts/useAccountContext';
 import { ContactProp } from '../../../types';
 import { FabButton } from '../../common/buttons/FabButton';
 import { ListEmpty } from '../../common/lists';
 import { ListSeparator } from '../../common/lists/ListSeparator';
-import { ContactListHeader } from './components/ContactListHeader';
+import { AccountListHeader } from '../common/AccountListHeader';
 import { ContactListItem } from './components/ContactListItem';
 import { ContactModal } from './components/ContactModal';
 
@@ -52,7 +52,7 @@ const AccountContactsScreen: React.FC = () => {
       <FlatList
         data={contacts}
         keyExtractor={(_, index) => String(index)}
-        ListHeaderComponent={ContactListHeader}
+        ListHeaderComponent={AccountListHeader}
         ListEmptyComponent={ListEmpty}
         renderItem={({ item }) => (
           <ContactListItem onItemPress={onItemPress} item={item} />
@@ -60,12 +60,15 @@ const AccountContactsScreen: React.FC = () => {
         ItemSeparatorComponent={ListSeparator}
       />
 
-      <ContactModal
-        item={contactModal}
-        onDismiss={onDismissModal}
-        onSave={onSaveContact}
-        visible={visible}
-      />
+      {visible && (
+        <ContactModal
+          isNewContact={isNewContact}
+          item={contactModal}
+          onDismiss={onDismissModal}
+          onSave={onSaveContact}
+          visible={true}
+        />
+      )}
 
       <FabButton onPress={onAddContact} />
     </>

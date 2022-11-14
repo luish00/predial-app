@@ -6,7 +6,7 @@ import { searchIcon } from '../../assets/icons';
 import { AccountDetailsProp } from '../../types';
 import { isNumber } from '../../utilities/utils';
 
-import { InputWithImage } from '../common/inputs/InputWithImage';
+import { InputWithImage } from '../common/inputs';
 import { MyAccountItem } from './components/MyAccountItem';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
 import { HomeTabChildrenProps } from '../home/homeTab';
@@ -54,6 +54,7 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
     <View>
       <InputWithImage
         label=""
+        nativeID="search"
         placeholder="buscar"
         returnKeyType="search"
         value={search}

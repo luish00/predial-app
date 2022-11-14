@@ -75,3 +75,14 @@ export interface TaskProp {
   AccountId: string;
   ContactId: string;
 }
+
+export interface MarkerProp {
+  buttonText?: string;
+  description?: string;
+  draggable?: boolean;
+  latitude: number;
+  longitude: number;
+  onDragEnd?: () => {};
+  onPressDescription?: () => void;
+  title?: string;
+}

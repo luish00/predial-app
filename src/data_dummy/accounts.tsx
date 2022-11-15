@@ -18,7 +18,7 @@ export const DATA_DUMMY: AccountDetailsProp[] = [
     Street: 'Calle 2',
     State: 'Culicán',
     PostalCode: '80450',
-    Latitud: '24.8070705',
+    Latitud: '80.8070705',
     Longitud: '-107.3918727',
   },
   {
@@ -29,7 +29,7 @@ export const DATA_DUMMY: AccountDetailsProp[] = [
     Street: 'Calle 3',
     State: 'Navolato',
     PostalCode: '80450',
-    Latitud: '24.8070705',
+    Latitud: '40.8070705',
     Longitud: '-107.3918727',
   },
   {
@@ -40,7 +40,7 @@ export const DATA_DUMMY: AccountDetailsProp[] = [
     Street: 'Calle 4',
     State: 'Culicán',
     PostalCode: '80450',
-    Latitud: '24.8070705',
+    Latitud: '30.8070705',
     Longitud: '-107.3918727',
   },
 ];

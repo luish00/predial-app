@@ -7,12 +7,13 @@ import { Label } from '../common/grids/Label';
 
 import { accountIcon, passwordIcon } from '../../assets/icons';
 
-import styles from './loginScreen.style';
 import { Container } from '../common/grids/Container';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
-import { useAuthContext } from '../../contexts/useAuthContext';
 import { FormNextFocus } from '../common/form/FormNextFocus';
+import { useLoginService } from './services/useAuthService';
+
+import styles from './loginScreen.style';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -21,13 +22,10 @@ interface Props {
 const FORM_KEYS = ['email', 'password'];
 
 const LoginScreenScreen = ({ navigation }: Props) => {
-  const [email, setEmail] = useState('test@asd.com');
-  const [password, setPassword] = useState('123');
+  const [email, setEmail] = useState('test@test.com');
+  const [password, setPassword] = useState('12345');
 
-  const authContext = useAuthContext();
-  const {
-    authFunctions: { signIn },
-  } = authContext;
+  const { isLoading, doLogin, errorLogin } = useLoginService();
 
   const isFromValid = React.useMemo(() => {
     return validateEmail(email) && password.length > 0;
@@ -38,9 +36,8 @@ const LoginScreenScreen = ({ navigation }: Props) => {
       return;
     }
 
-    // TODO: dummy token
-    signIn('dummy_token');
-  }, [isFromValid, signIn]);
+    doLogin({ Password: password, UserName: email });
+  }, [email, isFromValid, doLogin, password]);
 
   const onForgotPassword = () => {
     navigation.navigate('RecoveryPassword');
@@ -58,6 +55,7 @@ const LoginScreenScreen = ({ navigation }: Props) => {
         <FormNextFocus inputKeys={FORM_KEYS}>
           <InputForm
             autoFocus
+            disabled={isLoading}
             image={accountIcon}
             keyboardType="email-address"
             label="Usuario"
@@ -70,6 +68,7 @@ const LoginScreenScreen = ({ navigation }: Props) => {
           />
 
           <InputForm
+            disabled={isLoading}
             image={passwordIcon}
             label="Contraseña"
             nativeID="password"
@@ -82,6 +81,14 @@ const LoginScreenScreen = ({ navigation }: Props) => {
           />
         </FormNextFocus>
 
+        {errorLogin && (
+          <View style={styles.containerError}>
+            <Label color="#fff" textAlign="center">
+              {errorLogin}
+            </Label>
+          </View>
+        )}
+
         <View style={styles.containerButtons}>
           <PrimaryButton alignSelf="center" size="mid" onPress={onPress}>
             Login
@@ -89,6 +96,7 @@ const LoginScreenScreen = ({ navigation }: Props) => {
 
           <PrimaryButton
             borderLess
+            disabled={isLoading}
             onPress={onForgotPassword}
             style={styles.forgotButton}>
             ¿Olvidaste tu contraseña?

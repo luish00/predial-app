@@ -1,4 +1,5 @@
 {
   "name": "oidem",
-  "displayName": "oidem"
+  "displayName": "oidem",
+  "devMode": true
 }

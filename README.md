@@ -21,3 +21,8 @@ Run react native server
 
 Clean proyect
 > ### `yarn clean`
+
+
+# Login
+test@test.com
+37CQyaCKSZ

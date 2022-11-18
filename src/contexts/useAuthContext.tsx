@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
+import { UserProp } from '../types';
 
 interface Props {
   children: React.ReactNode;
@@ -7,18 +8,20 @@ interface Props {
 
 interface ActionProp {
   type: ACTIONS;
-  payload?: string;
+  payload?: {
+    user?: UserProp
+  };
 }
 
 interface ActionStateProps {
   isLoading: boolean;
-  isSignout: boolean;
-  userToken: string | null | undefined;
+  user: UserProp | undefined | null;
+  userToken: string | undefined | null;
 }
 
 const AUTH_STATE: ActionStateProps = {
   isLoading: true,
-  isSignout: false,
+  user: null,
   userToken: null,
 };
 
@@ -30,9 +33,8 @@ enum ACTIONS {
 
 const defaultContext = {
   authFunctions: {
-    signIn: async (_data: string) => { },
+    signIn: async (_data: UserProp) => { },
     signOut: () => { },
-    signUp: async (_data: string) => { },
   },
   authState: AUTH_STATE,
 };
@@ -50,20 +52,19 @@ function authReducer(prevState: ActionStateProps, action: ActionProp): ActionSta
     case ACTIONS.restoreToken:
       return {
         ...prevState,
-        userToken: payload,
+        user: payload?.user,
         isLoading: false,
       };
     case ACTIONS.singIn:
       return {
         ...prevState,
-        isSignout: false,
-        userToken: payload,
+        user: payload?.user,
+        userToken: payload?.user?.access_token,
       };
     case ACTIONS.singOut:
       return {
         ...prevState,
-        isSignout: true,
-        userToken: null,
+        user: null,
       };
     default:
       return prevState;
@@ -75,13 +76,10 @@ function useProviderAuth() {
 
   const authFunctions = useMemo(
     () => ({
-      signIn: async (data = 'dummy-auth-token') => {
-        dispatch({ type: ACTIONS.singIn, payload: data });
+      signIn: async (data: UserProp) => {
+        dispatch({ type: ACTIONS.singIn, payload: { user: data } });
       },
       signOut: () => dispatch({ type: ACTIONS.singOut }),
-      signUp: async (data = 'dummy-auth-token') => {
-        dispatch({ type: ACTIONS.singIn, payload: data });
-      },
     }),
     [],
   );

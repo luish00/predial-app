@@ -20,6 +20,7 @@ import { InputProps } from '../input';
 
 const InputWithImage: React.FC<InputProps> = ({
   focus,
+  disabled = false,
   image,
   keyboardType = 'default',
   label,
@@ -82,6 +83,7 @@ const InputWithImage: React.FC<InputProps> = ({
           ref={refInput}
           keyboardType={keyboardType}
           nativeID={nativeID}
+          editable={!disabled}
           onBlur={handleBlur}
           onChangeText={onChangeText}
           onFocus={handleFocus}
@@ -90,6 +92,7 @@ const InputWithImage: React.FC<InputProps> = ({
             styles.input,
             // focus && styles.inputFocused,
             error && styles.inputError,
+            disabled && styles.inputDisabled,
           ]}
           testID={nativeID}
           blurOnSubmit={returnKeyType !== 'next'}

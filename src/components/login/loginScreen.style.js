@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../colors';
 
 export default StyleSheet.create({
   appName: {
@@ -6,6 +7,12 @@ export default StyleSheet.create({
   },
   container: {
     padding: 16,
+  },
+  containerError: {
+    backgroundColor: colors.inputError,
+    height: 50,
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   containerButtons: {
     paddingTop: 20,

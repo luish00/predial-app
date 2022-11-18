@@ -105,6 +105,7 @@ const PrimaryButton: React.FC<Props> = ({
           styles.container,
           { alignSelf: alignSelf, width: sizes[size], minWidth: minWidth },
           style,
+          disabled && styles.buttonDisabled,
         ]}>
         {icon ? (
           <IconTextButton

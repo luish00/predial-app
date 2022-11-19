@@ -3,7 +3,7 @@ import { FlatList, RefreshControl, View } from 'react-native';
 
 import { searchIcon } from '../../assets/icons';
 
-import { AccountDetailsProp, NavigationPropBase } from '../../types';
+import { AccountDetailsProp } from '../../types';
 import { isNumber } from '../../utilities/utils';
 import { Col, Label } from '../common/grids';
 
@@ -11,7 +11,6 @@ import { InputWithImage } from '../common/inputs';
 import { HomeTabNavigationProp } from '../home/homeTab';
 import { MyAccountItem } from './components/MyAccountItem';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
-import { useGetAccounts } from './services/useAccountService';
 
 const MyAccountsScreen: React.FC<HomeTabNavigationProp> = ({
   accounts,
@@ -22,12 +21,6 @@ const MyAccountsScreen: React.FC<HomeTabNavigationProp> = ({
   const [search, setSearch] = useState('');
   const [data, setData] = useState<AccountDetailsProp[]>([]);
   const [dataFilter, setDataFilter] = useState<AccountDetailsProp[]>([]);
-
-  // const { accounts, isLoadingAccount, refreshAccounts } = useGetAccounts();
-
-  useEffect(() => {
-    console.log('mount');
-  }, []);
 
   useEffect(() => {
     if (isLoadingAccount || data.length > 0) {

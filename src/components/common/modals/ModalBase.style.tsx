@@ -49,4 +49,17 @@ export default StyleSheet.create({
     paddingBottom: 16,
     textAlign: 'left',
   },
+
+  titleScreen: {
+    color: colors.textPrimaryDark,
+    padding: 16,
+    borderBottomColor: '#999',
+    elevation: 2,
+    borderBottomWidth: 1,
+    margin: -2,
+    fontSize: 25,
+    fontWeight: 'bold',
+    lineHeight: 24,
+    textAlign: 'left',
+  },
 });

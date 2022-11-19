@@ -12,7 +12,7 @@ import {
   useAccountContext,
 } from '../../../contexts/useAccountContext';
 
-import { CONTACTS_DUMMY } from '../../../data_dummy/contacts';
+import { useAccountContacts } from '../services/useAccountService';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -30,13 +30,18 @@ const AccountDetailsTabScreen: React.FC<NavigationPropBase> = ({
   const { account } = route?.params;
   const { accountFunctions } = useAccountContext();
 
+  const { contacts, isLoading } = useAccountContacts(account.Id);
+
   const AccountTaskScreenWrapper: React.FC = () => (
     <AccountTasksScreen homeNavigation={navigation} />
   );
 
   useEffect(() => {
+    accountFunctions.loadContacts(contacts);
+  }, [accountFunctions, contacts]);
+
+  useEffect(() => {
     accountFunctions.loadAccount(account);
-    accountFunctions.loadContacts(CONTACTS_DUMMY);
   }, [account, accountFunctions]);
 
   return (

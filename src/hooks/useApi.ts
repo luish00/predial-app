@@ -10,12 +10,20 @@ interface BodyFetch {
   url: string;
 }
 
+interface ErrorsType {
+  value: string;
+  msg: string;
+  param: string;
+  location: string;
+}
+
 interface WrapperData<T> {
   isValid: boolean;
   message?: string;
   data?: T | null;
   status: number;
   error?: string;
+  errors: ErrorsType[];
 }
 
 type MethodType = 'POST' | 'DELETE' | 'PUT';
@@ -45,6 +53,8 @@ interface ApiGetServiceType<T> {
   isLoading: boolean;
   result: WrapperData<T> | null;
 }
+
+const STATUS_WITH_RESPONSE = [200, 403];
 
 const tryLog = async ({ url, data, request }) => {
   if (!devMode) {
@@ -122,20 +132,22 @@ export const useApiService = <T>(
 
     try {
       const request = await apiFetch(bodyFetch);
-      let data = request.status === 200 ? await request.json() : null;
+      let data = await request.json();
 
       tryLog({ url: path, data, request });
 
       wrapperData = {
+        data: request.status === 200 ? data : null,
+        errors: request.status === 403 ? data : [],
         isValid: request.ok,
         status: request.status,
-        data,
       };
     } catch (error) {
       wrapperData = {
         data: null,
-        message: error.message,
+        errors: [],
         isValid: false,
+        message: error.message,
         status: 500,
       };
     }
@@ -163,12 +175,15 @@ export const useApiGet = <T>(url = ''): ApiGetServiceType<T> => {
         url,
         method: 'GET',
       });
-      const data = request.status === 200 ? await request.json() : null;
+      const data = STATUS_WITH_RESPONSE.includes(request.status)
+        ? await request.json()
+        : null;
 
       tryLog({ url, data, request });
 
       wrapperData = {
-        data,
+        data: request.status === 200 ? data : null,
+        errors: request.status === 403 ? data?.errors : [],
         isValid: request.ok,
         message: '',
         status: request.status,
@@ -176,6 +191,7 @@ export const useApiGet = <T>(url = ''): ApiGetServiceType<T> => {
     } catch (error) {
       wrapperData = {
         data: null,
+        errors: [],
         isValid: false,
         message: error.message,
         status: 500,
@@ -207,22 +223,23 @@ const fetchWrapper = async <T>({
 
   try {
     const request = await apiFetch(bodyFetch);
-    let data = request.status === 200 ? await request.json() : null;
-
-    if (request.status >= 300) {
-      tryLog({ url: path, request });
-    }
+    const data = STATUS_WITH_RESPONSE.includes(request.status)
+      ? await request.json()
+      : null;
+    tryLog({ url: path, data, request });
 
     wrapperData = {
+      data: request.status === 200 ? data : null,
+      errors: request.status === 403 ? data?.errors : [],
       isValid: request.ok,
       status: request.status,
-      data,
     };
   } catch (error) {
     wrapperData = {
       data: null,
-      message: error.message,
+      errors: [],
       isValid: false,
+      message: error.message,
       status: 500,
     };
   }

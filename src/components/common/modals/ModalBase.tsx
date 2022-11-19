@@ -112,12 +112,14 @@ export const ModalScreen: React.FC<ModalTwoButtonProps> = props => {
 
   return (
     <Modal animationType="slide" visible={visible}>
+      <Text style={styles.titleScreen}>{title}</Text>
+
       <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
+        <Container>
+          {children}
 
-        <Container>{children}</Container>
-
-        <TwoButton {...props} />
+          <TwoButton {...props} />
+        </Container>
       </View>
     </Modal>
   );

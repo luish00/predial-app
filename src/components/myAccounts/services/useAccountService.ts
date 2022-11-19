@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useApiGet } from '../../../hooks';
-import { AccountsGetResponse, ContactAccountResponse } from '../../../models';
+import { useApiGet, useFetch } from '../../../hooks';
+import { AccountsGetResponse, ContactAccountResponse, CreateContactPayload } from '../../../models';
+import { ContactProp } from '../../../types';
 
 export const useGetAccounts = () => {
   const [accounts, setAccounts] = useState<AccountsGetResponse[]>([]);
@@ -31,18 +32,60 @@ export const useGetAccounts = () => {
 };
 
 export const useAccountContacts = (id = '') => {
-  const { get, isLoading, result } = useApiGet<ContactAccountResponse[]>(
-    `account/${id}`,
-  );
+  const [contacts, setContacts] = useState<ContactProp[]>([]);
+
+  const { get, isLoading, result } =
+    useApiGet<ContactAccountResponse[]>('contact');
+
+  useEffect(() => {
+    if (isLoading || !result?.isValid || !result.data) {
+      return;
+    }
+
+    setContacts(result.data);
+  }, [isLoading, result]);
 
   useEffect(() => {
     if (!id) {
       return;
     }
 
-    get({});
+    get({ params: { accountId: id } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  return { contacts: result, isLoading };
+  return { contacts, isLoading };
+};
+
+export const useCreateContact = () => {
+  const [isLoading, setLoading] = useState(false);
+  const [contact, setContact] = useState<ContactProp>();
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const { post } = useFetch<ContactAccountResponse>();
+
+  const createContact = useCallback(
+    async (newContact: CreateContactPayload) => {
+      setLoading(true);
+      setErrors([]);
+
+      console.log('newContact', newContact)
+      const response = await post({ path: 'contact', body: newContact });
+
+      if (response.isValid && response.data) {
+        setContact(response.data);
+      } else {
+        console.log('createContact', response);
+        const responseError = response.errors?.map(item => item.msg);
+
+        setErrors(responseError);
+      }
+
+      setLoading(false);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  return { contact, createContact, errors, isLoading };
 };

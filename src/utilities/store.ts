@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
 
 interface SetItem<T> {
@@ -6,11 +7,15 @@ interface SetItem<T> {
   json?: boolean;
 }
 
-const STORAGE_KEY_NAME = '@MyPetCloud:';
+const STORAGE_KEY_NAME = '@Oidem:';
 const doNothing = () => {};
 
+enum Keys {
+  USER_TOKEN = 'USER_TOKEN',
+}
+
 function storageKey(key: string) {
-  return STORAGE_KEY_NAME + key.split('/').join('_');
+  return STORAGE_KEY_NAME + key;
 }
 
 const setItem = async ({ data = {}, json = true, key = '' }) => {
@@ -38,33 +43,35 @@ const getItem = async <T>({ key = '', json = true, orDefault }: SetItem<T>) => {
   return dataFromSave;
 };
 
-export const getStorageValue = async <T>({
-  key = '',
-  orDefault,
-}: SetItem<T>) => {
+const getStorageValue = async <T>({ key = '', orDefault }: SetItem<T>) => {
   return getItem({ json: false, key, orDefault });
 };
 
-export const setStorageValue = async ({ key = '', data = '' }) => {
+const setStorageValue = async ({ key = '', data = '' }) => {
   setItem({ data, json: false, key });
 };
 
-export const getStorageBool = async ({
+const getStorageBool = async ({
   key = '',
   orDefault = false,
 }): Promise<boolean> => {
   const value = await getStorageValue<boolean>({ key, orDefault });
 
   return value;
-}
+};
 
-export const getStorageData = async <T>({
-  key = '',
-  orDefault,
-}: SetItem<T>) => {
+const getStorageData = async <T>({ key = '', orDefault }: SetItem<T>) => {
   return getItem({ key, orDefault });
 };
 
-export async function setStorageData({ key = '', data = {} }) {
+async function setStorageData({ key = '', data = {} }) {
   setItem({ data, key });
 }
+
+export const storeUserToken = (userToken: string) => {
+  setStorageValue({ key: Keys.USER_TOKEN, data: userToken });
+};
+
+export const getStoreUserToken = async (): Promise<string> => {
+  return getStorageValue({ key: Keys.USER_TOKEN, orDefault: '' });
+};

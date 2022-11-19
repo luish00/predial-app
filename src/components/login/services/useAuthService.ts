@@ -3,7 +3,7 @@ import { useAuthContext } from '../../../contexts/useAuthContext';
 
 import { useApiService } from '../../../hooks';
 import { UserProp } from '../../../types';
-import { LoginRequest, LoginResponse } from './services.model';
+import { LoginRequest, LoginResponse } from '../../../models';
 
 const useLoginSingIn = () => {
   const {

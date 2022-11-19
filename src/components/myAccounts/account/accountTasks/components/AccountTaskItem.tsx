@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 
-import { TaskListProps } from '../../../../types';
+import { TaskListProps } from '../../../../../types';
 
-import { Label } from '../../../common/grids';
+import { Label } from '../../../../common/grids';
 
 interface Props {
   item: TaskListProps;

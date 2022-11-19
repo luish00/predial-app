@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
-import { useAccountContext } from '../../../contexts/useAccountContext';
-import { ContactProp } from '../../../types';
-import { FabButton } from '../../common/buttons/FabButton';
-import { ListEmpty } from '../../common/lists';
-import { ListSeparator } from '../../common/lists/ListSeparator';
+import { useAccountContext } from '../../../../contexts/useAccountContext';
+import { ContactProp } from '../../../../types';
+import { FabButton } from '../../../common/buttons/FabButton';
+import { ListEmpty } from '../../../common/lists';
+import { ListSeparator } from '../../../common/lists/ListSeparator';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { ContactListItem } from './components/ContactListItem';
 import { ContactModal } from './components/ContactModal';

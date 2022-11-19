@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { devMode, URL_BASE } from '../../env';
+import { getStoreUserToken } from '../utilities/store';
 
 interface BodyFetch {
   body?: object;
@@ -25,6 +26,10 @@ interface FetchProps {
   params?: object;
 }
 
+interface FetchGetProps {
+  params?: object;
+}
+
 interface ApiFetchProps extends FetchProps {
   method: MethodType;
 }
@@ -35,14 +40,24 @@ interface ApiServiceType<T> {
   result: WrapperData<T> | null;
 }
 
-const tryLog = async ({ url, request }) => {
+interface ApiGetServiceType<T> {
+  get: (params: FetchGetProps) => Promise<WrapperData<T>>;
+  isLoading: boolean;
+  result: WrapperData<T> | null;
+}
+
+const tryLog = async ({ url, data, request }) => {
   if (!devMode) {
     return;
   }
 
   try {
-    const data = await request.json();
-    console.log('api log', { url, data });
+    const { status } = request;
+    if (status >= 300) {
+      console.log('api log', { url, data, status });
+    } else {
+      console.log('api log', { url, status });
+    }
   } catch (error) {
     console.log('api log catch', error.message);
   }
@@ -58,24 +73,22 @@ function serializeForUri(obj = {}) {
 
 async function apiFetch({
   body,
-  headers,
   method,
   params = {},
   url,
 }: BodyFetch): Promise<Response> {
-  const token = 'getSessiontoken';
+  const token = await getStoreUserToken();
   let rest = {};
 
   if (method === 'POST') {
     rest = { body: JSON.stringify(body) };
   }
 
-  return fetch(`${URL_BASE}/${url}?${serializeForUri(params)} `, {
+  return fetch(`${URL_BASE}/${url}?${serializeForUri(params)}`, {
     method: method,
     headers: {
       'Content-Type': 'application/json',
       authorization: `Bearer ${token}`,
-      ...headers,
     },
     ...rest,
   });
@@ -111,9 +124,7 @@ export const useApiService = <T>(
       const request = await apiFetch(bodyFetch);
       let data = request.status === 200 ? await request.json() : null;
 
-      if (request.status >= 300) {
-        tryLog({ url: path, request });
-      }
+      tryLog({ url: path, data, request });
 
       wrapperData = {
         isValid: request.ok,
@@ -138,7 +149,7 @@ export const useApiService = <T>(
   return { result, apiCall, isLoading };
 };
 
-export const useApiGet = <T>({ headers = {}, url = '' }) => {
+export const useApiGet = <T>(url = ''): ApiGetServiceType<T> => {
   const [result, setResult] = useState<WrapperData<T> | null>(null);
   const [isLoading, setLoading] = useState(false);
   let wrapperData: WrapperData<T>;
@@ -149,11 +160,12 @@ export const useApiGet = <T>({ headers = {}, url = '' }) => {
     try {
       const request = await apiFetch({
         params,
-        headers,
         url,
         method: 'GET',
       });
       const data = request.status === 200 ? await request.json() : null;
+
+      tryLog({ url, data, request });
 
       wrapperData = {
         data,
@@ -176,7 +188,7 @@ export const useApiGet = <T>({ headers = {}, url = '' }) => {
     return wrapperData;
   };
 
-  return [result, get, isLoading];
+  return { get, isLoading, result };
 };
 
 const fetchWrapper = async <T>({

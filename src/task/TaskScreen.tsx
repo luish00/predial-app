@@ -5,7 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import colors from '../colors';
 import { checkIcon, unCheckIcon } from '../assets/icons';
 
-import { AccountTaskItem } from '../components/account/accountTasks';
+import { AccountTaskItem } from '../components/myAccounts/account/accountTasks';
 import { Container, Label, Row } from '../components/common/grids';
 import { FormNextFocus } from '../components/common/form/FormNextFocus';
 import { InputForm } from '../components/common/inputs';

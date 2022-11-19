@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
 import { UserProp } from '../types';
+import { storeUserToken } from '../utilities/store';
 
 interface Props {
   children: React.ReactNode;
@@ -77,6 +78,7 @@ function useProviderAuth() {
   const authFunctions = useMemo(
     () => ({
       signIn: async (data: UserProp) => {
+        storeUserToken(data.access_token);
         dispatch({ type: ACTIONS.singIn, payload: { user: data } });
       },
       signOut: () => dispatch({ type: ACTIONS.singOut }),

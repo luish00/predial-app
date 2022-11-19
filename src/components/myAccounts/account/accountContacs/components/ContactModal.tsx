@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import { useInputReducerState } from '../../../../hooks';
-import { ContactProp } from '../../../../types';
+import { useInputReducerState } from '../../../../../hooks';
+import { ContactProp } from '../../../../../types';
 
-import { FormNextFocus } from '../../../common/form/FormNextFocus';
-import { InputForm } from '../../../common/inputs';
-import { DropdownForm } from '../../../common/inputs/Dropdown/DropdownForm';
-import { ModalScreen } from '../../../common/modals/ModalBase';
+import { FormNextFocus } from '../../../../common/form/FormNextFocus';
+import { InputForm } from '../../../../common/inputs';
+import { DropdownForm } from '../../../../common/inputs/Dropdown/DropdownForm';
+import { ModalScreen } from '../../../../common/modals/ModalBase';
 
 interface Props {
   isNewContact: boolean;

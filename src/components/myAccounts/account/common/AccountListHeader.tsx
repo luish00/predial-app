@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useAccountContext } from '../../../contexts/useAccountContext';
-import { useAccountUtils } from '../../../hooks/account/useAccountUtils';
-import { Col, Label } from '../../common/grids';
+import { useAccountContext } from '../../../../contexts/useAccountContext';
+import { useAccountUtils } from '../../../../hooks/account/useAccountUtils';
+import { Col, Label } from '../../../common/grids';
 
 const styles = StyleSheet.create({
   container: {

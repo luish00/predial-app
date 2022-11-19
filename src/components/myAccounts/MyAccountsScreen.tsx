@@ -1,30 +1,42 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 
 import { searchIcon } from '../../assets/icons';
 
-import { AccountDetailsProp } from '../../types';
+import { AccountDetailsProp, NavigationPropBase } from '../../types';
 import { isNumber } from '../../utilities/utils';
+import { Col, Label } from '../common/grids';
 
 import { InputWithImage } from '../common/inputs';
+import { HomeTabNavigationProp } from '../home/homeTab';
 import { MyAccountItem } from './components/MyAccountItem';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
-import { HomeTabChildrenProps } from '../home/homeTab';
+import { useGetAccounts } from './services/useAccountService';
 
-// eslint-disable-next-line prettier/prettier
-interface Props extends HomeTabChildrenProps { }
-
-const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
+const MyAccountsScreen: React.FC<HomeTabNavigationProp> = ({
+  accounts,
+  isLoadingAccount,
+  navigation,
+  refreshAccounts,
+}) => {
   const [search, setSearch] = useState('');
   const [data, setData] = useState<AccountDetailsProp[]>([]);
   const [dataFilter, setDataFilter] = useState<AccountDetailsProp[]>([]);
 
+  // const { accounts, isLoadingAccount, refreshAccounts } = useGetAccounts();
+
   useEffect(() => {
-    if (accounts.length > 0) {
-      setData(accounts);
-      setDataFilter(accounts);
+    console.log('mount');
+  }, []);
+
+  useEffect(() => {
+    if (isLoadingAccount || data.length > 0) {
+      return;
     }
-  }, [accounts]);
+
+    setData(accounts);
+    setDataFilter(accounts);
+  }, [isLoadingAccount, data, accounts]);
 
   const handleChangeSearch = useCallback(
     (value: string) => {
@@ -43,12 +55,21 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
           return isNum
             ? AccountNumber.includes(value)
             : fullName.toLowerCase().includes(value.toLowerCase());
-        });
+        },
+      );
 
       setDataFilter(newData);
     },
     [data],
   );
+
+  const onRefresh = useCallback(() => {
+    if (isLoadingAccount) {
+      return;
+    }
+
+    refreshAccounts();
+  }, [refreshAccounts, isLoadingAccount]);
 
   return (
     <View>
@@ -62,12 +83,21 @@ const MyAccountsScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
         image={searchIcon}
       />
 
+      <Col>
+        <Label textAlign="center" fontSize={20}>
+          {`${dataFilter.length} de ${data.length}`}
+        </Label>
+      </Col>
+
       <FlatList
         data={dataFilter}
         renderItem={({ item }) => {
-          return <MyAccountItem account={item} navigation={homeNavigation} />;
+          return <MyAccountItem account={item} navigation={navigation} />;
         }}
-        keyExtractor={item => item.AccountNumber}
+        refreshControl={
+          <RefreshControl refreshing={isLoadingAccount} onRefresh={onRefresh} />
+        }
+        keyExtractor={(item, index) => String(`${index}-${item.AccountNumber}`)}
         ListEmptyComponent={MyAccountListEmpty}
       />
     </View>

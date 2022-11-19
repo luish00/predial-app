@@ -28,7 +28,7 @@ const LoginScreenScreen = ({ navigation }: Props) => {
   const { isLoading, doLogin, errorLogin } = useLoginService();
 
   const isFromValid = React.useMemo(() => {
-    return validateEmail(email) && password.length > 0;
+    return validateEmail(email.trim()) && password.length > 0;
   }, [email, password]);
 
   const onPress = React.useCallback(() => {
@@ -36,7 +36,7 @@ const LoginScreenScreen = ({ navigation }: Props) => {
       return;
     }
 
-    doLogin({ Password: password, UserName: email });
+    doLogin({ Password: password, UserName: email.trim() });
   }, [email, isFromValid, doLogin, password]);
 
   const onForgotPassword = () => {
@@ -54,7 +54,6 @@ const LoginScreenScreen = ({ navigation }: Props) => {
       <View style={styles.containerInputs}>
         <FormNextFocus inputKeys={FORM_KEYS}>
           <InputForm
-            autoFocus
             disabled={isLoading}
             image={accountIcon}
             keyboardType="email-address"

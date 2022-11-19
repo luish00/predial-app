@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Col, Label } from '../../../common/grids';
+import { Col, Label } from '../../../../common/grids';
 
-import { ContactProp } from '../../../../types';
-import { useAccountContactUtils } from '../../../../hooks/account/useAccountUtils';
+import { ContactProp } from '../../../../../types';
+import { useAccountContactUtils } from '../../../../../hooks/account/useAccountUtils';
 
 const styles = StyleSheet.create({
   container: {

@@ -3,19 +3,21 @@ import { PermissionsAndroid, SafeAreaView, Text, View } from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 
-import { HomeTabChildrenProps } from '../home/homeTab';
+import { HomeTabNavigationProp } from '../home/homeTab';
 import { AccountDetailsProp } from '../../types';
 
 import { MarkerItem } from './MarkerItem';
 
 import { mapStyle, styles } from './MyRoutesScreen.style';
 
-interface Props extends HomeTabChildrenProps { }
 interface LocationProps extends Geolocation.GeoPosition {
   coords: Geolocation.GeoCoordinates;
 }
 
-const MyRoutesScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
+const MyRoutesScreen: React.FC<HomeTabNavigationProp> = ({
+  accounts,
+  navigation,
+}) => {
   const [location, setLocation] = useState<LocationProps | boolean>(false);
   const [permissionGranted, setPermissionGranted] = useState<boolean>(false);
 
@@ -64,9 +66,9 @@ const MyRoutesScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
 
   const onPressDescription = React.useCallback(
     (account: AccountDetailsProp) => () => {
-      homeNavigation.navigate('accountDetailsTab', { account });
+      navigation.navigate('accountDetailsTab', { account });
     },
-    [homeNavigation],
+    [navigation],
   );
 
   const renderMarkers = () => {
@@ -81,9 +83,8 @@ const MyRoutesScreen: React.FC<Props> = ({ accounts, homeNavigation }) => {
           Longitud,
         } = account;
         const titleText = `Cuenta ${AccountNumber}`;
-        const descriptionText = `Propietario: ${FirstName} ${LastName}.\nMonto de adeudo: $${
-          Amount || '0.00'
-        }`;
+        const descriptionText = `Propietario: ${FirstName} ${LastName}.\nMonto de adeudo: $${Amount || '0.00'
+          }`;
         const buttonText = 'Ver cuenta';
 
         return (

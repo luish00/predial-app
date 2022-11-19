@@ -12,6 +12,7 @@ export interface NavigationPropBase {
 }
 
 export interface AccountDetailsProp {
+  Id: number;
   AccountNumber: string;
   FirstName: string;
   MiddleName?: string;
@@ -20,14 +21,14 @@ export interface AccountDetailsProp {
   PostalCode?: string;
   City?: string;
   State?: string;
-  Country?: string;
-  Latitud?: string;
+  Country?: number;
+  Latitud?: number;
   Longitud?: string;
   Amount?: number;
   Phone?: string;
   Mobile?: string;
   Email?: string;
-  Assigned2UserId?: string;
+  Assigned2UserId?: number;
 }
 
 export interface AttachmentProp {
@@ -72,7 +73,7 @@ export interface TaskProp {
   InstructionNotification: boolean;
   PaymentPromise: string;
   Phone?: string;
-  Name?: string; // no bsck
+  Name?: string; // no back
   Mobile?: string;
   Email?: string;
   AccountId: string;

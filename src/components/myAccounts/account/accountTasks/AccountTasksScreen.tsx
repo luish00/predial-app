@@ -1,13 +1,13 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 
-import { TASK_LIST } from '../../../data_dummy/taskList';
-import { TaskListProps } from '../../../types';
+import { TASK_LIST } from '../../../../data_dummy/taskList';
+import { TaskListProps } from '../../../../types';
 
-import { ListSeparator } from '../../common/lists/ListSeparator';
+import { ListSeparator } from '../../../common/lists/ListSeparator';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { AccountTaskItem } from './components';
-import { HomeTabNavigationProp } from '../../home/homeTab';
+import { HomeTabNavigationProp } from '../../../home/homeTab';
 
 const AccountTasksScreen: React.FC<HomeTabNavigationProp> = ({
   homeNavigation,

@@ -73,9 +73,11 @@ function reducer(prevState: ActionStateProps, action: ActionProp): ActionStatePr
         }),
       };
     case ACTIONS.addContact:
+      const oldContacts = prevState.contacts || [];
+
       return {
         ...prevState,
-        contacts: [...prevState.contacts, action.updatedContact],
+        contacts: [...oldContacts, action.updatedContact],
       };
     default:
       return prevState;

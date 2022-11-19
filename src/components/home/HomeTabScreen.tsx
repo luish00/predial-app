@@ -4,25 +4,13 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { MyAccountsScreen } from '../myAccounts/MyAccountsScreen';
 import { MyRoutesScreen } from '../myRoutes/MyRoutesScreen';
 import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
-import { AccountDetailsProp, NavigationPropBase } from '../../types';
-import { DATA_DUMMY } from '../../data_dummy/accounts';
+import { NavigationPropBase } from '../../types';
+import { useGetAccounts } from '../myAccounts/services/useAccountService';
 
 const Tab = createMaterialTopTabNavigator();
 
-const HomeTabScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
-  const [accounts, setAccounts] = useState<AccountDetailsProp[]>([]);
-
-  const MyAccountWrapper: React.FC = () => {
-    return <MyAccountsScreen accounts={accounts} homeNavigation={navigation} />;
-  };
-
-  const MyRoutesWrapper: React.FC = () => {
-    return <MyRoutesScreen accounts={accounts} homeNavigation={navigation} />;
-  };
-
-  useEffect(() => {
-    setAccounts(DATA_DUMMY);
-  }, []);
+const HomeTabScreen: React.FC<NavigationPropBase> = () => {
+  const { accounts, isLoadingAccount, refreshAccounts } = useGetAccounts();
 
   return (
     <>
@@ -30,17 +18,29 @@ const HomeTabScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         initialRouteName="myAccounts"
         screenOptions={{
           ...TabTopScreenStyleOption,
+          swipeEnabled: false,
         }}>
-        <Tab.Screen
-          name="myAccounts"
-          options={{ title: 'Mis cuentas' }}
-          component={MyAccountWrapper}
-        />
-        <Tab.Screen
-          name="myRoutes"
-          options={{ title: 'Mi ruta' }}
-          component={MyRoutesWrapper}
-        />
+        <Tab.Screen name="myAccounts" options={{ title: 'Mis cuentas' }}>
+          {({ navigation }) => (
+            <MyAccountsScreen
+              accounts={accounts}
+              isLoadingAccount={isLoadingAccount}
+              navigation={navigation}
+              refreshAccounts={refreshAccounts}
+            />
+          )}
+        </Tab.Screen>
+
+        <Tab.Screen name="myRoutes" options={{ title: 'Mi ruta' }}>
+          {({ navigation }) => (
+            <MyRoutesScreen
+              accounts={accounts}
+              isLoadingAccount={isLoadingAccount}
+              navigation={navigation}
+              refreshAccounts={refreshAccounts}
+            />
+          )}
+        </Tab.Screen>
       </Tab.Navigator>
     </>
   );

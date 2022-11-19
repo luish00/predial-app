@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useRoute } from '@react-navigation/native';
 
-import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
+import { TabTopScreenStyleOption } from '../../../navigations/navigationUtils';
 import { AccountDetailsScreen } from './accountDetails/AccountDetailsScreen';
 import { AccountContactsScreen } from './accountContacs';
 import { AccountTasksScreen } from './accountTasks';
-import { NavigationPropBase } from '../../types';
+import { NavigationPropBase } from '../../../types';
 import {
   AccountProvider,
   useAccountContext,
-} from '../../contexts/useAccountContext';
+} from '../../../contexts/useAccountContext';
 
-import { CONTACTS_DUMMY } from '../../data_dummy/contacts';
-import { HomeTabNavigationProp } from '../home/homeTab';
+import { CONTACTS_DUMMY } from '../../../data_dummy/contacts';
 
 const Tab = createMaterialTopTabNavigator();
 

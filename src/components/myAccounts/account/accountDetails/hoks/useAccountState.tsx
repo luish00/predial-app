@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useState, useCallback } from 'react';
 // import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { AccountDetailsProp } from '../../../../types';
+import { AccountDetailsProp } from '../../../../../types';
 
 const useAccountState = (account: AccountDetailsProp | null | undefined) => {
   const [state, setState] = useState<AccountDetailsProp | null | undefined>(

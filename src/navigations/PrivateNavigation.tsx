@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { HomeTabScreen } from '../components/home/HomeTabScreen';
-import { AccountDetailsTabScreen } from '../components/account/AccountDetailsTabScreen';
+import { AccountDetailsTabScreen } from '../components/myAccounts/account/AccountDetailsTabScreen';
 import { TaskScreen } from '../task/TaskScreen';
 
 const Stack = createNativeStackNavigator();

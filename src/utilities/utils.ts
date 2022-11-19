@@ -33,9 +33,9 @@ export function toCurrency(value: string | number | undefined | null) {
   return `${formattedInt}${formattedDec}`;
 }
 
-export // serializeForUri({ param0: 'value 0', param1: 'value:1' }) ===
+// serializeForUri({ param0: 'value 0', param1: 'value:1' }) ===
 // 'param0=value%200&param1=value%3A1'
-function serializeForUri(obj = {}) {
+export function serializeForUri(obj = {}) {
   return Object.keys(obj)
     .map((key: string) => `${encodeURI(key)}=${encodeURI(obj[key])}`)
     .join('&');

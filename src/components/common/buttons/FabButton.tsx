@@ -20,16 +20,23 @@ const styles = StyleSheet.create({
     shadowColor: '#222',
     width: 80,
   },
+  containerAbsolute: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+  },
 });
 
 export const FabButton: React.FC<Props> = ({ onPress }) => {
   return (
-    <TouchableNativeFeedback onPress={onPress}>
-      <View style={styles.container}>
-        <Label fontSize={40} color="#fff">
-          +
-        </Label>
-      </View>
-    </TouchableNativeFeedback>
+    <View style={styles.containerAbsolute}>
+      <TouchableNativeFeedback onPress={onPress}>
+        <View style={styles.container}>
+          <Label fontSize={40} color="#fff">
+            +
+          </Label>
+        </View>
+      </TouchableNativeFeedback>
+    </View>
   );
 };

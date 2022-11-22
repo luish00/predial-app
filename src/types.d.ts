@@ -40,7 +40,7 @@ export interface AttachmentProp {
 }
 
 export interface ContactProp {
-  Id: string; // add to backend
+  Id: int; // add to backend
   IsOwner: boolean;
   Name?: string;
   Relationship: string;

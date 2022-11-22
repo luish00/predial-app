@@ -90,7 +90,7 @@ async function apiFetch({
   const token = await getStoreUserToken();
   let rest = {};
 
-  if (method === 'POST') {
+  if (['POST', 'PUT'].includes(method)) {
     rest = { body: JSON.stringify(body) };
   }
 

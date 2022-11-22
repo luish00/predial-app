@@ -19,7 +19,7 @@ const useValidateInput = (validations: ValidationsProps[], state: object) => {
   } = useFormContext();
 
   const validateForm = useCallback(() => {
-    let isValid = false;
+    let isValid = true;
     setFormErrors([]);
 
     try {

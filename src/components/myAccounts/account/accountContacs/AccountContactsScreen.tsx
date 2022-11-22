@@ -27,8 +27,13 @@ const AccountContactsScreen: React.FC = () => {
   const [isNewContact, setIsNewContact] = useState(false);
   const [contactModal, setContactModal] = useState<ContactProp>(newContact);
 
-  const { createContact, isLoading, errors, contact, resetAccountService } =
-    useCreateContact();
+  const {
+    createOrUpdateContact,
+    isLoading,
+    errors,
+    contact,
+    resetAccountService,
+  } = useCreateContact();
 
   const onDismissModal = React.useCallback(() => {
     setVisible(false);
@@ -43,9 +48,9 @@ const AccountContactsScreen: React.FC = () => {
 
   const onSaveContact = useCallback(
     (item: ContactProp) => {
-      createContact(item);
+      createOrUpdateContact(item);
     },
-    [createContact],
+    [createOrUpdateContact],
   );
 
   const onAddContact = useCallback(() => {

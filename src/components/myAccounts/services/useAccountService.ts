@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useApiGet, useFetch } from '../../../hooks';
-import { AccountsGetResponse, ContactAccountResponse, CreateContactPayload } from '../../../models';
+import {
+  AccountsGetResponse,
+  ContactAccountResponse,
+  CreateContactPayload,
+} from '../../../models';
 import { ContactProp } from '../../../types';
 
 export const useGetAccounts = () => {
@@ -42,7 +46,21 @@ export const useAccountContacts = (id = '') => {
       return;
     }
 
-    setContacts(result.data);
+    setContacts(
+      result.data.map(item => ({
+        AccountId: item.AccountId,
+        Email: item.Email,
+        FirstName: item.FirstName,
+        Id: item.Id,
+        IsOwner: item.IsOwner,
+        LastName: item.LastName,
+        MiddleName: item.MiddleName,
+        Mobile: item.Mobile,
+        Name: item.Name,
+        Phone: item.Phone,
+        Relationship: item.Relationship,
+      })),
+    );
   }, [isLoading, result]);
 
   useEffect(() => {
@@ -62,26 +80,46 @@ export const useCreateContact = () => {
   const [contact, setContact] = useState<ContactProp | null>();
   const [errors, setErrors] = useState<string[]>([]);
 
-  const { post } = useFetch<ContactAccountResponse>();
+  const { post, put } = useFetch<ContactAccountResponse>();
 
-  const createContact = useCallback(
-    async (newContact: CreateContactPayload) => {
-      setLoading(true);
-      setErrors([]);
+  const createOrUpdateContact = useCallback(
+    (body: CreateContactPayload) => {
+      const request = async () => {
+        setLoading(true);
+        setErrors([]);
 
-      console.log('newContact', newContact)
-      const response = await post({ path: 'contact', body: newContact });
+        const isNew = !!body.Id;
+        const path = isNew ? `contact/${body.Id}` : 'contact';
+        const action = isNew ? put : post;
 
-      if (response.isValid && response.data) {
-        setContact(response.data);
-      } else {
-        console.log('createContact', response);
-        const responseError = response.errors?.map(item => item.msg);
+        const response = await action({ path, body });
 
-        setErrors(responseError);
-      }
+        if (response.isValid && response.data) {
+          const { data } = response;
 
-      setLoading(false);
+          setContact({
+            AccountId: data.AccountId,
+            Email: data.Email,
+            FirstName: data.FirstName,
+            Id: parseInt(data.Id, 2),
+            IsOwner: data.IsOwner,
+            LastName: data.LastName,
+            MiddleName: data.MiddleName,
+            Mobile: data.Mobile,
+            Name: data.Name,
+            Phone: data.Phone,
+            Relationship: data.Relationship,
+          });
+        } else {
+          const responseError = response.errors?.map(item => item.msg);
+
+          setErrors(responseError);
+        }
+
+        setLoading(false);
+      };
+
+      request();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -93,5 +131,11 @@ export const useCreateContact = () => {
     setContact(null);
   }, []);
 
-  return { contact, createContact, errors, isLoading, resetAccountService };
+  return {
+    contact,
+    createOrUpdateContact,
+    errors,
+    isLoading,
+    resetAccountService,
+  };
 };

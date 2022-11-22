@@ -11,4 +11,4 @@ export interface AccountsGetResponse extends AccountDetailsProp {}
 
 export interface ContactAccountResponse extends ContactProp {}
 
-export interface CreateContactPayload extends Omit<ContactProp, 'Id'> {}
+export interface CreateContactPayload extends ContactProp {}

@@ -9,6 +9,7 @@ import { AccountDetailsProp } from '../../types';
 import { MarkerItem } from './MarkerItem';
 
 import { mapStyle, styles } from './MyRoutesScreen.style';
+import { log } from '../../utilities/utils';
 
 interface LocationProps extends Geolocation.GeoPosition {
   coords: Geolocation.GeoCoordinates;
@@ -54,7 +55,10 @@ const MyRoutesScreen: React.FC<HomeTabNavigationProp> = ({
           Geolocation.getCurrentPosition(
             position => setLocation(position),
             error => {
-              console.log(error.code, error.message);
+              log(
+                'Geolocation',
+                `code: ${error.code}, message: ${error.message}`,
+              );
               setLocation(false);
             },
             { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },

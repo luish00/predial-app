@@ -10,7 +10,13 @@ import { AccountListHeader } from '../common/AccountListHeader';
 import { ContactListItem } from './components/ContactListItem';
 import { ContactModal } from './components/ContactModal';
 
-const newContact: ContactProp = {};
+const newContact: ContactProp = {
+  Id: '',
+  IsOwner: false,
+  Relationship: '',
+  FirstName: '',
+  AccountId: '',
+};
 
 const AccountContactsScreen: React.FC = () => {
   const {
@@ -21,7 +27,8 @@ const AccountContactsScreen: React.FC = () => {
   const [isNewContact, setIsNewContact] = useState(false);
   const [contactModal, setContactModal] = useState<ContactProp>(newContact);
 
-  const { createContact, isLoading, errors, contact } = useCreateContact();
+  const { createContact, isLoading, errors, contact, resetAccountService } =
+    useCreateContact();
 
   const onDismissModal = React.useCallback(() => {
     setVisible(false);
@@ -49,6 +56,7 @@ const AccountContactsScreen: React.FC = () => {
 
   useEffect(() => {
     if (visible && account?.Id) {
+      resetAccountService();
       setContactModal((prev: ContactProp) => ({
         ...prev,
         AccountId: account?.Id,

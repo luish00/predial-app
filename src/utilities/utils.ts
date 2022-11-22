@@ -1,3 +1,5 @@
+import { devMode } from '../../env';
+
 export function validateEmail(email: string): boolean {
   if (email?.length === 0) {
     return false;
@@ -39,4 +41,10 @@ export function serializeForUri(obj = {}) {
   return Object.keys(obj)
     .map((key: string) => `${encodeURI(key)}=${encodeURI(obj[key])}`)
     .join('&');
+}
+
+export function log(key: string, message: string) {
+  if (devMode) {
+    console.log(key, message);
+  }
 }

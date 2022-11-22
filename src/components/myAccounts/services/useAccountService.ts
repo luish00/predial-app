@@ -59,7 +59,7 @@ export const useAccountContacts = (id = '') => {
 
 export const useCreateContact = () => {
   const [isLoading, setLoading] = useState(false);
-  const [contact, setContact] = useState<ContactProp>();
+  const [contact, setContact] = useState<ContactProp | null>();
   const [errors, setErrors] = useState<string[]>([]);
 
   const { post } = useFetch<ContactAccountResponse>();
@@ -87,5 +87,11 @@ export const useCreateContact = () => {
     [],
   );
 
-  return { contact, createContact, errors, isLoading };
+  const resetAccountService = useCallback(() => {
+    setErrors([]);
+    setLoading(false);
+    setContact(null);
+  }, []);
+
+  return { contact, createContact, errors, isLoading, resetAccountService };
 };

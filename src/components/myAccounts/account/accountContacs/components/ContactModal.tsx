@@ -3,8 +3,13 @@ import colors from '../../../../../colors';
 
 import { useInputReducerState } from '../../../../../hooks';
 import { ContactProp } from '../../../../../types';
+import { DATA_RELATIONSHIP } from '../../../../../utilities/constants';
 
 import { FormNextFocus } from '../../../../common/form/FormNextFocus';
+import {
+  useValidateInput,
+  ValidationsProps,
+} from '../../../../common/form/hooks/useValidateInput';
 import { Col, Label } from '../../../../common/grids';
 import { InputForm } from '../../../../common/inputs';
 import { DropdownForm } from '../../../../common/inputs/Dropdown/DropdownForm';
@@ -30,15 +35,46 @@ const InputFormKeysFocus = [
   'Email',
 ];
 
-const dataRelationship = [
-  { label: 'Propietario(a)', value: 'Propietario(a)' },
-  { label: 'Esposo(a)', value: 'Esposo(a)' },
-  { label: 'Hijo(a)', value: 'Hijo(a)' },
-  { label: 'Padre', value: 'Padre' },
-  { label: 'Abuelo(a)', value: 'Abuelo(a)' },
-  { label: 'Tío(a)', value: 'Tío(a)' },
-  { label: 'Sobrino(a)', value: 'Sobrino(a)' },
-  { label: 'Otro', value: 'Otro' },
+const InputValidations: ValidationsProps[] = [
+  {
+    key: 'FirstName',
+    keyName: 'Nombre',
+    requerid: true,
+  },
+  {
+    key: 'MiddleName',
+    keyName: 'Apellido materno',
+    requerid: true,
+  },
+  {
+    key: 'LastName',
+    keyName: 'Apellido paterno',
+    requerid: true,
+  },
+  {
+    key: 'Relationship',
+    keyName: 'Parentesco',
+    requerid: true,
+  },
+  {
+    key: 'Mobile',
+    keyName: 'Celular',
+    requerid: true,
+    onlyNumber: true,
+    minLength: 10,
+  },
+  {
+    key: 'Phone',
+    keyName: 'Teléfono',
+    requerid: true,
+    onlyNumber: true,
+    minLength: 10,
+  },
+  {
+    key: 'Email',
+    keyName: 'Correo',
+    isEmail: true,
+  },
 ];
 
 export const ContactModal: React.FC<Props> = ({
@@ -53,9 +89,19 @@ export const ContactModal: React.FC<Props> = ({
   const [contact, setContact] = useState<ContactProp>(item);
   const { state, onChangeInput, setItemState } =
     useInputReducerState<ContactProp>(contact);
+  const { validateForm, formErrors } = useValidateInput(
+    InputValidations,
+    state,
+  );
 
   const handleSave = React.useCallback(() => {
     if (isLoading) {
+      return;
+    }
+
+    const isValid = validateForm();
+
+    if (!isValid) {
       return;
     }
 
@@ -65,7 +111,7 @@ export const ContactModal: React.FC<Props> = ({
     };
 
     onSave(newState);
-  }, [isLoading, onSave, state]);
+  }, [isLoading, onSave, state, validateForm]);
 
   const handleDismiss = React.useCallback(() => {
     if (isLoading) {
@@ -122,7 +168,7 @@ export const ContactModal: React.FC<Props> = ({
 
         <DropdownForm
           title="Parentesco"
-          data={dataRelationship}
+          data={DATA_RELATIONSHIP}
           onChange={itemRelationship => {
             setItemState('Relationship', itemRelationship.value);
           }}
@@ -170,6 +216,14 @@ export const ContactModal: React.FC<Props> = ({
         {errors.map((error, index) => (
           <Label key={String(index)} color={colors.inputError}>
             {`* ${error}`}
+          </Label>
+        ))}
+      </Col>
+
+      <Col>
+        {formErrors.map((error, index) => (
+          <Label key={String(index)} color={colors.inputError}>
+            {error}
           </Label>
         ))}
       </Col>

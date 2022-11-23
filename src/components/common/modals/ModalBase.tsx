@@ -1,11 +1,13 @@
 import React from 'react';
-import { Modal, Text, View } from 'react-native';
+import { Modal, Text, View, ViewStyle } from 'react-native';
+import AnimatedLottieView from 'lottie-react-native';
 
 import colors from '../../../colors';
 import styles from './ModalBase.style';
 
 import { PrimaryButton } from '../buttons/PrimaryButton';
 import { Container } from '../grids';
+import { loadingAnimation } from '../../../assets/lottie';
 
 interface SecondaryButtonProps {
   secondaryText?: string | null;
@@ -14,8 +16,9 @@ interface SecondaryButtonProps {
 
 interface ModalBaseProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   visible: boolean;
+  styleContent?: ViewStyle;
 }
 
 interface ModalTwoButtonProps extends ModalBaseProps {
@@ -75,11 +78,12 @@ export const ModalBase: React.FC<ModalBaseProps> = ({
   children,
   title,
   visible,
+  styleContent,
 }) => (
   <Modal animationType="slide" transparent visible={visible}>
     <View style={styles.overlay}>
-      <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
+      <View style={[styles.content, styleContent]}>
+        {title && <Text style={styles.title}>{title}</Text>}
 
         {children}
       </View>
@@ -122,5 +126,19 @@ export const ModalScreen: React.FC<ModalTwoButtonProps> = props => {
         </Container>
       </View>
     </Modal>
+  );
+};
+
+export const ModalLoading = ({ visible = false }) => {
+  return (
+    <ModalBase visible={visible} styleContent={styles.modalLoadingContainer}>
+      <AnimatedLottieView
+        source={loadingAnimation}
+        autoPlay
+        loop
+        hardwareAccelerationAndroid
+        style={styles.modalLoadingLottie}
+      />
+    </ModalBase>
   );
 };

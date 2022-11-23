@@ -9,6 +9,7 @@
  */
 
 import React from 'react';
+import Toast from 'react-native-toast-message';
 
 import { AppNavigation } from './src/navigations/AppNavigation';
 import { AuthProvider } from './src/contexts/useAuthContext';
@@ -17,6 +18,8 @@ const App = () => {
   return (
     <AuthProvider>
       <AppNavigation />
+
+      <Toast />
     </AuthProvider>
   );
 };

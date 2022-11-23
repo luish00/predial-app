@@ -62,4 +62,13 @@ export default StyleSheet.create({
     lineHeight: 24,
     textAlign: 'left',
   },
+
+  modalLoadingContainer: {
+    width: '70%',
+  },
+
+  modalLoadingLottie: {
+    alignSelf: 'center',
+    height: 160,
+  },
 });

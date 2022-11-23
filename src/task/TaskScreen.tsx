@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableNativeFeedback, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
@@ -16,6 +16,7 @@ import styles from './TaskScreen.style';
 import { useInputReducerState } from '../hooks';
 import { NavigationPropBase, TaskProp } from '../types';
 import DatePicker from 'react-native-date-picker';
+import { CameraScreen } from './CameraScreen';
 
 interface PhotoButtonProps {
   label: string;
@@ -36,14 +37,20 @@ const PhotoButton: React.FC<PhotoButtonProps> = ({ label, onPress }) => {
   );
 };
 
-export const TaskScreen: React.FC<NavigationPropBase> = () => {
+export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const route = useRoute();
   const { task } = route?.params || {};
+
+  const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
 
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
   const { onChangeInput, setItemState, state } =
     useInputReducerState<TaskProp>(task);
+
+  useEffect(() => {
+    navigation.setOptions({ headerShown: !isCameraActive });
+  }, [isCameraActive, navigation]);
 
   const onPersonalPress = useCallback(() => {
     setPersonalNotify(true);
@@ -70,102 +77,114 @@ export const TaskScreen: React.FC<NavigationPropBase> = () => {
     setOpenPicker(false);
   }, []);
 
-  return (
-    <Container>
-      <AccountTaskItem disabled item={task} />
+  const onPressPhotoButton = useCallback(() => {
+    setIsCameraActive(prevState => !prevState);
+  }, []);
 
-      <View style={styles.formContainer}>
-        <TouchableNativeFeedback onPress={onPersonalPress}>
-          <View style={styles.toggleButton}>
-            <ImageIcon
-              height={25}
-              source={isPersonalNotify ? checkIcon : unCheckIcon}
-              style={styles.toggleButtonIcon}
-              tintColor={colors.secondary}
-              width={25}
-            />
+  const renderContent = () => {
+    if (isCameraActive) {
+      return <CameraScreen onClose={onPressPhotoButton} />;
+    }
 
-            <Label color={colors.textPrimary}>Notificación personal</Label>
-          </View>
-        </TouchableNativeFeedback>
+    return (
+      <Container>
+        <AccountTaskItem disabled item={task} />
 
-        {isPersonalNotify && (
-          <View>
-            <FormNextFocus inputKeys={FORM_NOTIFICATION}>
-              <InputForm
-                label="Nombre de contacto"
-                nativeID="Name"
-                onChange={onChangeInput}
-                required
-                returnKeyType="next"
-                value={state.Name}
+        <View style={styles.formContainer}>
+          <TouchableNativeFeedback onPress={onPersonalPress}>
+            <View style={styles.toggleButton}>
+              <ImageIcon
+                height={25}
+                source={isPersonalNotify ? checkIcon : unCheckIcon}
+                style={styles.toggleButtonIcon}
+                tintColor={colors.secondary}
+                width={25}
               />
 
-              <InputForm
-                keyboardType="phone-pad"
-                label="Celular"
-                nativeID="Mobile"
-                onChange={onChangeInput}
-                required
-                returnKeyType="next"
-                value={state.Mobile}
+              <Label color={colors.textPrimary}>Notificación personal</Label>
+            </View>
+          </TouchableNativeFeedback>
+
+          {isPersonalNotify && (
+            <View>
+              <FormNextFocus inputKeys={FORM_NOTIFICATION}>
+                <InputForm
+                  label="Nombre de contacto"
+                  nativeID="Name"
+                  onChange={onChangeInput}
+                  required
+                  returnKeyType="next"
+                  value={state.Name}
+                />
+
+                <InputForm
+                  keyboardType="phone-pad"
+                  label="Celular"
+                  nativeID="Mobile"
+                  onChange={onChangeInput}
+                  required
+                  returnKeyType="next"
+                  value={state.Mobile}
+                />
+
+                <TouchableNativeFeedback onPress={() => setOpenPicker(true)}>
+                  <View>
+                    <InputForm
+                      label="Promesa de pago"
+                      nativeID="PaymentPromise"
+                      onChange={onChangeInput}
+                      required
+                      returnKeyType="done"
+                      editable={false}
+                      value={state.PaymentPromise}
+                    />
+                  </View>
+                </TouchableNativeFeedback>
+              </FormNextFocus>
+            </View>
+          )}
+
+          <TouchableNativeFeedback onPress={onIntructivoPress}>
+            <View style={styles.toggleButton}>
+              <ImageIcon
+                height={25}
+                source={isPersonalNotify ? unCheckIcon : checkIcon}
+                style={styles.toggleButtonIcon}
+                tintColor={colors.secondary}
+                width={25}
               />
 
-              <TouchableNativeFeedback onPress={() => setOpenPicker(true)}>
-                <View>
-                  <InputForm
-                    label="Promesa de pago"
-                    nativeID="PaymentPromise"
-                    onChange={onChangeInput}
-                    required
-                    returnKeyType="done"
-                    editable={false}
-                    value={state.PaymentPromise}
-                  />
-                </View>
-              </TouchableNativeFeedback>
-            </FormNextFocus>
-          </View>
-        )}
+              <Label color={colors.textPrimary}>
+                Notificación por instructivo
+              </Label>
+            </View>
+          </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback onPress={onIntructivoPress}>
-          <View style={styles.toggleButton}>
-            <ImageIcon
-              height={25}
-              source={isPersonalNotify ? unCheckIcon : checkIcon}
-              style={styles.toggleButtonIcon}
-              tintColor={colors.secondary}
-              width={25}
-            />
+          {isPersonalNotify && <PhotoButton label="Foto identificación" />}
 
-            <Label color={colors.textPrimary}>
-              Notificación por instructivo
-            </Label>
-          </View>
-        </TouchableNativeFeedback>
+          <PhotoButton label="Foto evidencia" onPress={onPressPhotoButton} />
 
-        {isPersonalNotify && <PhotoButton label="Foto identificación" />}
+          <PhotoButton label="Foto del predio" />
 
-        <PhotoButton label="Foto evidencia" />
+          <Row justifyContent="flex-end">
+            <PrimaryButton borderLess>Cancelar</PrimaryButton>
 
-        <PhotoButton label="Foto del predio" />
+            <PrimaryButton onPress={onSave}>Guardar</PrimaryButton>
+          </Row>
+        </View>
 
-        <Row justifyContent="flex-end">
-          <PrimaryButton borderLess>Cancelar</PrimaryButton>
+        <DatePicker
+          date={new Date()}
+          minimumDate={new Date()}
+          modal
+          mode="date"
+          onCancel={onCancelPicker}
+          onConfirm={onConfirmPicker}
+          open={openPicker}
+        />
+      </Container>
+    );
+  };
 
-          <PrimaryButton onPress={onSave}>Guardar</PrimaryButton>
-        </Row>
-      </View>
-
-      <DatePicker
-        date={new Date()}
-        minimumDate={new Date()}
-        modal
-        mode="date"
-        onCancel={onCancelPicker}
-        onConfirm={onConfirmPicker}
-        open={openPicker}
-      />
-    </Container>
-  );
+  return renderContent();
 };

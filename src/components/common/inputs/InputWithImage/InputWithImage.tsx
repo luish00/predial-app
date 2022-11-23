@@ -34,6 +34,11 @@ const InputWithImage: React.FC<InputProps> = ({
     let validations = false;
     let message = '';
 
+    if (required) {
+      validations = !value || value?.trim().length === 0;
+      message = validations ? 'Requerido' : '';
+    }
+
     if ((required || value.length) && minLength) {
       const minLengthValidation = minLength >= value.length;
       validations = validations || minLengthValidation;
@@ -43,11 +48,6 @@ const InputWithImage: React.FC<InputProps> = ({
     if ((required || value.length) && keyboardType === 'email-address') {
       validations = validations || !validateEmail(value);
       message = validations ? 'Formato de email incorrecto' : message;
-    }
-
-    if (required) {
-      validations = !value || value?.trim().length === 0;
-      message = validations ? 'Requerido' : '';
     }
 
     setError(validations);

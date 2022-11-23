@@ -3,30 +3,36 @@ import { StyleSheet, View } from 'react-native';
 
 import { Container } from '../common/grids/Container';
 import { Label } from '../common/grids/Label';
-import { InputWithImage } from '../common/inputs';
+import { InputForm } from '../common/inputs';
 import { emailIcon } from '../../assets/icons';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
 import { AlertModal } from '../common/modals';
+import { useForgotService } from './useForgotService';
 
 const styles = StyleSheet.create({
   container: { padding: 16 },
-  formContainer: { paddingHorizontal: 44, paddingTop: 50, paddingBottom: 50 },
+  formContainer: { paddingHorizontal: 44, paddingTop: 30, paddingBottom: 50 },
 });
 
 const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
   const [value, setValue] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+  const { forgotPassword } = useForgotService();
 
   const toggleAlert = React.useCallback(() => {
     setShowAlert(prev => !prev);
   }, []);
 
   const onForgotPassword = React.useCallback(() => {
-    if (validateEmail(value)) {
-      toggleAlert();
+    if (!validateEmail(value)) {
+      return;
     }
-  }, [toggleAlert, value]);
+
+    forgotPassword(value);
+
+    toggleAlert();
+  }, [forgotPassword, toggleAlert, value]);
 
   return (
     <>
@@ -46,7 +52,7 @@ const RecoveryPasswordScreen: React.FC<PropsWithChildren> = () => {
         </Label>
 
         <View style={styles.formContainer}>
-          <InputWithImage
+          <InputForm
             image={emailIcon}
             keyboardType="email-address"
             label="Correo"

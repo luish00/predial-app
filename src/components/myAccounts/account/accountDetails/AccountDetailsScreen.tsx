@@ -1,19 +1,26 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { useAccountContext } from '../../../../contexts/useAccountContext';
 import { useAccountUtils } from '../../../../hooks/account/useAccountUtils';
 import { toCurrency } from '../../../../utilities/utils';
+import { useInputReducerState } from '../../../../hooks';
+import { AccountDetailsProp } from '../../../../types';
 
-import { Container } from '../../../common/grids';
+import { Col, Container, Label } from '../../../common/grids';
 import { StaticMapImage } from '../../../common/images';
-import { InputWithImage } from '../../../common/inputs';
+import { InputForm, InputWithImage } from '../../../common/inputs';
 import { Row } from '../../../common/grids';
 import { PrimaryButton } from '../../../common/buttons/PrimaryButton';
+import { FormNextFocus } from '../../../common/form/FormNextFocus';
 
 import { editIcon, saveIcon } from '../../../../assets/icons';
-import { useAccountState } from './hoks/useAccountState';
-import { useMemo } from 'react';
+import { useValidateInput } from '../../../common/form/hooks/useValidateInput';
+import colors from '../../../../colors';
+import { InputFormKeys, InputValidations } from './accountDetails.validation';
+import { ModalLoading } from '../../../common/modals';
+import { useUpdateAccount } from '../../services/useAccountService';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,13 +41,21 @@ const AccountDetailsScreen: React.FC = () => {
     accountState,
   } = useAccountContext();
   const [editMode, setEditMode] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const { accountReducer, onChangeTextAccount } = useAccountState(
-    accountState.account,
-  );
+  const { state: accountReducer, onChangeInput } =
+    useInputReducerState<AccountDetailsProp>(accountState.account);
+
   const { fullAccountName, fullAccountAddress } = useAccountUtils(
     accountState.account,
   );
+
+  const { formErrors, validateForm } = useValidateInput(
+    InputValidations,
+    accountReducer,
+  );
+
+  const { updateAccount } = useUpdateAccount(accountReducer?.Id);
 
   const account = useMemo(() => {
     return editMode ? accountReducer : accountState.account;
@@ -50,168 +65,206 @@ const AccountDetailsScreen: React.FC = () => {
     setEditMode((prev: boolean) => !prev);
   }, []);
 
-  const onSave = useCallback(() => {
+  const onSave = useCallback(async () => {
     if (!accountReducer) {
       return;
     }
 
+    const isValidForm = validateForm();
+
+    if (!isValidForm) {
+      return;
+    }
+
+    setModalVisible(true);
+
+    const accountUpdated = await updateAccount(accountReducer);
+
+    setModalVisible(false);
     loadAccount(accountReducer);
     setEditMode(false);
-  }, [accountReducer, loadAccount]);
+
+    const type = accountUpdated ? 'success' : 'error';
+    const text1 = accountUpdated
+      ? 'Cuenta actualizada'
+      : '¡¡Upss!! Ocurrió un error al actualizar';
+
+    Toast.show({
+      type,
+      text1,
+    });
+  }, [accountReducer, updateAccount, loadAccount, validateForm]);
 
   return (
-    <Container style={styles.container}>
-      <InputWithImage
-        editable={false}
-        label="Número de cuenta"
-        returnKeyType="next"
-        value={account?.AccountNumber}
-      />
-
-      {editMode ? (
-        <>
+    <>
+      <Container style={styles.container}>
+        <FormNextFocus inputKeys={InputFormKeys}>
           <InputWithImage
-            editable={editMode}
-            label="Nombre/s"
-            nativeID="FirstName"
-            onChange={onChangeTextAccount}
-            required
+            editable={false}
+            label="Número de cuenta"
+            nativeID="AccountNumber"
             returnKeyType="next"
-            value={account?.FirstName}
+            value={account?.AccountNumber}
           />
 
-          <InputWithImage
-            editable={editMode}
-            label="Apellido materno"
-            nativeID="MiddleName"
-            onChange={onChangeTextAccount}
-            returnKeyType="next"
-            value={account?.MiddleName}
-          />
+          {editMode ? (
+            <>
+              <InputForm
+                editable={editMode}
+                label="Nombre/s"
+                nativeID="FirstName"
+                onChange={onChangeInput}
+                required
+                returnKeyType="next"
+                value={account?.FirstName}
+              />
+
+              <InputForm
+                editable={editMode}
+                label="Apellido materno"
+                nativeID="MiddleName"
+                onChange={onChangeInput}
+                returnKeyType="next"
+                value={account?.MiddleName}
+              />
+
+              <InputForm
+                editable={editMode}
+                label="Apellido paterno"
+                nativeID="LastName"
+                onChange={onChangeInput}
+                returnKeyType="next"
+                value={account?.LastName}
+              />
+            </>
+          ) : (
+            <InputWithImage
+              editable={false}
+              label="Propietario"
+              nativeID="fullAccountName"
+              returnKeyType="next"
+              value={fullAccountName}
+            />
+          )}
+
+          {editMode ? (
+            <>
+              <InputForm
+                editable={editMode}
+                label="Ciudad"
+                nativeID="City"
+                onChange={onChangeInput}
+                returnKeyType="next"
+                value={account?.City}
+              />
+
+              <InputForm
+                editable={editMode}
+                label="Estado"
+                nativeID="State"
+                onChange={onChangeInput}
+                returnKeyType="next"
+                value={account?.State}
+              />
+
+              <InputForm
+                editable={editMode}
+                label="Calle"
+                nativeID="Street"
+                onChange={onChangeInput}
+                returnKeyType="next"
+                value={account?.Street}
+              />
+
+              <InputForm
+                editable={editMode}
+                keyboardType="decimal-pad"
+                label="C.P."
+                maxLength={5}
+                nativeID="PostalCode"
+                onChange={onChangeInput}
+                returnKeyType="next"
+                value={account?.PostalCode}
+              />
+            </>
+          ) : (
+            <InputWithImage
+              editable={false}
+              label="Domicilio"
+              nativeID="fullAccountAddress"
+              returnKeyType="next"
+              value={fullAccountAddress}
+            />
+          )}
 
           <InputWithImage
-            editable={editMode}
-            label="Apellido paterno"
-            nativeID="LastName"
-            onChange={onChangeTextAccount}
+            editable={false}
+            label="Monto de adeudo"
+            nativeID="Amount"
+            onChange={onChangeInput}
             returnKeyType="next"
-            value={account?.LastName}
-          />
-        </>
-      ) : (
-        <InputWithImage
-          editable={false}
-          label="Propietario"
-          returnKeyType="next"
-          value={fullAccountName}
-        />
-      )}
-
-      {editMode ? (
-        <>
-          <InputWithImage
-            editable={editMode}
-            label="Ciudad"
-            nativeID="City"
-            onChange={onChangeTextAccount}
-            returnKeyType="next"
-            value={account?.City}
+            value={`$ ${toCurrency(account?.Amount)}`}
           />
 
-          <InputWithImage
+          <InputForm
             editable={editMode}
-            label="Estado"
-            nativeID="State"
-            onChange={onChangeTextAccount}
+            keyboardType="name-phone-pad"
+            label="Celular"
+            nativeID="Mobile"
+            onChange={onChangeInput}
             returnKeyType="next"
-            value={account?.State}
+            value={account?.Mobile}
           />
 
-          <InputWithImage
+          <InputForm
             editable={editMode}
-            label="Calle"
-            nativeID="Street"
-            onChange={onChangeTextAccount}
-            returnKeyType="next"
-            value={account?.Street}
+            keyboardType="email-address"
+            label="Correo"
+            nativeID="Email"
+            onChange={onChangeInput}
+            returnKeyType="done"
+            value={account?.Email}
           />
+        </FormNextFocus>
 
-          <InputWithImage
-            editable={editMode}
-            keyboardType="decimal-pad"
-            label="C.P."
-            maxLength={5}
-            nativeID="PostalCode"
-            onChange={onChangeTextAccount}
-            returnKeyType="next"
-            value={account?.PostalCode}
+        {!editMode && (
+          <StaticMapImage
+            latitude={account?.Latitud}
+            longitude={account?.Longitud}
           />
-        </>
-      ) : (
-        <InputWithImage
-          editable={false}
-          label="Domicilio"
-          returnKeyType="next"
-          value={fullAccountAddress}
-        />
-      )}
-
-      <InputWithImage
-        editable={false}
-        label="Monto de adeudo"
-        nativeID="Amount"
-        onChange={onChangeTextAccount}
-        returnKeyType="next"
-        value={`$ ${toCurrency(account?.Amount)}`}
-      />
-
-      <InputWithImage
-        editable={editMode}
-        keyboardType="name-phone-pad"
-        label="Celular"
-        nativeID="Mobile"
-        onChange={onChangeTextAccount}
-        returnKeyType="next"
-        value={account?.Mobile}
-      />
-
-      <InputWithImage
-        editable={editMode}
-        keyboardType="email-address"
-        label="Correo"
-        nativeID="Email"
-        onChange={onChangeTextAccount}
-        returnKeyType="done"
-        value={account?.Email}
-      />
-
-      <StaticMapImage
-        latitude={account?.Latitud}
-        longitude={account?.Longitud}
-      />
-
-      <Row style={styles.editButton} justifyContent="flex-end">
-        {editMode ? (
-          <>
-            <PrimaryButton
-              style={styles.cancelButton}
-              borderLess
-              onPress={onEditMode}
-              textColor="#222">
-              Cancelar
-            </PrimaryButton>
-
-            <PrimaryButton minWidth={160} icon={saveIcon} onPress={onSave}>
-              Guardar
-            </PrimaryButton>
-          </>
-        ) : (
-          <PrimaryButton minWidth={160} icon={editIcon} onPress={onEditMode}>
-            Editar
-          </PrimaryButton>
         )}
-      </Row>
-    </Container>
+
+        <Col>
+          {formErrors.map(error => (
+            <Label color={colors.inputError}>{error}</Label>
+          ))}
+        </Col>
+
+        <Row style={styles.editButton} justifyContent="flex-end">
+          {editMode ? (
+            <>
+              <PrimaryButton
+                style={styles.cancelButton}
+                borderLess
+                onPress={onEditMode}
+                textColor="#222">
+                Cancelar
+              </PrimaryButton>
+
+              <PrimaryButton minWidth={160} icon={saveIcon} onPress={onSave}>
+                Guardar
+              </PrimaryButton>
+            </>
+          ) : (
+            <PrimaryButton minWidth={160} icon={editIcon} onPress={onEditMode}>
+              Editar
+            </PrimaryButton>
+          )}
+        </Row>
+      </Container>
+
+      <ModalLoading visible={modalVisible} />
+    </>
   );
 };
 

@@ -54,7 +54,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = () => {
   }, []);
 
   const onSave = useCallback(() => {
-    console.log('save', state);
+    // TODO
   }, [state]);
 
   const onConfirmPicker = useCallback(

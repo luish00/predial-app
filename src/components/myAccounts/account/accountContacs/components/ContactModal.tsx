@@ -6,14 +6,16 @@ import { ContactProp } from '../../../../../types';
 import { DATA_RELATIONSHIP } from '../../../../../utilities/constants';
 
 import { FormNextFocus } from '../../../../common/form/FormNextFocus';
-import {
-  useValidateInput,
-  ValidationsProps,
-} from '../../../../common/form/hooks/useValidateInput';
+import { useValidateInput } from '../../../../common/form/hooks/useValidateInput';
 import { Col, Label } from '../../../../common/grids';
 import { InputForm } from '../../../../common/inputs';
 import { DropdownForm } from '../../../../common/inputs/Dropdown/DropdownForm';
 import { ModalScreen } from '../../../../common/modals/ModalBase';
+
+import {
+  InputFormKeysFocus,
+  InputValidations,
+} from './contactModal.validations';
 
 interface Props {
   errors: string[];
@@ -24,58 +26,6 @@ interface Props {
   onSave: (item: ContactProp) => void;
   visible: boolean;
 }
-
-const InputFormKeysFocus = [
-  'FirstName',
-  'MiddleName',
-  'LastName',
-  'Relationship',
-  'Mobile',
-  'Phone',
-  'Email',
-];
-
-const InputValidations: ValidationsProps[] = [
-  {
-    key: 'FirstName',
-    keyName: 'Nombre',
-    requerid: true,
-  },
-  {
-    key: 'MiddleName',
-    keyName: 'Apellido materno',
-    requerid: true,
-  },
-  {
-    key: 'LastName',
-    keyName: 'Apellido paterno',
-    requerid: true,
-  },
-  {
-    key: 'Relationship',
-    keyName: 'Parentesco',
-    requerid: true,
-  },
-  {
-    key: 'Mobile',
-    keyName: 'Celular',
-    requerid: true,
-    onlyNumber: true,
-    minLength: 10,
-  },
-  {
-    key: 'Phone',
-    keyName: 'Teléfono',
-    requerid: true,
-    onlyNumber: true,
-    minLength: 10,
-  },
-  {
-    key: 'Email',
-    keyName: 'Correo',
-    isEmail: true,
-  },
-];
 
 export const ContactModal: React.FC<Props> = ({
   errors,

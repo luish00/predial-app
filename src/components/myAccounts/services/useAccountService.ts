@@ -5,7 +5,7 @@ import {
   ContactAccountResponse,
   CreateContactPayload,
 } from '../../../models';
-import { ContactProp } from '../../../types';
+import { AccountDetailsProp, ContactProp } from '../../../types';
 
 export const useGetAccounts = () => {
   const [accounts, setAccounts] = useState<AccountsGetResponse[]>([]);
@@ -35,7 +35,7 @@ export const useGetAccounts = () => {
   return { refreshAccounts, accounts, isLoadingAccount: isLoading };
 };
 
-export const useAccountContacts = (id = '') => {
+export const useGetAccountContacts = (id = '') => {
   const [contacts, setContacts] = useState<ContactProp[]>([]);
 
   const { get, isLoading, result } =
@@ -138,4 +138,20 @@ export const useCreateContact = () => {
     isLoading,
     resetAccountService,
   };
+};
+
+export const useUpdateAccount = (id: number) => {
+  const { put } = useFetch();
+
+  const updateAccount = useCallback(
+    async (body: AccountDetailsProp) => {
+      const response = await put({ path: `account/${id}`, body });
+
+      return response.isValid;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [id],
+  );
+
+  return { updateAccount };
 };

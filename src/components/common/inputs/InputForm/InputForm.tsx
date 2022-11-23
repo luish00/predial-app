@@ -27,7 +27,7 @@ export const InputForm: React.FC<InputProps> = ({
   }, [focusPocus, nativeID]);
 
   // const handleOnSubmitEditing = React.useCallback((event: any) => {
-  //   //   console.log('update', onSubmitEditing);
+  //   console.log('update', onSubmitEditing);
 
   //   if (onSubmitEditing) {
   //     onSubmitEditing(event);

@@ -1,12 +1,5 @@
 import React, { useRef, useState } from 'react';
-import {
-  ImageSourcePropType,
-  KeyboardTypeOptions,
-  TextInput,
-  ReturnKeyTypeOptions,
-  TextInputProps,
-  View,
-} from 'react-native';
+import { TextInput, View } from 'react-native';
 
 import { ImageIcon } from '../../images/ImageIcon';
 

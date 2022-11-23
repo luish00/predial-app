@@ -12,8 +12,8 @@ import { serializeForUri } from '../../../utilities/utils';
 const MAPS_URL_BASE = 'https://maps.googleapis.com/maps/api/staticmap';
 
 interface Props {
-  latitude?: string | null;
-  longitude?: string | null;
+  latitude?: string | null | number;
+  longitude?: string | null | number;
   style?: StyleProp<any>;
 }
 

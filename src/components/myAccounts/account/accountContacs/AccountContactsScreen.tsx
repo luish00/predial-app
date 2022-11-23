@@ -67,7 +67,7 @@ const AccountContactsScreen: React.FC = () => {
         AccountId: account?.Id,
       }));
     }
-  }, [account, visible]);
+  }, [account, resetAccountService, visible]);
 
   useEffect(() => {
     if (!contact) {

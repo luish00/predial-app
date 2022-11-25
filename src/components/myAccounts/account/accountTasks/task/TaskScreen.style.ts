@@ -1,7 +1,10 @@
 import { StyleSheet } from 'react-native';
-import colors from '../colors';
+import colors from '../../../../../colors';
 
 export default StyleSheet.create({
+  cancelButton: {
+    marginRight: 16,
+  },
   toggleButton: {
     flex: 1,
     height: 52,

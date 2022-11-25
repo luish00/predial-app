@@ -22,19 +22,13 @@ const AccountDetailsTabWrapperScreen: React.FC<NavigationPropBase> = props => (
   </AccountProvider>
 );
 
-const AccountDetailsTabScreen: React.FC<NavigationPropBase> = ({
-  navigation,
-}) => {
+const AccountDetailsTabScreen: React.FC<NavigationPropBase> = () => {
   const route = useRoute();
 
   const { account } = route?.params;
   const { accountFunctions } = useAccountContext();
 
   const { contacts, isLoading } = useGetAccountContacts(account.Id);
-
-  const AccountTaskScreenWrapper: React.FC = () => (
-    <AccountTasksScreen homeNavigation={navigation} />
-  );
 
   useEffect(() => {
     accountFunctions.loadContacts(contacts);
@@ -65,7 +59,7 @@ const AccountDetailsTabScreen: React.FC<NavigationPropBase> = ({
       <Tab.Screen
         name="accountTask"
         options={{ title: 'Tareas' }}
-        component={AccountTaskScreenWrapper}
+        component={AccountTasksScreen}
       />
     </Tab.Navigator>
   );

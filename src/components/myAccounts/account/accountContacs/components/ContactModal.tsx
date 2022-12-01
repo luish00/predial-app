@@ -18,7 +18,7 @@ import {
 } from './contactModal.validations';
 
 interface Props {
-  errors: string[];
+  errors?: string[];
   isLoading: boolean;
   isNewContact: boolean;
   item: ContactProp;
@@ -163,7 +163,7 @@ export const ContactModal: React.FC<Props> = ({
       </FormNextFocus>
 
       <Col>
-        {errors.map((error, index) => (
+        {errors?.map((error, index) => (
           <Label key={String(index)} color={colors.inputError}>
             {`* ${error}`}
           </Label>

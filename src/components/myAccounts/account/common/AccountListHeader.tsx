@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useAccountContext } from '../../../../contexts/useAccountContext';
+import { useAppSelector } from '../../../../hooks';
 import { useAccountUtils } from '../../../../hooks/account/useAccountUtils';
 import { Col, Label } from '../../../common/grids';
 
@@ -14,9 +14,7 @@ const styles = StyleSheet.create({
 });
 
 export const AccountListHeader: React.FC = () => {
-  const {
-    accountState: { account },
-  } = useAccountContext();
+  const account = useAppSelector(state => state.accountDetails.accountDetails);
   const { fullAccountAddress, fullAccountName } = useAccountUtils(account);
 
   return (

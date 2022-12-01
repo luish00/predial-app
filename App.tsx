@@ -10,17 +10,22 @@
 
 import React from 'react';
 import Toast from 'react-native-toast-message';
+import { Provider } from 'react-redux';
+
+import { store } from './src/redux/store';
 
 import { AppNavigation } from './src/navigations/AppNavigation';
 import { AuthProvider } from './src/contexts/useAuthContext';
 
 const App = () => {
   return (
-    <AuthProvider>
-      <AppNavigation />
+    <Provider store={store}>
+      <AuthProvider>
+        <AppNavigation />
 
-      <Toast />
-    </AuthProvider>
+        <Toast />
+      </AuthProvider>
+    </Provider>
   );
 };
 

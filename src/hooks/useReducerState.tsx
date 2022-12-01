@@ -5,6 +5,7 @@ interface InputReducerType<T> {
   state: T;
   onChangeInput: (_event: object) => void;
   setItemState: (key: string, value: string | any) => void;
+  updateState: (state: T) => void;
 }
 
 export function useInputReducerState<T>(
@@ -29,9 +30,13 @@ export function useInputReducerState<T>(
     setState(prev => (prev ? { ...prev, [key]: value } : prev));
   }, []);
 
+  const updateState = useCallback((newState: T) => {
+    setState(prev => ({ ...prev, ...newState }));
+  }, []);
+
   useEffect(() => {
     setState(model);
   }, [model]);
 
-  return { onChangeInput, setItemState, state };
+  return { onChangeInput, setItemState, updateState, state };
 }

@@ -7,15 +7,12 @@ import { ListSeparator } from '../../../common/lists/ListSeparator';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { AccountTaskItem } from './components';
 import { FabButton } from '../../../common/buttons/FabButton';
-import { useAccountContext } from '../../../../contexts/useAccountContext';
 import { useGetTaskService } from './services/useTaskServices';
-import { ModalBase } from '../../../common/modals';
+import { useAppSelector } from '../../../../hooks';
 
 const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
-  const {
-    accountState: { account },
-  } = useAccountContext();
-
+  const store = useAppSelector(state => state.accountDetails);
+  const account = store.accountDetails;
   const { getTasks, isLoading, result } = useGetTaskService(account?.Id);
 
   const onPress = React.useCallback(
@@ -30,10 +27,6 @@ const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
       task: { AccountId: account?.Id },
     });
   }, [account?.Id, navigation]);
-
-  useEffect(() => {
-    console.log('mount');
-  }, []);
 
   return (
     <>

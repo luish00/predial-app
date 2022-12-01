@@ -14,8 +14,8 @@ import { PrimaryButton } from '../../../../common/buttons/PrimaryButton';
 import { ImageIcon } from '../../../../common/images';
 
 import styles from './TaskScreen.style';
-import { useInputReducerState } from '../../../../../hooks';
-import { NavigationPropBase, TaskProp } from '../../../../../types';
+import { useAppDispatch, useAppSelector, useInputReducerState } from '../../../../../hooks';
+import { ContactProp, NavigationPropBase, TaskProp } from '../../../../../types';
 import DatePicker from 'react-native-date-picker';
 import { useCreateTaskService } from '../services/useTaskServices';
 import {
@@ -23,9 +23,14 @@ import {
   ValidationsProps,
 } from '../../../../common/form/hooks/useValidateInput';
 import { AlertModal, ModalLoading } from '../../../../common/modals';
-import { HomeTabScreen } from '../../../../home/HomeTabScreen';
-import { useAccountContext } from '../../../../../contexts/useAccountContext';
-import { DropdownForm } from '../../../../common/inputs/Dropdown/DropdownForm';
+import {
+  DropdownForm,
+  DropdownItemType,
+} from '../../../../common/inputs/Dropdown/DropdownForm';
+import { ContactModal } from '../../accountContacs/components/ContactModal';
+import { ContactModel } from '../../../../../models/ContactModel';
+import { useCreateContact } from '../../../services/useAccountService';
+import { addContact } from '../../../../../redux/slices/accountDetailsSlice';
 
 interface PhotoButtonProps {
   label: string;
@@ -71,14 +76,35 @@ const PhotoButton: React.FC<PhotoButtonProps> = ({ label, onPress }) => {
   );
 };
 
+const NewContact: ContactProp = {
+  Id: undefined,
+  IsOwner: false,
+  Relationship: '',
+  FirstName: '',
+  AccountId: '',
+};
+
 export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const route = useRoute();
+  const dispatch = useAppDispatch();
   const { task } = route?.params || {};
+  const store = useAppSelector(state => state.accountDetails);
+  const { contacts } = store;
 
-  const { accountState: { contacts } } = useAccountContext();
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
-  const { onChangeInput, setItemState, state } =
+  const [newContact, setNewContact] = useState<ContactProp>(new ContactModel());
+  const [showNewContact, setShowNewContact] = useState(false);
+
+  const {
+    createOrUpdateContact,
+    isLoading,
+    errors,
+    contact: contactCreated,
+    resetAccountService,
+  } = useCreateContact();
+
+  const { onChangeInput, setItemState, updateState, state } =
     useInputReducerState<TaskProp>(task);
   const { formErrors, validateForm } = useValidateInput(
     InputFormValidations,
@@ -93,9 +119,17 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     resetCreteService,
   } = useCreateTaskService();
 
-  const contactsMemo = useMemo(() => {
+  const contactsMemo: DropdownItemType[] = useMemo(() => {
+    if (contacts.length === 0) {
+      [];
+    }
 
-  },[contacts]);
+    return contacts.map(item => ({
+      ...item,
+      label: `${item.FirstName} ${item.MiddleName}`,
+      value: item.Id,
+    }));
+  }, [contacts]);
 
   const onPersonalPress = useCallback(() => {
     setPersonalNotify(true);
@@ -108,17 +142,6 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const goBack = useCallback(() => {
     navigation?.goBack();
   }, [navigation]);
-
-  useEffect(() => {
-    if (createTaskError) {
-      resetCreteService();
-
-      Toast.show({
-        type: 'error',
-        text1: '!!Upps¡¡ Ocurrió un problema a guardar la tarea.',
-      });
-    }
-  }, [createTaskError, resetCreteService]);
 
   const onSave = useCallback(() => {
     const isValid = isPersonalNotify ? validateForm() : true;
@@ -147,9 +170,62 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     [setItemState],
   );
 
+  const onSelectContact = useCallback(
+    (modalContact: ContactProp) => {
+      updateState({
+        ...state,
+        Name: `${modalContact.FirstName} ${modalContact.MiddleName} ${modalContact.LastName}`,
+        Email: modalContact.Email,
+        Id: modalContact.Id,
+        Mobile: modalContact.Mobile,
+        Phone: modalContact.Phone,
+      });
+    },
+    [state, updateState],
+  );
+
   const onCancelPicker = useCallback(() => {
     setOpenPicker(false);
   }, []);
+
+  const onSaveContact = useCallback(
+    (item: ContactProp) => {
+      createOrUpdateContact({
+        ...item,
+        AccountId: String(store.accountDetails?.Id),
+      });
+    },
+    [createOrUpdateContact, store.accountDetails?.Id],
+  );
+
+  useEffect(() => {
+    if (createTaskError) {
+      resetCreteService();
+
+      Toast.show({
+        type: 'error',
+        text1: '!!Upps¡¡ Ocurrió un problema a guardar la tarea.',
+      });
+    }
+  }, [createTaskError, resetCreteService]);
+
+  useEffect(() => {
+    if (!contactCreated?.Id) {
+      return;
+    }
+
+    setShowNewContact(false);
+    updateState({ ...state, ...contactCreated });
+    dispatch(addContact(contactCreated));
+    resetAccountService();
+  }, [
+    contactCreated,
+    dispatch,
+    resetAccountService,
+    resetCreteService,
+    state,
+    updateState,
+  ]);
 
   return (
     <Container>
@@ -174,43 +250,52 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
           <View>
             <FormNextFocus inputKeys={FORM_NOTIFICATION}>
               <DropdownForm
-                data={contacts?.map(item => ({
-                  label: `${item.FirstName} ${item.MiddleName}`,
-                  value: item.Id,
-                }))}
+                data={contactsMemo}
+                onChange={onSelectContact}
                 title="Contactos"
                 value=""
               />
 
-              <InputForm
-                label="Nombre de contacto"
-                nativeID="Name"
-                onChange={onChangeInput}
-                required
-                returnKeyType="next"
-                value={state.Name}
-              />
+              <PrimaryButton borderLess onPress={() => setShowNewContact(true)}>
+                Agregar nuevo contacto
+              </PrimaryButton>
 
-              <InputForm
-                keyboardType="phone-pad"
-                label="Celular"
-                maxLength={10}
-                nativeID="Mobile"
-                onChange={onChangeInput}
-                required
-                returnKeyType="next"
-                value={state.Mobile}
-              />
+              {state.Mobile && (
+                <>
+                  {/* <InputForm
+                    label="Nombre de contacto"
+                    nativeID="Name"
+                    onChange={onChangeInput}
+                    required
+                    returnKeyType="next"
+                    value={state.Name}
+                    editable={false}
+                  /> */}
 
-              <InputForm
-                label="Correo electrónico"
-                nativeID="Email"
-                onChange={onChangeInput}
-                placeholder="correo@gmail.com"
-                required
-                returnKeyType="next"
-                value={state.Email}
-              />
+                  <InputForm
+                    editable={false}
+                    keyboardType="phone-pad"
+                    label="Celular"
+                    maxLength={10}
+                    nativeID="Mobile"
+                    onChange={onChangeInput}
+                    required
+                    returnKeyType="next"
+                    value={state.Mobile}
+                  />
+
+                  <InputForm
+                    editable={false}
+                    label="Correo electrónico"
+                    nativeID="Email"
+                    onChange={onChangeInput}
+                    placeholder="correo@gmail.com"
+                    required
+                    returnKeyType="next"
+                    value={state.Email}
+                  />
+                </>
+              )}
 
               <TouchableNativeFeedback onPress={() => setOpenPicker(true)}>
                 <View>
@@ -290,6 +375,16 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         title="Tarea"
         primaryText="Aceptar"
         handlePrimaryButtonPress={goBack}
+      />
+
+      <ContactModal
+        visible={showNewContact}
+        onDismiss={() => setShowNewContact(false)}
+        item={newContact}
+        isNewContact
+        onSave={onSaveContact}
+        isLoading={isLoading}
+        errors={errors}
       />
     </Container>
   );

@@ -35,7 +35,7 @@ import {
   DropdownForm,
   DropdownItemType,
 } from '../../../../common/inputs/Dropdown/DropdownForm';
-import { ContactModal } from '../../accountContacs/components/ContactModal';
+import { ContactModal } from '../../accountContacts/components/ContactModal';
 import { ContactModel } from '../../../../../models/ContactModel';
 import { useCreateContact } from '../../../services/useAccountService';
 import { addContact } from '../../../../../redux/slices/accountDetailsSlice';

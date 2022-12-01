@@ -1,8 +1,9 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import { MyAccountsScreen } from '../myAccounts/MyAccountsScreen';
+import { MyAccountsScreen } from '../myAccounts/myAccount.routes';
 import { MyRoutesScreen } from '../myRoutes/MyRoutesScreen';
+
 import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
 import { NavigationPropBase } from '../../types';
 import { useGetAccounts } from '../myAccounts/services/useAccountService';

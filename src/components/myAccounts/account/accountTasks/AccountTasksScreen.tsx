@@ -17,13 +17,13 @@ const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
   const onPress = React.useCallback(
     (item: TaskProp) => {
-      navigation?.navigate('taskScreen', { task: item });
+      navigation?.navigate('addTaskScreen', { task: item });
     },
     [navigation],
   );
 
   const onNewTask = useCallback(() => {
-    navigation?.navigate('taskScreen', {
+    navigation?.navigate('addTaskScreen', {
       task: { AccountId: account?.Id },
     });
   }, [account?.Id, navigation]);

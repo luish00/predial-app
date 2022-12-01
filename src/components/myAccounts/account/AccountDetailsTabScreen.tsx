@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 
 import { TabTopScreenStyleOption } from '../../../navigations/navigationUtils';
 import { AccountDetailsScreen } from './accountDetails/AccountDetailsScreen';
-import { AccountContactsScreen } from './accountContacs';
+import { AccountContactsScreen } from './accountContacts';
 import { AccountTasksScreen } from './accountTasks';
 import { NavigationPropBase } from '../../../types';
 import {

@@ -2,8 +2,10 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { HomeTabScreen } from '../components/home/HomeTabScreen';
-import { AccountDetailsTabScreen } from '../components/myAccounts/account/AccountDetailsTabScreen';
-import { TaskScreen } from '../components/myAccounts/account/accountTasks/task/TaskScreen';
+import {
+  AccountDetailsTabScreen,
+  TaskScreen,
+} from '../components/myAccounts/myAccount.routes';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +25,7 @@ const PrivateNavigation = () => {
       />
 
       <Stack.Screen
-        name="taskScreen"
+        name="addTaskScreen"
         options={{ title: 'Tarea en gestión' }}
         component={TaskScreen}
       />

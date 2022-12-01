@@ -1,11 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
-import { useAccountContext } from '../../../../contexts/useAccountContext';
+
+import {
+  addContact,
+  updateAccount,
+} from '../../../../redux/slices/accountDetailsSlice';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { ContactProp } from '../../../../types';
+
+import { useCreateContact } from '../../services/useAccountService';
+
 import { FabButton } from '../../../common/buttons/FabButton';
 import { ListEmpty } from '../../../common/lists';
 import { ListSeparator } from '../../../common/lists/ListSeparator';
-import { useCreateContact } from '../../services/useAccountService';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { ContactListItem } from './components/ContactListItem';
 import { ContactModal } from './components/ContactModal';
@@ -19,10 +26,10 @@ const newContact: ContactProp = {
 };
 
 const AccountContactsScreen: React.FC = () => {
-  const {
-    accountState: { account, contacts },
-    accountFunctions: { addContact, updateAccount },
-  } = useAccountContext();
+  const store = useAppSelector(state => state.accountDetails);
+  const { accountDetails, contacts } = store;
+  const dispatch = useAppDispatch();
+
   const [visible, setVisible] = useState(false);
   const [isNewContact, setIsNewContact] = useState(false);
   const [contactModal, setContactModal] = useState<ContactProp>(newContact);
@@ -60,14 +67,14 @@ const AccountContactsScreen: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (visible && account?.Id) {
+    if (visible && accountDetails?.Id) {
       resetAccountService();
       setContactModal((prev: ContactProp) => ({
         ...prev,
-        AccountId: account?.Id,
+        AccountId: accountDetails?.Id,
       }));
     }
-  }, [account, resetAccountService, visible]);
+  }, [accountDetails, resetAccountService, visible]);
 
   useEffect(() => {
     if (!contact) {
@@ -75,9 +82,9 @@ const AccountContactsScreen: React.FC = () => {
     }
 
     const action = isNewContact ? addContact : updateAccount;
-    action(contact);
+    dispatch(action(contact));
     setVisible(false);
-  }, [addContact, contact, isNewContact, updateAccount]);
+  }, [contact, dispatch, isNewContact]);
 
   return (
     <>

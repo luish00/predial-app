@@ -101,7 +101,7 @@ export const useCreateContact = () => {
             AccountId: data.AccountId,
             Email: data.Email,
             FirstName: data.FirstName,
-            Id: parseInt(data.Id, 2),
+            Id: data.Id,
             IsOwner: data.IsOwner,
             LastName: data.LastName,
             MiddleName: data.MiddleName,

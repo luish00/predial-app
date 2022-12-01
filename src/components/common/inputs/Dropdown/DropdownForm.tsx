@@ -6,7 +6,7 @@ import colors from '../../../../colors';
 
 import { Label } from '../../grids';
 
-type DropdownItemType = { label: string; value: string };
+export type DropdownItemType = { label: string; value: string };
 
 interface Props {
   data: DropdownItemType[];

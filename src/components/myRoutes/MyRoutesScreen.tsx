@@ -87,8 +87,9 @@ const MyRoutesScreen: React.FC<HomeTabNavigationProp> = ({
           Longitud,
         } = account;
         const titleText = `Cuenta ${AccountNumber}`;
-        const descriptionText = `Propietario: ${FirstName} ${LastName}.\nMonto de adeudo: $${Amount || '0.00'
-          }`;
+        const descriptionText = `Propietario: ${FirstName} ${LastName}.\nMonto de adeudo: $${
+          Amount || '0.00'
+        }`;
         const buttonText = 'Ver cuenta';
 
         return (

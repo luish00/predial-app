@@ -1,34 +1,50 @@
-import React from 'react';
-import { FlatList } from 'react-native';
+import React, { useCallback } from 'react';
+import { FlatList, RefreshControl } from 'react-native';
 
-import { TASK_LIST } from '../../../../data_dummy/taskList';
-import { TaskListProps } from '../../../../types';
+import { NavigationPropBase, TaskProp } from '../../../../types';
 
 import { ListSeparator } from '../../../common/lists/ListSeparator';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { AccountTaskItem } from './components';
-import { HomeTabNavigationProp } from '../../../home/homeTab';
+import { FabButton } from '../../../common/buttons/FabButton';
+import { useGetTaskService } from './services/useTaskServices';
+import { useAppSelector } from '../../../../hooks';
 
-const AccountTasksScreen: React.FC<HomeTabNavigationProp> = ({
-  homeNavigation,
-}) => {
+const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
+  const store = useAppSelector(state => state.accountDetails);
+  const account = store.accountDetails;
+  const { getTasks, isLoading, result } = useGetTaskService(account?.Id);
+
   const onPress = React.useCallback(
-    (item: TaskListProps) => {
-      homeNavigation?.navigate('taskScreen', { task: item });
+    (item: TaskProp) => {
+      navigation?.navigate('taskScreen', { task: item });
     },
-    [homeNavigation],
+    [navigation],
   );
 
+  const onNewTask = useCallback(() => {
+    navigation?.navigate('taskScreen', {
+      task: { AccountId: account?.Id },
+    });
+  }, [account?.Id, navigation]);
+
   return (
-    <FlatList
-      ItemSeparatorComponent={ListSeparator}
-      data={TASK_LIST.reverse()}
-      ListHeaderComponent={AccountListHeader}
-      renderItem={({ item }) => (
-        <AccountTaskItem item={item} onPress={onPress} />
-      )}
-      keyExtractor={(item: TaskListProps) => String(item.type)}
-    />
+    <>
+      <FlatList
+        ItemSeparatorComponent={ListSeparator}
+        data={result?.data || []}
+        ListHeaderComponent={AccountListHeader}
+        renderItem={({ item }) => (
+          <AccountTaskItem item={item} onPress={onPress} />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={getTasks} />
+        }
+        keyExtractor={(_, index) => String(index)}
+      />
+
+      <FabButton onPress={onNewTask} />
+    </>
   );
 };
 

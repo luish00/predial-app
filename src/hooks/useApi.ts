@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { devMode, URL_BASE } from '../../env';
 import { getStoreUserToken } from '../utilities/store';
+import { log } from '../utilities/utils';
 
 interface BodyFetch {
   body?: object;
@@ -64,7 +65,7 @@ const tryLog = async ({ url, data, request }) => {
   try {
     const { status } = request;
     if (status >= 300) {
-      console.log('api log', { url, data, status });
+      console.log('api log', { url, data: JSON.stringify(data), status });
     } else {
       console.log('api log', { url, status });
     }
@@ -93,6 +94,8 @@ async function apiFetch({
   if (['POST', 'PUT'].includes(method)) {
     rest = { body: JSON.stringify(body) };
   }
+
+  console.log('fetch', `${URL_BASE}/${url}?${serializeForUri(params)}`);
 
   return fetch(`${URL_BASE}/${url}?${serializeForUri(params)}`, {
     method: method,
@@ -179,7 +182,7 @@ export const useApiGet = <T>(url = ''): ApiGetServiceType<T> => {
         ? await request.json()
         : null;
 
-      tryLog({ url, data, request });
+      tryLog({ url: `${url}?${serializeForUri(params)}`, data, request });
 
       wrapperData = {
         data: request.status === 200 ? data : null,
@@ -196,6 +199,8 @@ export const useApiGet = <T>(url = ''): ApiGetServiceType<T> => {
         message: error.message,
         status: 500,
       };
+
+      log('GET fail', JSON.stringify(wrapperData));
     }
 
     setLoading(false);
@@ -242,6 +247,8 @@ const fetchWrapper = async <T>({
       message: error.message,
       status: 500,
     };
+
+    tryLog({ url: path, data: wrapperData, request: { status: 500 } });
   }
 
   return wrapperData;

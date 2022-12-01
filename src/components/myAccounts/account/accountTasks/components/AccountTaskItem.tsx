@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 
-import { TaskListProps } from '../../../../../types';
+import { TaskProp } from '../../../../../types';
 
 import { Label } from '../../../../common/grids';
 
 interface Props {
-  item: TaskListProps;
-  onPress?: (item: TaskListProps) => void;
+  item: TaskProp;
+  onPress?: (item: TaskProp) => void;
   disabled?: boolean;
 }
 
@@ -34,12 +34,14 @@ const AccountTaskItem: React.FC<Props> = ({
     disabled={disabled}
     onPress={() => onPress && onPress(item)}>
     <View style={styles.container}>
-      <Label fontWeight="bold" fontSize={20}>{`Entrega ${getTitle(
-        item.type,
-      )} carta invitación`}</Label>
-      <Label fontSize={16}>{item.date}</Label>
+      <Label fontWeight="bold" fontSize={20}>
+        {`Entrega ${getTitle(item?.Id || 0)} carta invitación`}
+      </Label>
+
+      <Label fontSize={16}>{item.LastModifiedDate?.split('T')[0]}</Label>
+
       <Label fontSize={16}>
-        {item.isComplete ? 'Completado' : 'Por notificar'}
+        {item.IsComplete ? 'Completado' : 'Por notificar'}
       </Label>
     </View>
   </TouchableNativeFeedback>

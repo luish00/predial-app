@@ -1,5 +1,4 @@
 import { Dimensions, StyleSheet } from 'react-native';
-import colors from '../colors';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -25,26 +24,6 @@ export default StyleSheet.create({
     height: 30,
     width: 30,
   },
-  toggleButton: {
-    flex: 1,
-    height: 52,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  toggleButtonOn: {
-    backgroundColor: colors.secondary,
-  },
-  toggleButtonOff: {
-    backgroundColor: '#fff',
-    flex: 1,
-    height: 52,
-  },
-  toggleButtonIcon: {
-    marginRight: 8,
-  },
-  formContainer: {
-    paddingHorizontal: 16,
-  },
   photoButton: {
     position: 'absolute',
     alignItems: 'center',
@@ -63,10 +42,6 @@ export default StyleSheet.create({
     width: 80,
     position: 'absolute',
     alignSelf: 'center',
-  },
-  photoContainer: {
-    justifyContent: 'center',
-    height: 52,
   },
   photoStyle: {
     height: height,

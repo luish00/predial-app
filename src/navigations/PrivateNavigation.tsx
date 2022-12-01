@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { HomeTabScreen } from '../components/home/HomeTabScreen';
 import { AccountDetailsTabScreen } from '../components/myAccounts/account/AccountDetailsTabScreen';
-import { TaskScreen } from '../task/TaskScreen';
+import { TaskScreen } from '../components/myAccounts/account/accountTasks/task/TaskScreen';
 
 const Stack = createNativeStackNavigator();
 

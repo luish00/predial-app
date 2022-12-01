@@ -69,6 +69,7 @@ export interface UserProp {
 }
 
 export interface TaskProp {
+  Id?: number;
   PersonalNotification: boolean;
   InstructionNotification: boolean;
   PaymentPromise: string;
@@ -78,6 +79,8 @@ export interface TaskProp {
   Email?: string;
   AccountId: string;
   ContactId: string;
+  LastModifiedDate?: string;
+  IsComplete?: boolean; // falta en back
 }
 
 type TaskListStatusType = 1 | 2 | 3;

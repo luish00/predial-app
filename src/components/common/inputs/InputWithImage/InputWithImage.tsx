@@ -40,7 +40,7 @@ const InputWithImage: React.FC<InputProps> = ({
     }
 
     if ((required || value.length) && minLength) {
-      const minLengthValidation = minLength >= value.length;
+      const minLengthValidation = minLength > value.length;
       validations = validations || minLengthValidation;
       message = minLengthValidation ? `Tamaño mínimo ${minLength}` : message;
     }

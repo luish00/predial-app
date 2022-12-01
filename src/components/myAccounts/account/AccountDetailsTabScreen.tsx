@@ -8,41 +8,30 @@ import { AccountContactsScreen } from './accountContacs';
 import { AccountTasksScreen } from './accountTasks';
 import { NavigationPropBase } from '../../../types';
 import {
-  AccountProvider,
-  useAccountContext,
-} from '../../../contexts/useAccountContext';
+  loadAccount,
+  loadContacts,
+} from '../../../redux/slices/accountDetailsSlice';
 
 import { useGetAccountContacts } from '../services/useAccountService';
+import { useAppDispatch } from '../../../hooks';
 
 const Tab = createMaterialTopTabNavigator();
 
-const AccountDetailsTabWrapperScreen: React.FC<NavigationPropBase> = props => (
-  <AccountProvider>
-    <AccountDetailsTabScreen {...props} />
-  </AccountProvider>
-);
-
-const AccountDetailsTabScreen: React.FC<NavigationPropBase> = ({
-  navigation,
-}) => {
+const AccountDetailsTabScreen: React.FC<NavigationPropBase> = () => {
   const route = useRoute();
+  const dispatch = useAppDispatch();
 
   const { account } = route?.params;
-  const { accountFunctions } = useAccountContext();
 
   const { contacts, isLoading } = useGetAccountContacts(account.Id);
 
-  const AccountTaskScreenWrapper: React.FC = () => (
-    <AccountTasksScreen homeNavigation={navigation} />
-  );
+  useEffect(() => {
+    dispatch(loadContacts(contacts));
+  }, [contacts, dispatch]);
 
   useEffect(() => {
-    accountFunctions.loadContacts(contacts);
-  }, [accountFunctions, contacts]);
-
-  useEffect(() => {
-    accountFunctions.loadAccount(account);
-  }, [account, accountFunctions]);
+    dispatch(loadAccount(account));
+  }, [account, dispatch]);
 
   return (
     <Tab.Navigator
@@ -65,10 +54,10 @@ const AccountDetailsTabScreen: React.FC<NavigationPropBase> = ({
       <Tab.Screen
         name="accountTask"
         options={{ title: 'Tareas' }}
-        component={AccountTaskScreenWrapper}
+        component={AccountTasksScreen}
       />
     </Tab.Navigator>
   );
 };
 
-export { AccountDetailsTabWrapperScreen as AccountDetailsTabScreen };
+export { AccountDetailsTabScreen };

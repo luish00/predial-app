@@ -2,11 +2,15 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 
-import { useAccountContext } from '../../../../contexts/useAccountContext';
 import { useAccountUtils } from '../../../../hooks/account/useAccountUtils';
 import { toCurrency } from '../../../../utilities/utils';
-import { useInputReducerState } from '../../../../hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useInputReducerState,
+} from '../../../../hooks';
 import { AccountDetailsProp } from '../../../../types';
+import { loadAccount } from '../../../../redux/slices/accountDetailsSlice';
 
 import { Col, Container, Label } from '../../../common/grids';
 import { StaticMapImage } from '../../../common/images';
@@ -36,19 +40,18 @@ const styles = StyleSheet.create({
 });
 
 const AccountDetailsScreen: React.FC = () => {
-  const {
-    accountFunctions: { loadAccount },
-    accountState,
-  } = useAccountContext();
+  const dispatch = useAppDispatch();
+  const store = useAppSelector(state => state.accountDetails);
+  const { accountDetails } = store;
+
   const [editMode, setEditMode] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const { state: accountReducer, onChangeInput } =
-    useInputReducerState<AccountDetailsProp>(accountState.account);
+    useInputReducerState<AccountDetailsProp>(accountDetails);
 
-  const { fullAccountName, fullAccountAddress } = useAccountUtils(
-    accountState.account,
-  );
+  const { fullAccountName, fullAccountAddress } =
+    useAccountUtils(accountDetails);
 
   const { formErrors, validateForm } = useValidateInput(
     InputValidations,
@@ -58,8 +61,8 @@ const AccountDetailsScreen: React.FC = () => {
   const { updateAccount } = useUpdateAccount(accountReducer?.Id);
 
   const account = useMemo(() => {
-    return editMode ? accountReducer : accountState.account;
-  }, [accountState.account, editMode, accountReducer]);
+    return editMode ? accountReducer : accountDetails;
+  }, [accountDetails, editMode, accountReducer]);
 
   const onEditMode = useCallback(() => {
     setEditMode((prev: boolean) => !prev);
@@ -81,7 +84,7 @@ const AccountDetailsScreen: React.FC = () => {
     const accountUpdated = await updateAccount(accountReducer);
 
     setModalVisible(false);
-    loadAccount(accountReducer);
+    dispatch(loadAccount(accountReducer));
     setEditMode(false);
 
     const type = accountUpdated ? 'success' : 'error';
@@ -93,7 +96,7 @@ const AccountDetailsScreen: React.FC = () => {
       type,
       text1,
     });
-  }, [accountReducer, updateAccount, loadAccount, validateForm]);
+  }, [accountReducer, validateForm, updateAccount, dispatch]);
 
   return (
     <>

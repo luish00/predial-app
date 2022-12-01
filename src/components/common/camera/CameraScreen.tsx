@@ -5,7 +5,7 @@ import {
   useCameraDevices,
   PhotoFile,
 } from 'react-native-vision-camera';
-import { PrimaryButton } from '../components/common/buttons/PrimaryButton';
+import { PrimaryButton } from '../buttons/PrimaryButton';
 
 import {
   backWhiteIcon,
@@ -14,10 +14,10 @@ import {
   closeWhiteIcon,
   repeatWhiteIcon,
   unCheckedRadioWhiteIcon,
-} from '../assets/icons';
+} from '../../../assets/icons';
 
-import styles from './TaskScreen.style';
-import { Label } from '../components/common/grids';
+import styles from './CameraScreen.styles';
+import { Label } from '../grids';
 
 interface CameraScreenProps {
   onClose?: () => void;

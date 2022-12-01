@@ -14,8 +14,16 @@ import { PrimaryButton } from '../../../../common/buttons/PrimaryButton';
 import { ImageIcon } from '../../../../common/images';
 
 import styles from './TaskScreen.style';
-import { useAppDispatch, useAppSelector, useInputReducerState } from '../../../../../hooks';
-import { ContactProp, NavigationPropBase, TaskProp } from '../../../../../types';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useInputReducerState,
+} from '../../../../../hooks';
+import {
+  ContactProp,
+  NavigationPropBase,
+  TaskProp,
+} from '../../../../../types';
 import DatePicker from 'react-native-date-picker';
 import { useCreateTaskService } from '../services/useTaskServices';
 import {
@@ -76,13 +84,7 @@ const PhotoButton: React.FC<PhotoButtonProps> = ({ label, onPress }) => {
   );
 };
 
-const NewContact: ContactProp = {
-  Id: undefined,
-  IsOwner: false,
-  Relationship: '',
-  FirstName: '',
-  AccountId: '',
-};
+const newContact = new ContactModel();
 
 export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const route = useRoute();
@@ -93,7 +95,6 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
-  const [newContact, setNewContact] = useState<ContactProp>(new ContactModel());
   const [showNewContact, setShowNewContact] = useState(false);
 
   const {
@@ -154,7 +155,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
     action({
       ...state,
-      ContactId: '1', // TODO: contact test
+      ContactId: state.ContactId, // TODO: contact test
       InstructionNotification: !isPersonalNotify,
       PersonalNotification: isPersonalNotify,
       Phone: state.Mobile,
@@ -176,7 +177,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         ...state,
         Name: `${modalContact.FirstName} ${modalContact.MiddleName} ${modalContact.LastName}`,
         Email: modalContact.Email,
-        Id: modalContact.Id,
+        ContactId: modalContact.Id,
         Mobile: modalContact.Mobile,
         Phone: modalContact.Phone,
       });
@@ -215,7 +216,14 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     }
 
     setShowNewContact(false);
-    updateState({ ...state, ...contactCreated });
+    updateState({
+      ...state,
+      Name: `${contactCreated.FirstName} ${contactCreated.MiddleName} ${contactCreated.LastName}`,
+      Email: contactCreated.Email,
+      ContactId: contactCreated.Id,
+      Mobile: contactCreated.Mobile,
+      Phone: contactCreated.Phone,
+    });
     dispatch(addContact(contactCreated));
     resetAccountService();
   }, [

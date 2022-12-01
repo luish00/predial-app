@@ -95,7 +95,7 @@ async function apiFetch({
     rest = { body: JSON.stringify(body) };
   }
 
-  console.log('fetch', `${URL_BASE}/${url}?${serializeForUri(params)}`)
+  console.log('fetch', `${URL_BASE}/${url}?${serializeForUri(params)}`);
 
   return fetch(`${URL_BASE}/${url}?${serializeForUri(params)}`, {
     method: method,

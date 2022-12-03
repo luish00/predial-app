@@ -15,6 +15,7 @@ export default StyleSheet.create({
     flex: 1,
     paddingBottom: 4,
     fontSize: 18,
+    color: colors.textPrimary,
   },
   inputFocused: {
     borderBottomColor: colors.primaryDark,

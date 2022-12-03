@@ -81,6 +81,7 @@ const InputWithImage: React.FC<InputProps> = ({
           onChangeText={onChangeText}
           onFocus={handleFocus}
           returnKeyType={returnKeyType}
+          placeholderTextColor="#888"
           style={[
             styles.input,
             // focus && styles.inputFocused,

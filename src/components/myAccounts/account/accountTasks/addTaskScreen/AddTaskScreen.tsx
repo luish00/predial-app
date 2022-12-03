@@ -39,6 +39,7 @@ import { ContactModal } from '../../accountContacts/components/ContactModal';
 import { ContactModel } from '../../../../../models/ContactModel';
 import { useCreateContact } from '../../../services/useAccountService';
 import { addContact } from '../../../../../redux/slices/accountDetailsSlice';
+import { CameraScreen } from '../../../../common/camera';
 
 interface PhotoButtonProps {
   label: string;
@@ -96,6 +97,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
   const [showNewContact, setShowNewContact] = useState(false);
+  const [showTakePhoto, setShowTakePhoto] = useState(false);
 
   const {
     createOrUpdateContact,
@@ -341,7 +343,10 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
         {isPersonalNotify && <PhotoButton label="Foto identificación" />}
 
-        <PhotoButton label="Foto evidencia" />
+        <PhotoButton
+          label="Foto evidencia"
+          onPress={() => setShowTakePhoto(true)}
+        />
 
         <PhotoButton label="Foto del predio" />
 
@@ -393,6 +398,12 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         onSave={onSaveContact}
         isLoading={isLoading}
         errors={errors}
+      />
+
+      <CameraScreen
+        visible={showTakePhoto}
+        onClose={() => setShowTakePhoto(false)}
+        onTakePhoto={(photo) => console.log('photo', photo)}
       />
     </Container>
   );

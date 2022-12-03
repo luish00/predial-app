@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Image, View, Linking, TouchableHighlight } from 'react-native';
+import { Image, Linking, Modal, TouchableHighlight, View } from 'react-native';
 import {
   Camera,
   useCameraDevices,
@@ -18,15 +18,18 @@ import {
 
 import styles from './CameraScreen.styles';
 import { Label } from '../grids';
+import { log } from '../../../utilities/utils';
 
 interface CameraScreenProps {
   onClose?: () => void;
-  onTakePhoto?: () => void;
+  onTakePhoto?: (photo?: any) => void;
+  visible: boolean;
 }
 
 const CameraScreen: React.FC<CameraScreenProps> = ({
   onClose,
   onTakePhoto,
+  visible = false,
 }) => {
   const camera = useRef<Camera>(null);
   const devices = useCameraDevices();
@@ -47,16 +50,23 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
   }, [requestCameraPermission]);
 
   const handleTakePhoto = useCallback(async () => {
-    const photo = await camera?.current?.takePhoto({
-      enableAutoStabilization: true,
-      flash: 'auto',
-    });
+    console.log('cilck')
 
-    console.log('photo', photo);
-    setPhotoInfo(photo!);
 
-    if (onTakePhoto) {
-      onTakePhoto();
+    try {
+      const photo = await camera?.current?.takePhoto({
+        enableAutoStabilization: true,
+        flash: 'auto',
+      });
+
+      console.log('photo', photo);
+      setPhotoInfo(photo!);
+
+      if (onTakePhoto) {
+        onTakePhoto(photo);
+      }
+    } catch (error) {
+      log('photo', error.message);
     }
   }, [onTakePhoto]);
 
@@ -164,13 +174,15 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
   };
 
   return (
-    <View style={styles.cameraContainer}>
-      <CameraComponent />
+    <Modal animationType="slide" visible={visible}>
+      <View style={styles.cameraContainer}>
+        <CameraComponent />
 
-      <PhotoComponent />
+        <PhotoComponent />
 
-      <TopButton />
-    </View>
+        <TopButton />
+      </View>
+    </Modal>
   );
 };
 

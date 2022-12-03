@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 
 const Label: React.FC<Props> = ({
   children,
-  color,
+  color = colors.textPrimary,
   fontSize,
   textAlign,
   fontWeight,

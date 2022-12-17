@@ -8,7 +8,9 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "clean": "cd android && ./gradlew clean"
+    "clean": "cd android && ./gradlew clean",
+    "make": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "build": "yarn make && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",

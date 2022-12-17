@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TouchableNativeFeedback, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import DatePicker from 'react-native-date-picker';
 
 import colors from '../../../../../colors';
 import { checkIcon, unCheckIcon, eventIcon } from '../../../../../assets/icons';
@@ -23,13 +24,10 @@ import {
   ContactProp,
   NavigationPropBase,
   TaskProp,
-} from '../../../../../types';
-import DatePicker from 'react-native-date-picker';
+} from '../../../../../types.d';
 import { useCreateTaskService } from '../services/useTaskServices';
-import {
-  useValidateInput,
-  ValidationsProps,
-} from '../../../../common/form/hooks/useValidateInput';
+import { useValidateInput } from '../../../../common/form/hooks/useValidateInput';
+
 import { AlertModal, ModalLoading } from '../../../../common/modals';
 import {
   DropdownForm,
@@ -39,51 +37,9 @@ import { ContactModal } from '../../accountContacts/components/ContactModal';
 import { ContactModel } from '../../../../../models/ContactModel';
 import { useCreateContact } from '../../../services/useAccountService';
 import { addContact } from '../../../../../redux/slices/accountDetailsSlice';
-import { CameraScreen } from '../../../../common/camera';
 
-interface PhotoButtonProps {
-  label: string;
-  onPress?: () => void;
-}
-
-const FORM_NOTIFICATION = ['Name', 'Mobile', 'Email', 'PaymentPromise'];
-
-const InputFormValidations: ValidationsProps[] = [
-  {
-    key: 'Name',
-    keyName: 'Nombre del contacto',
-    requerid: true,
-  },
-  {
-    key: 'Mobile',
-    keyName: 'Teléfono',
-    minLength: 10,
-    onlyNumber: true,
-    requerid: true,
-  },
-  {
-    key: 'Email',
-    isEmail: true,
-    keyName: 'Correo',
-  },
-  {
-    key: 'PaymentPromise',
-    keyName: 'Promesa de pago',
-    requerid: true,
-  },
-];
-
-const PhotoButton: React.FC<PhotoButtonProps> = ({ label, onPress }) => {
-  return (
-    <TouchableNativeFeedback onPress={onPress}>
-      <View style={styles.photoContainer}>
-        <Label fontWeight="bold" fontSize={20}>
-          {label}
-        </Label>
-      </View>
-    </TouchableNativeFeedback>
-  );
-};
+import { FORM_NOTIFICATION, InputFormValidations } from './addTask.validations';
+import { PhotoTaskButtons } from '../components/PhotoTaskButtons';
 
 const newContact = new ContactModel();
 
@@ -92,12 +48,11 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { task } = route?.params || {};
   const store = useAppSelector(state => state.accountDetails);
-  const { contacts } = store;
+  const { accountDetails, contacts } = store;
 
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
   const [showNewContact, setShowNewContact] = useState(false);
-  const [showTakePhoto, setShowTakePhoto] = useState(false);
 
   const {
     createOrUpdateContact,
@@ -157,7 +112,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
     action({
       ...state,
-      ContactId: state.ContactId, // TODO: contact test
+      ContactId: state.ContactId,
       InstructionNotification: !isPersonalNotify,
       PersonalNotification: isPersonalNotify,
       Phone: state.Mobile,
@@ -341,14 +296,11 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
           </View>
         </TouchableNativeFeedback>
 
-        {isPersonalNotify && <PhotoButton label="Foto identificación" />}
-
-        <PhotoButton
-          label="Foto evidencia"
-          onPress={() => setShowTakePhoto(true)}
+        <PhotoTaskButtons
+          accountDetailsId={accountDetails?.Id}
+          isPersonalNotify={isPersonalNotify}
+          taskId={task?.Id}
         />
-
-        <PhotoButton label="Foto del predio" />
 
         <Col>
           {formErrors.map((error, index) => (
@@ -398,12 +350,6 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         onSave={onSaveContact}
         isLoading={isLoading}
         errors={errors}
-      />
-
-      <CameraScreen
-        visible={showTakePhoto}
-        onClose={() => setShowTakePhoto(false)}
-        onTakePhoto={(photo) => console.log('photo', photo)}
       />
     </Container>
   );

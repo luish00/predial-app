@@ -31,9 +31,15 @@ export interface AccountDetailsProp {
   Assigned2UserId?: number;
 }
 
+export const AttachmentType = {
+  Identificacion: 'Identificación',
+  Evidencia: 'Evidencia',
+  Predio: 'Predio',
+};
+
 export interface AttachmentProp {
-  Name: string;
-  Type: string;
+  Name?: string;
+  Type: AttachmentType;
   ParentId: string;
   AccountId: string;
   Body: string;

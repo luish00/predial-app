@@ -65,3 +65,12 @@ buck-out/
 /vendor/bundle/
 
 env.js
+
+# Android build files
+android/app/src/main/assets/
+android/app/src/main/res/drawable-hdpi/
+android/app/src/main/res/drawable-mdpi/
+android/app/src/main/res/drawable-xhdpi/
+android/app/src/main/res/drawable-xxhdpi/
+android/app/src/main/res/dragtwable-xxxhdpi/
+android/app/src/main/res/drawable-xxxhdpi/

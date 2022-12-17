@@ -23,7 +23,7 @@ const FORM_KEYS = ['email', 'password'];
 
 const LoginScreenScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('test@test.com');
-  const [password, setPassword] = useState('12345');
+  const [password, setPassword] = useState('37CQyaCKSZ');
 
   const { isLoading, doLogin, errorLogin } = useLoginService();
 

@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
+import colors from '../../../colors';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -21,6 +22,7 @@ export default StyleSheet.create({
     top: 20,
   },
   closeIcon: {
+    tintColor: colors.secondary,
     height: 30,
     width: 30,
   },
@@ -50,10 +52,12 @@ export default StyleSheet.create({
   photoTakenActions: {
     alignItems: 'center',
     alignSelf: 'flex-end',
-    bottom: height * 0.08,
+    backgroundColor: '#eee',
+    bottom: 50,
+    height: 70,
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingHorizontal: 10,
     position: 'absolute',
     width: width,
@@ -63,6 +67,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   repeatIcon: {
+    tintColor: colors.secondary,
     height: 30,
     width: 30,
   },

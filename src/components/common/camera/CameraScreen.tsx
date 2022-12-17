@@ -9,20 +9,18 @@ import { PrimaryButton } from '../buttons/PrimaryButton';
 
 import {
   backWhiteIcon,
-  checkIcon,
   circleWhiteIcon,
   closeWhiteIcon,
-  repeatWhiteIcon,
   unCheckedRadioWhiteIcon,
 } from '../../../assets/icons';
 
 import styles from './CameraScreen.styles';
-import { Label } from '../grids';
 import { log } from '../../../utilities/utils';
+import colors from '../../../colors';
 
 interface CameraScreenProps {
-  onClose?: () => void;
-  onTakePhoto?: (photo?: any) => void;
+  onClose: () => void;
+  onTakePhoto?: (photo?: PhotoFile) => void;
   visible: boolean;
 }
 
@@ -50,8 +48,7 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
   }, [requestCameraPermission]);
 
   const handleTakePhoto = useCallback(async () => {
-    console.log('cilck')
-
+    console.log('cilck');
 
     try {
       const photo = await camera?.current?.takePhoto({
@@ -59,24 +56,26 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
         flash: 'auto',
       });
 
-      console.log('photo', photo);
       setPhotoInfo(photo!);
-
-      if (onTakePhoto) {
-        onTakePhoto(photo);
-      }
     } catch (error) {
       log('photo', error.message);
     }
-  }, [onTakePhoto]);
-
-  const handleSavePhoto = useCallback(() => {
-    console.log('save photo');
   }, []);
 
   const handleRepeat = useCallback(() => {
     setPhotoInfo(null);
   }, []);
+
+  const handleSavePhoto = useCallback(() => {
+    console.log('save photo');
+
+    if (onTakePhoto && photoInfo) {
+      onTakePhoto(photoInfo);
+    }
+
+    onClose();
+    handleRepeat();
+  }, [handleRepeat, onClose, onTakePhoto, photoInfo]);
 
   const handleCancel = useCallback(() => {
     if (photoInfo) {
@@ -145,24 +144,23 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
           />
 
           <View style={styles.photoTakenActions}>
-            <TouchableHighlight
-              style={styles.repeatContainer}
-              onPress={handleRepeat}>
-              <View>
-                <Image source={repeatWhiteIcon} style={styles.repeatIcon} />
-
-                <Label fontSize={12} color="#fff">
-                  Repetir
-                </Label>
-              </View>
-            </TouchableHighlight>
+            <PrimaryButton
+              onPress={handleRepeat}
+              borderLess
+              size="small"
+              style={{ width: 100 }}
+              textColor={colors.textPrimary}
+              textFontSize={20}>
+              Repetir
+            </PrimaryButton>
 
             <PrimaryButton
-              alignSelf="flex-end"
-              icon={checkIcon}
               onPress={handleSavePhoto}
+              borderLess
               size="small"
-              textFontSize={12}>
+              style={{ width: 100 }}
+              textColor={colors.secondary}
+              textFontSize={20}>
               Usar foto
             </PrimaryButton>
           </View>

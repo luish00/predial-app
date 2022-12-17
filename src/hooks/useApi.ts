@@ -95,16 +95,25 @@ async function apiFetch({
     rest = { body: JSON.stringify(body) };
   }
 
-  console.log('fetch', `${URL_BASE}/${url}?${serializeForUri(params)}`);
-
-  return fetch(`${URL_BASE}/${url}?${serializeForUri(params)}`, {
+  const options = {
     method: method,
     headers: {
       'Content-Type': 'application/json',
       authorization: `Bearer ${token}`,
     },
     ...rest,
-  });
+  };
+  const path = `${URL_BASE}/${url}?${serializeForUri(params)}`;
+  const timeOut = 3000;
+
+  console.log('fetch', path);
+
+  return Promise.race([
+    fetch(path, options),
+    new Promise<Response>((_, reyect) =>
+      setTimeout(() => reyect(new Error('Time out')), timeOut),
+    ),
+  ]);
 }
 
 /**
@@ -146,6 +155,8 @@ export const useApiService = <T>(
         status: request.status,
       };
     } catch (error) {
+      log('fetch error', error.message);
+
       wrapperData = {
         data: null,
         errors: [],
@@ -192,6 +203,8 @@ export const useApiGet = <T>(url = ''): ApiGetServiceType<T> => {
         status: request.status,
       };
     } catch (error) {
+      log('fetch error', error.message);
+
       wrapperData = {
         data: null,
         errors: [],
@@ -240,6 +253,8 @@ const fetchWrapper = async <T>({
       status: request.status,
     };
   } catch (error) {
+    log('fetch error', error.message);
+
     wrapperData = {
       data: null,
       errors: [],

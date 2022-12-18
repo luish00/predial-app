@@ -16,22 +16,17 @@ export default StyleSheet.create({
   cameraStyle: {
     flex: 1,
   },
-  closeCamera: {
-    left: 10,
+  photoButtonContainer: {
+    bottom: 0,
+    height: 190,
+    justifyContent: 'center',
+    left: 0,
+    marginLeft: -60,
     position: 'absolute',
-    top: 20,
-  },
-  closeIcon: {
-    tintColor: colors.secondary,
-    height: 30,
-    width: 30,
+    right: 0,
   },
   photoButton: {
-    position: 'absolute',
     alignItems: 'center',
-    bottom: height * 0.2,
-    left: 0,
-    right: 0,
   },
   photoButtonIcon: {
     height: 60,
@@ -45,6 +40,10 @@ export default StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
   },
+  photoFlashButton: {
+    marginRight: 30,
+    paddingTop: 30,
+  },
   photoStyle: {
     height: height,
     width: width,
@@ -54,13 +53,16 @@ export default StyleSheet.create({
     alignSelf: 'flex-end',
     backgroundColor: '#eee',
     bottom: 50,
-    height: 70,
     flex: 1,
     flexDirection: 'row',
+    height: 70,
     justifyContent: 'flex-end',
     paddingHorizontal: 10,
     position: 'absolute',
     width: width,
+  },
+  photoTakenActionsWidth: {
+    width: 100,
   },
   repeatContainer: {
     alignItems: 'center',

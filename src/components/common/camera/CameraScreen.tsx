@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Image, Linking, Modal, TouchableHighlight, View } from 'react-native';
 import {
   Camera,
@@ -8,21 +14,37 @@ import {
 import { PrimaryButton } from '../buttons/PrimaryButton';
 
 import {
-  backWhiteIcon,
   circleWhiteIcon,
-  closeWhiteIcon,
   unCheckedRadioWhiteIcon,
 } from '../../../assets/icons';
+import {
+  flashAutoIcon,
+  flashOffIcon,
+  flashOnIcon,
+} from '../../../assets/icons/camera';
 
 import styles from './CameraScreen.styles';
 import { log } from '../../../utilities/utils';
-import colors from '../../../colors';
+
+import { ButtonImage } from '../buttons/ButtonImage';
+import { Row } from '../grids';
+import { CameraTopButton } from './CameraTopButton';
+import { PhotoPreview } from './PhotoPreview';
 
 interface CameraScreenProps {
   onClose: () => void;
   onTakePhoto?: (photo?: PhotoFile) => void;
   visible: boolean;
 }
+
+enum FLASH_TYPE {
+  auto,
+  on,
+  off,
+}
+
+const FLASH_TYPES = ['auto', 'on', 'off'];
+const FLAS_IMAGES = [flashAutoIcon, flashOnIcon, flashOffIcon];
 
 const CameraScreen: React.FC<CameraScreenProps> = ({
   onClose,
@@ -34,6 +56,19 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
   const device = devices.back!;
 
   const [photoInfo, setPhotoInfo] = useState<PhotoFile | null>(null);
+  const [flashType, setFlashType] = useState<FLASH_TYPE | undefined>(
+    FLASH_TYPE.auto,
+  );
+
+  const flash: 'auto' | 'on' | 'off' = useMemo(() => {
+    const type = FLASH_TYPES[flashType || 0];
+
+    return type;
+  }, [flashType]);
+
+  const showCamera = useMemo(() => {
+    return device && !photoInfo;
+  }, [device, photoInfo]);
 
   const requestCameraPermission = useCallback(async () => {
     const permission = await Camera.requestCameraPermission();
@@ -43,24 +78,20 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
     }
   }, []);
 
-  useEffect(() => {
-    requestCameraPermission();
-  }, [requestCameraPermission]);
-
   const handleTakePhoto = useCallback(async () => {
     console.log('cilck');
 
     try {
       const photo = await camera?.current?.takePhoto({
         enableAutoStabilization: true,
-        flash: 'auto',
+        flash: flash,
       });
 
       setPhotoInfo(photo!);
     } catch (error) {
       log('photo', error.message);
     }
-  }, []);
+  }, [flash]);
 
   const handleRepeat = useCallback(() => {
     setPhotoInfo(null);
@@ -87,98 +118,75 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
     }
   }, [handleRepeat, onClose, photoInfo]);
 
-  const TopButton: React.FC = () => {
-    const icon = photoInfo ? backWhiteIcon : closeWhiteIcon;
+  const handleOnFlash = useCallback(() => {
+    setFlashType((prev: FLASH_TYPE | undefined) => {
+      switch (prev) {
+        case FLASH_TYPE.auto:
+          return FLASH_TYPE.on;
+        case FLASH_TYPE.on:
+          return FLASH_TYPE.off;
+        case FLASH_TYPE.off:
+          return FLASH_TYPE.auto;
+        default:
+          FLASH_TYPE.auto;
+      }
+    });
+  }, []);
 
-    return (
-      <TouchableHighlight
-        activeOpacity={0.6}
-        onPress={handleCancel}
-        style={styles.closeCamera}
-        underlayColor="transparent">
-        <Image source={icon} style={styles.closeIcon} />
-      </TouchableHighlight>
-    );
-  };
-
-  const CameraComponent: React.FC = () => {
-    if (device && !photoInfo) {
-      return (
-        <View style={styles.cameraContainer}>
-          <Camera
-            ref={camera}
-            device={device}
-            style={styles.cameraStyle}
-            isActive={true}
-            photo={true}
-          />
-
-          <TouchableHighlight
-            activeOpacity={0.6}
-            onPress={handleTakePhoto}
-            style={styles.photoButton}
-            underlayColor="transparent">
-            <View pointerEvents="none">
-              <Image
-                source={unCheckedRadioWhiteIcon}
-                style={styles.photoButtonOuter}
-              />
-
-              <Image source={circleWhiteIcon} style={styles.photoButtonIcon} />
-            </View>
-          </TouchableHighlight>
-        </View>
-      );
-    }
-
-    return null;
-  };
-
-  const PhotoComponent: React.FC = () => {
-    if (photoInfo) {
-      return (
-        <View style={styles.cameraContainer}>
-          <Image
-            source={{ uri: `file://${photoInfo.path}` }}
-            style={styles.photoStyle}
-          />
-
-          <View style={styles.photoTakenActions}>
-            <PrimaryButton
-              onPress={handleRepeat}
-              borderLess
-              size="small"
-              style={{ width: 100 }}
-              textColor={colors.textPrimary}
-              textFontSize={20}>
-              Repetir
-            </PrimaryButton>
-
-            <PrimaryButton
-              onPress={handleSavePhoto}
-              borderLess
-              size="small"
-              style={{ width: 100 }}
-              textColor={colors.secondary}
-              textFontSize={20}>
-              Usar foto
-            </PrimaryButton>
-          </View>
-        </View>
-      );
-    }
-
-    return null;
-  };
+  useEffect(() => {
+    requestCameraPermission();
+  }, [requestCameraPermission]);
 
   return (
     <Modal animationType="slide" visible={visible}>
       <View style={styles.cameraContainer}>
-        <CameraComponent />
+        {showCamera && (
+          <View style={styles.cameraContainer}>
+            <Camera
+              ref={camera}
+              device={device}
+              style={styles.cameraStyle}
+              isActive={true}
+              photo={true}
+            />
 
-        <PhotoComponent />
+            <Row style={styles.photoButtonContainer}>
+              <ButtonImage
+                onPress={handleOnFlash}
+                image={FLAS_IMAGES[flashType || 0]}
+                buttonStyle={styles.photoFlashButton}
+              />
 
-        <TopButton />
+              <TouchableHighlight
+                activeOpacity={0.6}
+                onPress={handleTakePhoto}
+                style={styles.photoButton}
+                underlayColor="transparent">
+                <View pointerEvents="none">
+                  <Image
+                    source={unCheckedRadioWhiteIcon}
+                    style={styles.photoButtonOuter}
+                  />
+
+                  <Image
+                    source={circleWhiteIcon}
+                    style={styles.photoButtonIcon}
+                  />
+                </View>
+              </TouchableHighlight>
+            </Row>
+          </View>
+        )}
+
+        {photoInfo && (
+          <PhotoPreview
+            handleRepeat={handleRepeat}
+            handleSavePhoto={handleSavePhoto}
+            photoInfo={photoInfo}
+          />
+        )}
+
+        <CameraTopButton handleCancel={handleCancel} photoInfo={photoInfo} />
       </View>
     </Modal>
   );

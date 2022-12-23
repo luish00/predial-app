@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
 
 const styles = StyleSheet.create({
   scrollView: {
-    marginBottom: 50,
+    paddingBottom: 30,
   },
 });
 
@@ -14,8 +14,8 @@ interface Props {
 
 const Container: React.FC<Props> = ({ children, style }) => {
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={style}>{children}</View>
+    <ScrollView>
+      <View style={[styles.scrollView, style]}>{children}</View>
     </ScrollView>
   );
 };

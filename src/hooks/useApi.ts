@@ -57,7 +57,7 @@ interface ApiGetServiceType<T> {
 
 const STATUS_WITH_RESPONSE = [200, 403];
 
-const tryLog = async ({ url, data, request }) => {
+const tryLog = async ({ url = '', data = {}, request = { status: 200 } }) => {
   if (!devMode) {
     return;
   }
@@ -104,7 +104,7 @@ async function apiFetch({
     ...rest,
   };
   const path = `${URL_BASE}/${url}?${serializeForUri(params)}`;
-  const timeOut = 3000;
+  const timeOut = 5000;
 
   console.log('fetch', path);
 
@@ -141,6 +141,8 @@ export const useApiService = <T>(
       params,
       url: path,
     };
+
+    console.log('apiCall', bodyFetch);
 
     try {
       const request = await apiFetch(bodyFetch);
@@ -269,7 +271,13 @@ const fetchWrapper = async <T>({
   return wrapperData;
 };
 
-export const useFetch = <T>() => {
+interface UseFetchProps<T> {
+  post: (params: FetchProps) => Promise<WrapperData<T>>;
+  del: Promise<WrapperData<T>>;
+  put: Promise<WrapperData<T>>;
+}
+
+export const useFetch = <T>(): UseFetchProps<T> => {
   const post = useCallback(async (params: FetchProps) => {
     return fetchWrapper<T>({ ...params, method: 'POST' });
   }, []);

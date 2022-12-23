@@ -67,9 +67,11 @@ const TwoButton: React.FC<ModalTwoButtonProps> = props => {
         secondaryText={secondaryText}
       />
 
-      <PrimaryButton onPress={handlePrimaryButtonPress}>
-        {primaryText && primaryText.toUpperCase()}
-      </PrimaryButton>
+      {primaryText && (
+        <PrimaryButton onPress={handlePrimaryButtonPress}>
+          {primaryText?.toUpperCase()}
+        </PrimaryButton>
+      )}
     </View>
   );
 };

@@ -8,15 +8,18 @@ export enum AttachmentModelStatus {
 export class AttachmentModel implements AttachmentProp {
   Name = '';
   Type = AttachmentType.Evidencia;
-  ParentId = '';
+  ParentId? = '';
   AccountId = '';
   Body = '';
   Status: AttachmentModelStatus = AttachmentModelStatus.Pending;
 
   constructor(props: AttachmentProp) {
-    this.Name = `${AttachmentType.Evidencia}-${Date.now()}`;
+    this.Name = `${props.ParentId}-${props.AccountId}-${
+      props.Type
+    }-${Date.now()}`;
     this.AccountId = props.AccountId;
     this.Body = props.Body;
     this.Type = props.Type;
+    this.ParentId = props.ParentId;
   }
 }

@@ -11,7 +11,6 @@ import {
   useCameraDevices,
   PhotoFile,
 } from 'react-native-vision-camera';
-import { PrimaryButton } from '../buttons/PrimaryButton';
 
 import {
   circleWhiteIcon,
@@ -79,8 +78,6 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
   }, []);
 
   const handleTakePhoto = useCallback(async () => {
-    console.log('cilck');
-
     try {
       const photo = await camera?.current?.takePhoto({
         enableAutoStabilization: true,
@@ -98,8 +95,6 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
   }, []);
 
   const handleSavePhoto = useCallback(() => {
-    console.log('save photo');
-
     if (onTakePhoto && photoInfo) {
       onTakePhoto(photoInfo);
     }

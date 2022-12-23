@@ -40,6 +40,11 @@ import { addContact } from '../../../../../redux/slices/accountDetailsSlice';
 
 import { FORM_NOTIFICATION, InputFormValidations } from './addTask.validations';
 import { PhotoTaskButtons } from '../components/PhotoTaskButtons';
+import { AttachmentModel } from '../../../../../models/AttachmentModel';
+import {
+  useCreateAttachmentService,
+  useGetAttachmentService,
+} from '../../../../../services/useAttachmentService';
 
 const newContact = new ContactModel();
 
@@ -53,6 +58,11 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
   const [showNewContact, setShowNewContact] = useState(false);
+  const [showUploadAttch, setShowUpploadAttch] = useState(false);
+  const [showFinishModal, setShowFinishModal] = useState(false);
+  const [photos, setPhotos] = useState<AttachmentModel[]>([]);
+  const [uploadedPhotos, setUploadedPhotos] = useState<AttachmentModel[]>([]);
+  const [savingAttch, setSavaingAttch] = useState(false);
 
   const {
     createOrUpdateContact,
@@ -68,7 +78,9 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     InputFormValidations,
     state,
   );
+
   const {
+    createdTask,
     createTask,
     createTaskError,
     createTaskLoading,
@@ -76,6 +88,16 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     updateTask,
     resetCreteService,
   } = useCreateTaskService();
+
+  const {
+    createAttachments,
+    finishUploadedAttach,
+    index: indexAttch,
+    isLoading: isAttchLoading,
+  } = useCreateAttachmentService();
+
+  const { getAttachments, isGetAttchLoading, taskAttachements } =
+    useGetAttachmentService();
 
   const contactsMemo: DropdownItemType[] = useMemo(() => {
     if (contacts.length === 0) {
@@ -156,6 +178,32 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     [createOrUpdateContact, store.accountDetails?.Id],
   );
 
+  const onDismissCreateTask = useCallback(() => {
+    if (photos.length === 0 || finishUploadedAttach) {
+      goBack();
+    }
+
+    setShowFinishModal(false);
+    setShowUpploadAttch(true);
+  }, [finishUploadedAttach, goBack, photos.length]);
+
+  const onModalUploadAttch = useCallback(() => {
+    const data = photos.map(
+      (item: AttachmentModel) =>
+        new AttachmentModel({ ...item, ParentId: task?.Id || createdTask?.Id }),
+    );
+
+    createAttachments(data);
+    setSavaingAttch(true);
+    setShowUpploadAttch(false);
+  }, [createAttachments, createdTask?.Id, photos, task?.Id]);
+
+  const onModalUploadAttchCancel = useCallback(() => {
+    // TODO: save photos
+    setSavaingAttch(false);
+    goBack();
+  }, [goBack]);
+
   useEffect(() => {
     if (createTaskError) {
       resetCreteService();
@@ -181,6 +229,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
       Mobile: contactCreated.Mobile,
       Phone: contactCreated.Phone,
     });
+
     dispatch(addContact(contactCreated));
     resetAccountService();
   }, [
@@ -191,6 +240,26 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     state,
     updateState,
   ]);
+
+  useEffect(() => {
+    setShowFinishModal(isTaskCreated);
+  }, [isTaskCreated]);
+
+  useEffect(() => {
+    if (!task?.Id) {
+      return;
+    }
+
+    const parentId: number = task.Id;
+    getAttachments(parentId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (taskAttachements?.data) {
+      setUploadedPhotos(taskAttachements.data);
+    }
+  }, [taskAttachements]);
 
   return (
     <Container>
@@ -298,8 +367,12 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
         <PhotoTaskButtons
           accountDetailsId={accountDetails?.Id}
+          isLoading={isGetAttchLoading}
           isPersonalNotify={isPersonalNotify}
+          photos={photos}
+          setPhotos={setPhotos}
           taskId={task?.Id}
+          uploadedPhotos={uploadedPhotos}
         />
 
         <Col>
@@ -335,10 +408,28 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
       <ModalLoading visible={createTaskLoading} />
 
       <AlertModal
-        body="Tarea creada con éxito"
+        body={`Tarea ${task?.Id ? 'actualizada' : 'creada'} con éxito`}
         visible={isTaskCreated}
         title="Tarea"
         primaryText="Aceptar"
+        handlePrimaryButtonPress={onDismissCreateTask}
+      />
+
+      <AlertModal
+        body="¿Deseas subir las fotografias?"
+        visible={showUploadAttch}
+        title={`Existen ${photos.length} fotos sin guardar`}
+        primaryText="Aceptar"
+        secondaryText="Después"
+        handleSecondaryButtonPress={onModalUploadAttchCancel}
+        handlePrimaryButtonPress={onModalUploadAttch}
+      />
+
+      <AlertModal
+        body={`Cargadas ${indexAttch} de ${photos.length}`}
+        visible={isAttchLoading}
+        title="Subiendo fotografias.."
+        primaryText={`${finishUploadedAttach ? 'Aceptar' : ''}`}
         handlePrimaryButtonPress={goBack}
       />
 

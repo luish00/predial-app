@@ -1,5 +1,6 @@
 {
   "name": "oidem",
   "displayName": "oidem",
-  "devMode": true
+  "devMode": true,
+  "plugins": ["react-native-compressor"]
 }

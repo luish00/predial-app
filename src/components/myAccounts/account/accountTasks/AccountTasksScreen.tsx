@@ -13,7 +13,7 @@ import { useAppSelector } from '../../../../hooks';
 const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const store = useAppSelector(state => state.accountDetails);
   const account = store.accountDetails;
-  const { getTasks, isLoading, result } = useGetTaskService(account?.Id);
+  const { getTasks, isLoading, data } = useGetTaskService(account?.Id);
 
   const onPress = React.useCallback(
     (item: TaskProp) => {
@@ -32,7 +32,7 @@ const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
     <>
       <FlatList
         ItemSeparatorComponent={ListSeparator}
-        data={result?.data || []}
+        data={data}
         ListHeaderComponent={AccountListHeader}
         renderItem={({ item }) => (
           <AccountTaskItem item={item} onPress={onPress} />

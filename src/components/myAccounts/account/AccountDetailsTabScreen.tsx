@@ -23,7 +23,7 @@ const AccountDetailsTabScreen: React.FC<NavigationPropBase> = () => {
 
   const { account } = route?.params;
 
-  const { contacts, isLoading } = useGetAccountContacts(account.Id);
+  const { contacts } = useGetAccountContacts(account.Id);
 
   useEffect(() => {
     dispatch(loadContacts(contacts));

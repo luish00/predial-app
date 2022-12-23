@@ -40,7 +40,7 @@ export const AttachmentType = {
 export interface AttachmentProp {
   Name?: string;
   Type: AttachmentType;
-  ParentId: string;
+  ParentId?: string;
   AccountId: string;
   Body: string;
 }

@@ -104,7 +104,7 @@ async function apiFetch({
     ...rest,
   };
   const path = `${URL_BASE}/${url}?${serializeForUri(params)}`;
-  const timeOut = 5000;
+  const timeOut = 10000;
 
   console.log('fetch', path);
 

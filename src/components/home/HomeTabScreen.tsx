@@ -6,7 +6,7 @@ import { MyRoutesScreen } from '../myRoutes/MyRoutesScreen';
 
 import { TabTopScreenStyleOption } from '../../navigations/navigationUtils';
 import { NavigationPropBase } from '../../types';
-import { useGetAccounts } from '../myAccounts/services/useAccountService';
+import { useGetAccounts } from '../../services';
 
 const Tab = createMaterialTopTabNavigator();
 

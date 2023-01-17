@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 
 import {
   addContact,
@@ -8,14 +8,14 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { ContactProp } from '../../../../types';
 
-import { useCreateContact } from '../../services/useAccountService';
+import { useCreateContact, useGetAccountContacts, useGetAccounts } from '../../../../services';
 
 import { FabButton } from '../../../common/buttons/FabButton';
 import { ListEmpty } from '../../../common/lists';
 import { ListSeparator } from '../../../common/lists/ListSeparator';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { ContactListItem } from './components/ContactListItem';
-import { ContactModal } from './components/ContactModal';
+import { ContactNewModal } from './components/ContactNewModal';
 
 const newContact: ContactProp = {
   Id: '',
@@ -42,6 +42,11 @@ const AccountContactsScreen: React.FC = () => {
     resetAccountService,
   } = useCreateContact();
 
+  const { isRefreshing, onRreshContacts} = useGetAccountContacts({
+    id: accountDetails?.Id ? String(accountDetails.Id) : '',
+    autoLoad: false,
+  });
+
   const onDismissModal = React.useCallback(() => {
     setVisible(false);
     setContactModal(newContact);
@@ -65,6 +70,14 @@ const AccountContactsScreen: React.FC = () => {
     setIsNewContact(true);
     setVisible(true);
   }, []);
+
+  const onRefresh = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+
+    onRreshContacts();
+  }, [isLoading, onRreshContacts]);
 
   useEffect(() => {
     if (visible && accountDetails?.Id) {
@@ -96,11 +109,14 @@ const AccountContactsScreen: React.FC = () => {
         renderItem={({ item }) => (
           <ContactListItem onItemPress={onItemPress} item={item} />
         )}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
         ItemSeparatorComponent={ListSeparator}
       />
 
       {visible && (
-        <ContactModal
+        <ContactNewModal
           errors={errors}
           isLoading={isLoading}
           isNewContact={isNewContact}

@@ -56,7 +56,7 @@ const CameraScreen: React.FC<CameraScreenProps> = ({
 
   const [photoInfo, setPhotoInfo] = useState<PhotoFile | null>(null);
   const [flashType, setFlashType] = useState<FLASH_TYPE | undefined>(
-    FLASH_TYPE.auto,
+    FLASH_TYPE.off,
   );
 
   const flash: 'auto' | 'on' | 'off' = useMemo(() => {

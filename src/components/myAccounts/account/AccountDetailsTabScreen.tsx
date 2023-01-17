@@ -6,13 +6,13 @@ import { TabTopScreenStyleOption } from '../../../navigations/navigationUtils';
 import { AccountDetailsScreen } from './accountDetails/AccountDetailsScreen';
 import { AccountContactsScreen } from './accountContacts';
 import { AccountTasksScreen } from './accountTasks';
-import { NavigationPropBase } from '../../../types';
+import { ContactProp, NavigationPropBase } from '../../../types';
 import {
-  loadAccount,
   loadContacts,
+  loadAccount,
 } from '../../../redux/slices/accountDetailsSlice';
 
-import { useGetAccountContacts } from '../services/useAccountService';
+import { useGetAccountContacts } from '../../../services';
 import { useAppDispatch } from '../../../hooks';
 
 const Tab = createMaterialTopTabNavigator();
@@ -23,15 +23,18 @@ const AccountDetailsTabScreen: React.FC<NavigationPropBase> = () => {
 
   const { account } = route?.params;
 
-  const { contacts } = useGetAccountContacts(account.Id);
-
-  useEffect(() => {
-    dispatch(loadContacts(contacts));
-  }, [contacts, dispatch]);
+  useGetAccountContacts({ id: account.Id });
 
   useEffect(() => {
     dispatch(loadAccount(account));
   }, [account, dispatch]);
+
+  useEffect(
+    () => () => {
+      dispatch(loadContacts([] as ContactProp[]));
+    },
+    [dispatch],
+  );
 
   return (
     <Tab.Navigator
@@ -46,9 +49,9 @@ const AccountDetailsTabScreen: React.FC<NavigationPropBase> = () => {
       />
 
       <Tab.Screen
+        component={AccountContactsScreen}
         name="accountContacts"
         options={{ title: 'Contactos' }}
-        component={AccountContactsScreen}
       />
 
       <Tab.Screen

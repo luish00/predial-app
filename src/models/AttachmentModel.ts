@@ -23,3 +23,8 @@ export class AttachmentModel implements AttachmentProp {
     this.ParentId = props.ParentId;
   }
 }
+
+export interface AttachmentTaskStorage {
+  taskId: number;
+  photos: AttachmentModel[];
+}

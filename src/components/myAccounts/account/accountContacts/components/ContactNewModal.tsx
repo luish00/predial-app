@@ -27,7 +27,7 @@ interface Props {
   visible: boolean;
 }
 
-export const ContactModal: React.FC<Props> = ({
+export const ContactNewModal: React.FC<Props> = ({
   errors,
   isLoading,
   isNewContact,
@@ -84,6 +84,7 @@ export const ContactModal: React.FC<Props> = ({
       title={isNewContact ? 'Agregar contacto' : 'Editar contacto'}
       handleSecondaryButtonPress={handleDismiss}
       handlePrimaryButtonPress={handleSave}
+      isLoading={isLoading}
       visible={visible}>
       <FormNextFocus inputKeys={InputFormKeysFocus}>
         <InputForm

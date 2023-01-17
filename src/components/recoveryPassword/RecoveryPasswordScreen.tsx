@@ -8,7 +8,7 @@ import { emailIcon } from '../../assets/icons';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
 import { AlertModal } from '../common/modals';
-import { useForgotService } from './useForgotService';
+import { useForgotService } from '../../services';
 
 const styles = StyleSheet.create({
   container: { padding: 16 },

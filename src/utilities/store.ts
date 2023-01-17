@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
+import { AttachmentModel, AttachmentTaskStorage } from '../models/AttachmentModel';
 
 interface SetItem<T> {
   key: string;
@@ -8,10 +9,11 @@ interface SetItem<T> {
 }
 
 const STORAGE_KEY_NAME = '@Oidem:';
-const doNothing = () => {};
+const doNothing = () => { };
 
 enum Keys {
   USER_TOKEN = 'USER_TOKEN',
+  ATTACHEMNT_FROM_TASK = 'ATTACHEMNT_FROM_TASK',
 }
 
 function storageKey(key: string) {
@@ -74,4 +76,31 @@ export const storeUserToken = (userToken: string) => {
 
 export const getStoreUserToken = async (): Promise<string> => {
   return getStorageValue({ key: Keys.USER_TOKEN, orDefault: '' });
+};
+
+export const getStorePhotoTask = async (): Promise<
+  AttachmentTaskStorage[] | null
+> => {
+  return getStorageData({ key: Keys.ATTACHEMNT_FROM_TASK, orDefault: null });
+};
+
+export const storePhotoTask = async (photos: AttachmentTaskStorage) => {
+  const oldData: AttachmentTaskStorage[] = (await getStorePhotoTask()) || [];
+
+  setStorageData({
+    key: Keys.ATTACHEMNT_FROM_TASK,
+    data: [
+      ...oldData.filter(item => String(item.taskId) !== String(photos.taskId)),
+      photos,
+    ],
+  });
+};
+
+export const removeStorePhotoTask = async (taskId: number) => {
+  const oldData: AttachmentTaskStorage[] = (await getStorePhotoTask()) || [];
+
+  setStorageData({
+    key: Keys.ATTACHEMNT_FROM_TASK,
+    data: oldData?.filter(item => String(item.taskId) !== String(taskId)),
+  });
 };

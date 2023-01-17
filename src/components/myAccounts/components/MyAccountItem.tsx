@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#222',
     borderBottomWidth: 1,
   },
+  padding: {
+    paddingBottom: 8,
+  },
 });
 
 interface Props {
@@ -33,8 +36,22 @@ const MyAccountItem: React.FC<Props> = ({ account, navigation }) => {
         <Label fontSize={20} fontWeight="bold">
           {account.AccountNumber}
         </Label>
-        <Label fontSize={15}>{fullAccountName}</Label>
-        <Label fontSize={15}>{fullAccountAddress}</Label>
+
+        <Label fontSize={16} style={styles.padding}>
+          {fullAccountName}
+        </Label>
+
+        <Label fontSize={13} fontWeight="bold">
+          Dirección a notificar:
+        </Label>
+        <Label fontSize={12} style={styles.padding}>
+          {account?.NotificationLocation}
+        </Label>
+
+        <Label fontSize={13} fontWeight="bold">
+          Dirección del predio:
+        </Label>
+        <Label fontSize={12}>{account?.Street}</Label>
       </Col>
     </TouchableOpacity>
   );

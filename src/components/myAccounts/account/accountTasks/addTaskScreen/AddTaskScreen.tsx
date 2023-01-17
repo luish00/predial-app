@@ -19,13 +19,14 @@ import {
   useAppDispatch,
   useAppSelector,
   useInputReducerState,
+  useTaskLocalStorage,
 } from '../../../../../hooks';
 import {
   ContactProp,
   NavigationPropBase,
   TaskProp,
 } from '../../../../../types.d';
-import { useCreateTaskService } from '../services/useTaskServices';
+import { useCreateTaskService } from '../../../../../services';
 import { useValidateInput } from '../../../../common/form/hooks/useValidateInput';
 
 import { AlertModal, ModalLoading } from '../../../../common/modals';
@@ -33,18 +34,22 @@ import {
   DropdownForm,
   DropdownItemType,
 } from '../../../../common/inputs/Dropdown/DropdownForm';
-import { ContactModal } from '../../accountContacts/components/ContactModal';
+import { ContactNewModal } from '../../accountContacts/components/ContactNewModal';
 import { ContactModel } from '../../../../../models/ContactModel';
-import { useCreateContact } from '../../../services/useAccountService';
+import { useCreateContact } from '../../../../../services';
 import { addContact } from '../../../../../redux/slices/accountDetailsSlice';
 
 import { FORM_NOTIFICATION, InputFormValidations } from './addTask.validations';
 import { PhotoTaskButtons } from '../components/PhotoTaskButtons';
-import { AttachmentModel } from '../../../../../models/AttachmentModel';
+import {
+  AttachmentModel,
+  AttachmentTaskStorage,
+} from '../../../../../models/AttachmentModel';
 import {
   useCreateAttachmentService,
   useGetAttachmentService,
 } from '../../../../../services/useAttachmentService';
+import { removeStorePhotoTask } from '../../../../../utilities/store';
 
 const newContact = new ContactModel();
 
@@ -55,6 +60,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
   const store = useAppSelector(state => state.accountDetails);
   const { accountDetails, contacts } = store;
 
+  const [taskId, setTaskId] = useState<number>(task?.Id || 0);
   const [isPersonalNotify, setPersonalNotify] = useState(true);
   const [openPicker, setOpenPicker] = useState(false);
   const [showNewContact, setShowNewContact] = useState(false);
@@ -98,6 +104,23 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
   const { getAttachments, isGetAttchLoading, taskAttachements } =
     useGetAttachmentService();
+
+  const { storePhotoTask } = useTaskLocalStorage(
+    (data: AttachmentTaskStorage[]) => {
+      if (!data || !task?.Id) {
+        return;
+      }
+
+      const findTask = data.find(item => item.taskId === task.Id);
+
+      if (!findTask) {
+        return;
+      }
+
+      removeStorePhotoTask(task.Id);
+      setPhotos(findTask.photos);
+    },
+  );
 
   const contactsMemo: DropdownItemType[] = useMemo(() => {
     if (contacts.length === 0) {
@@ -200,6 +223,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
 
   const onModalUploadAttchCancel = useCallback(() => {
     // TODO: save photos
+    setPhotos([]);
     setSavaingAttch(false);
     goBack();
   }, [goBack]);
@@ -260,6 +284,27 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
       setUploadedPhotos(taskAttachements.data);
     }
   }, [taskAttachements]);
+
+  useEffect(
+    () => () => {
+      if (photos.length && taskId && !finishUploadedAttach) {
+        storePhotoTask({
+          taskId: taskId,
+          photos,
+        });
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [accountDetails, taskId, photos],
+  );
+
+  useEffect(() => {
+    if (!createdTask?.Id) {
+      return;
+    }
+
+    setTaskId(createdTask.Id);
+  }, [createdTask]);
 
   return (
     <Container>
@@ -433,7 +478,7 @@ export const TaskScreen: React.FC<NavigationPropBase> = ({ navigation }) => {
         handlePrimaryButtonPress={goBack}
       />
 
-      <ContactModal
+      <ContactNewModal
         visible={showNewContact}
         onDismiss={() => setShowNewContact(false)}
         item={newContact}

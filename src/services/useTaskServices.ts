@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useApiGet, useFetch } from '../../../../../hooks';
-import { TaskProp } from '../../../../../types';
+import { useApiGet, useFetch } from '../hooks';
+import { TaskProp } from '../types';
 
 export const useCreateTaskService = () => {
   const [createdTask, setCreatedTask] = useState<TaskProp | null | undefined>(
@@ -86,8 +86,6 @@ export const useGetTaskService = (accountId: number | undefined) => {
   }, [accountId]);
 
   useEffect(() => {
-    console.log('get taks');
-
     getTasks();
   }, [getTasks]);
 

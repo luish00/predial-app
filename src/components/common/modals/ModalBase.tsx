@@ -7,7 +7,10 @@ import styles from './ModalBase.style';
 
 import { PrimaryButton } from '../buttons/PrimaryButton';
 import { Container } from '../grids';
-import { loadingAnimation } from '../../../assets/lottie';
+import {
+  loadingAnimation,
+  loadingHorizontalAnimation,
+} from '../../../assets/lottie';
 
 interface SecondaryButtonProps {
   secondaryText?: string | null;
@@ -23,6 +26,7 @@ interface ModalBaseProps {
 
 interface ModalTwoButtonProps extends ModalBaseProps {
   handlePrimaryButtonPress: () => void;
+  isLoading?: boolean;
   handleSecondaryButtonPress?: () => void;
   primaryText: string;
   secondaryText?: string;
@@ -55,6 +59,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 const TwoButton: React.FC<ModalTwoButtonProps> = props => {
   const {
     handleSecondaryButtonPress,
+    isLoading,
     secondaryText,
     handlePrimaryButtonPress,
     primaryText,
@@ -68,7 +73,7 @@ const TwoButton: React.FC<ModalTwoButtonProps> = props => {
       />
 
       {primaryText && (
-        <PrimaryButton onPress={handlePrimaryButtonPress}>
+        <PrimaryButton isLoading={isLoading} onPress={handlePrimaryButtonPress}>
           {primaryText?.toUpperCase()}
         </PrimaryButton>
       )}
@@ -114,13 +119,24 @@ export const AlertModal: React.FC<AlertModalProps> = props => {
 };
 
 export const ModalScreen: React.FC<ModalTwoButtonProps> = props => {
-  const { visible, title, children } = props;
+  const { children, isLoading, title, visible } = props;
 
   return (
     <Modal animationType="slide" visible={visible}>
       <Text style={styles.titleScreen}>{title}</Text>
 
       <View style={styles.content}>
+        {isLoading && (
+          <View>
+            <AnimatedLottieView
+              autoPlay
+              loop
+              source={loadingHorizontalAnimation}
+              autoSize
+            />
+          </View>
+        )}
+
         <Container>
           {children}
 

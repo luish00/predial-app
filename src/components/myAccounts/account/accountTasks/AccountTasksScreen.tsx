@@ -7,7 +7,7 @@ import { ListSeparator } from '../../../common/lists/ListSeparator';
 import { AccountListHeader } from '../common/AccountListHeader';
 import { AccountTaskItem } from './components';
 import { FabButton } from '../../../common/buttons/FabButton';
-import { useGetTaskService } from './services/useTaskServices';
+import { useGetTaskService } from '../../../../services';
 import { useAppSelector } from '../../../../hooks';
 
 const AccountTasksScreen: React.FC<NavigationPropBase> = ({ navigation }) => {

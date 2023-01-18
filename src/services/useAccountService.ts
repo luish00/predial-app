@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useApiGet, useFetch } from '../../../hooks';
+import { useApiGet, useAppDispatch, useFetch } from '../hooks';
 import {
   AccountsGetResponse,
   ContactAccountResponse,
   CreateContactPayload,
-} from '../../../models';
-import { AccountDetailsProp, ContactProp } from '../../../types';
+} from '../models';
+import { loadContacts } from '../redux/slices/accountDetailsSlice';
+import { AccountDetailsProp, ContactProp } from '../types';
 
 export const useGetAccounts = () => {
   const [accounts, setAccounts] = useState<AccountsGetResponse[]>([]);
@@ -35,44 +36,68 @@ export const useGetAccounts = () => {
   return { refreshAccounts, accounts, isLoadingAccount: isLoading };
 };
 
-export const useGetAccountContacts = (id = '') => {
+export const useGetAccountContacts = ({ id = '', autoLoad = true }) => {
+  const dispatch = useAppDispatch();
   const [contacts, setContacts] = useState<ContactProp[]>([]);
+  const [isRefreshing, setRefreshing] = useState(false);
 
   const { get, isLoading, result } =
     useApiGet<ContactAccountResponse[]>('contact');
+
+  const getAccount = useCallback(() => {
+    get({ params: { accountId: id } });
+  }, [get, id]);
+
+  const onRreshContacts = useCallback(() => {
+    if (isRefreshing) {
+      return;
+    }
+
+    setRefreshing(true);
+    getAccount();
+  }, [getAccount, isRefreshing]);
 
   useEffect(() => {
     if (isLoading || !result?.isValid || !result.data) {
       return;
     }
 
-    setContacts(
-      result.data.map(item => ({
-        AccountId: item.AccountId,
-        Email: item.Email,
-        FirstName: item.FirstName,
-        Id: item.Id,
-        IsOwner: item.IsOwner,
-        LastName: item.LastName,
-        MiddleName: item.MiddleName,
-        Mobile: item.Mobile,
-        Name: item.Name,
-        Phone: item.Phone,
-        Relationship: item.Relationship,
-      })),
-    );
-  }, [isLoading, result]);
+    const data = result.data.map(item => ({
+      AccountId: item.AccountId,
+      Email: item.Email,
+      FirstName: item.FirstName,
+      Id: item.Id,
+      IsOwner: item.IsOwner,
+      LastName: item.LastName,
+      MiddleName: item.MiddleName,
+      Mobile: item.Mobile,
+      Name: item.Name,
+      Phone: item.Phone,
+      Relationship: item.Relationship,
+    }));
+    setContacts(data);
+
+    dispatch(loadContacts(data));
+  }, [dispatch, isLoading, result]);
 
   useEffect(() => {
-    if (!id) {
+    if (!autoLoad || !id) {
       return;
     }
 
-    get({ params: { accountId: id } });
+    getAccount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [autoLoad]);
 
-  return { contacts, isLoading };
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    setRefreshing(false);
+  }, [result, isLoading]);
+
+  return { contacts, isLoading, isRefreshing, onRreshContacts };
 };
 
 export const useCreateContact = () => {

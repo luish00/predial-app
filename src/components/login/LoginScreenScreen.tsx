@@ -11,7 +11,7 @@ import { Container } from '../common/grids/Container';
 import { PrimaryButton } from '../common/buttons/PrimaryButton';
 import { validateEmail } from '../../utilities/utils';
 import { FormNextFocus } from '../common/form/FormNextFocus';
-import { useLoginService } from './services/useAuthService';
+import { useLoginService } from '../../services';
 
 import styles from './loginScreen.style';
 

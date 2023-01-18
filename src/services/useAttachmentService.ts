@@ -30,7 +30,7 @@ export const useCreateAttachmentService = () => {
 
       await apiCall({
         path: 'attachment',
-        body: { ...item, Body: bodyBase64 },
+        body: { ...item, Body: bodyBase64.replace(/\n/g, '') },
       });
 
       setIndex((prev: number) => prev + 1);

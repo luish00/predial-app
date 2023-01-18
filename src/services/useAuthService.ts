@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAuthContext } from '../../../contexts/useAuthContext';
+import { useAuthContext } from '../contexts/useAuthContext';
 
-import { useApiService } from '../../../hooks';
-import { UserProp } from '../../../types';
-import { LoginRequest, LoginResponse } from '../../../models';
+import { useApiService } from '../hooks';
+import { UserProp } from '../types';
+import { LoginRequest, LoginResponse } from '../models';
 
 const useLoginSingIn = () => {
   const {

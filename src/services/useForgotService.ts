@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useFetch } from '../../hooks';
+import { useFetch } from '../hooks';
 
 const useForgotService = () => {
   const { post } = useFetch();

@@ -16,6 +16,7 @@ export interface AccountDetailsProp {
   AccountNumber: string;
   FirstName: string;
   MiddleName?: string;
+  NotificationLocation?: string;
   LastName: string;
   Street?: string;
   PostalCode?: string;

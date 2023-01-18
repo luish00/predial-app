@@ -24,7 +24,7 @@ import { useValidateInput } from '../../../common/form/hooks/useValidateInput';
 import colors from '../../../../colors';
 import { InputFormKeys, InputValidations } from './accountDetails.validation';
 import { ModalLoading } from '../../../common/modals';
-import { useUpdateAccount } from '../../services/useAccountService';
+import { useUpdateAccount } from '../../../../services';
 
 const styles = StyleSheet.create({
   container: {
@@ -191,13 +191,30 @@ const AccountDetailsScreen: React.FC = () => {
               />
             </>
           ) : (
-            <InputWithImage
-              editable={false}
-              label="Domicilio"
-              nativeID="fullAccountAddress"
-              returnKeyType="next"
-              value={fullAccountAddress}
-            />
+            // <InputWithImage
+            //   editable={false}
+            //   label="Domicilio"
+            //   nativeID="fullAccountAddress"
+            //   returnKeyType="next"
+            //   value={fullAccountAddress}
+            // />
+            <>
+              <InputWithImage
+                editable={false}
+                label="Dirección"
+                nativeID="Street"
+                returnKeyType="next"
+                value={account?.Street}
+              />
+
+              <InputWithImage
+                editable={false}
+                label="Dirección de notificación"
+                nativeID="NotificationLocation"
+                returnKeyType="next"
+                value={account?.NotificationLocation}
+              />
+            </>
           )}
 
           <InputWithImage
@@ -243,7 +260,8 @@ const AccountDetailsScreen: React.FC = () => {
           ))}
         </Col>
 
-        <Row style={styles.editButton} justifyContent="flex-end">
+        {/* TODO */}
+        {/* <Row style={styles.editButton} justifyContent="flex-end">
           {editMode ? (
             <>
               <PrimaryButton
@@ -263,7 +281,7 @@ const AccountDetailsScreen: React.FC = () => {
               Editar
             </PrimaryButton>
           )}
-        </Row>
+        </Row> */}
       </Container>
 
       <ModalLoading visible={modalVisible} />

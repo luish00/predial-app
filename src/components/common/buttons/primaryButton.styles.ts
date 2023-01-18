@@ -18,6 +18,9 @@ export const stylesPrimary = StyleSheet.create({
   buttonDisabled: {
     opacity: 0.4,
   },
+  loading: {
+    height: 40,
+  },
 });
 
 export const stylesBorderLess = StyleSheet.create({

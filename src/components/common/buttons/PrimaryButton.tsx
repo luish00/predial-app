@@ -1,4 +1,5 @@
-import React from 'react';
+import AnimatedLottieView from 'lottie-react-native';
+import React, { useCallback, useMemo } from 'react';
 import {
   ImageSourcePropType,
   Text,
@@ -7,6 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { loadingCircle } from '../../../assets/lottie';
 import { Row } from '../grids';
 import { ImageIcon } from '../images';
 import { stylesBorderLess, stylesPrimary } from './primaryButton.styles';
@@ -23,6 +25,7 @@ interface Props {
   children: string;
   disabled?: boolean;
   icon?: ImageSourcePropType | undefined;
+  isLoading?: boolean;
   minWidth?: number;
   onPress?: () => void;
   size?: 'auto' | 'big' | 'mid' | 'small';
@@ -72,10 +75,11 @@ const PrimaryButton: React.FC<Props> = ({
   borderLess,
   children,
   disabled = false,
-  onPress,
-  style,
-  size = 'auto',
   icon,
+  isLoading,
+  onPress,
+  size = 'auto',
+  style,
   textColor,
   textFontSize,
   minWidth,
@@ -98,15 +102,9 @@ const PrimaryButton: React.FC<Props> = ({
     return { fontSize: textFontSize };
   }, [textFontSize]);
 
-  return (
-    <TouchableNativeFeedback onPress={onPress} disabled={disabled}>
-      <View
-        style={[
-          styles.container,
-          { alignSelf: alignSelf, width: sizes[size], minWidth: minWidth },
-          style,
-          disabled && styles.buttonDisabled,
-        ]}>
+  const Content = useCallback(
+    () => (
+      <>
         {icon ? (
           <IconTextButton
             text={children}
@@ -122,6 +120,30 @@ const PrimaryButton: React.FC<Props> = ({
             customFontSize={customFontSize}
             styles={styles}
           />
+        )}
+      </>
+    ),
+    [children, customColor, customFontSize, icon, styles],
+  );
+
+  return (
+    <TouchableNativeFeedback onPress={onPress} disabled={disabled}>
+      <View
+        style={[
+          styles.container,
+          { alignSelf: alignSelf, width: sizes[size], minWidth: minWidth },
+          style,
+          disabled && styles.buttonDisabled,
+        ]}>
+        {isLoading ? (
+          <AnimatedLottieView
+            style={stylesPrimary.loading}
+            loop
+            autoPlay
+            source={loadingCircle}
+          />
+        ) : (
+          <Content />
         )}
       </View>
     </TouchableNativeFeedback>

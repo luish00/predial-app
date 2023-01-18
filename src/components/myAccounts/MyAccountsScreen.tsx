@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 
 import { searchIcon } from '../../assets/icons';
 
@@ -12,6 +12,12 @@ import { HomeTabNavigationProp } from '../home/homeTab';
 import { MyAccountItem } from './components/MyAccountItem';
 import { MyAccountListEmpty } from './components/MyAccountListEmpty';
 
+const styles = StyleSheet.create({
+  marginBotton: {
+    marginBottom: 120,
+  },
+});
+
 const MyAccountsScreen: React.FC<HomeTabNavigationProp> = ({
   accounts,
   isLoadingAccount,
@@ -23,13 +29,13 @@ const MyAccountsScreen: React.FC<HomeTabNavigationProp> = ({
   const [dataFilter, setDataFilter] = useState<AccountDetailsProp[]>([]);
 
   useEffect(() => {
-    if (isLoadingAccount || data.length > 0) {
+    if (isLoadingAccount) {
       return;
     }
 
     setData(accounts);
     setDataFilter(accounts);
-  }, [isLoadingAccount, data, accounts]);
+  }, [isLoadingAccount, accounts]);
 
   const handleChangeSearch = useCallback(
     (value: string) => {
@@ -87,6 +93,7 @@ const MyAccountsScreen: React.FC<HomeTabNavigationProp> = ({
         renderItem={({ item }) => {
           return <MyAccountItem account={item} navigation={navigation} />;
         }}
+        style={styles.marginBotton}
         refreshControl={
           <RefreshControl refreshing={isLoadingAccount} onRefresh={onRefresh} />
         }

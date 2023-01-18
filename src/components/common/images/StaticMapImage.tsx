@@ -12,6 +12,7 @@ import { serializeForUri } from '../../../utilities/utils';
 const MAPS_URL_BASE = 'https://maps.googleapis.com/maps/api/staticmap';
 
 interface Props {
+  direction?: string;
   latitude?: string | null | number;
   longitude?: string | null | number;
   style?: StyleProp<any>;
@@ -26,24 +27,36 @@ const styles = StyleSheet.create({
   },
 });
 
-const StaticMapImage: React.FC<Props> = ({ style, latitude, longitude }) => {
+const StaticMapImage: React.FC<Props> = ({
+  direction,
+  latitude,
+  longitude,
+  style,
+}) => {
+  const directionEncode = direction?.toLocaleLowerCase().split(' ').join('+');
+  const center = latitude
+    ? `${latitude},${longitude}`
+    : `Mazatlan, ${directionEncode}`;
+  const latLong = latitude ? `|${latitude},${longitude}` : '';
   const params = {
-    center: `${latitude},${longitude}`,
+    center,
     zoom: 16,
     size: '600x300',
     maptype: 'roadmap',
-    markers: `color:red|label:S|${latitude},${longitude}`,
+    markers: `color:red|label:S|Mazatlan, ${directionEncode}`,
     key: GOOGLE_MAP_KEY,
   };
 
   const url = `${MAPS_URL_BASE}?${serializeForUri(params)}`;
 
+  console.log('url', url);
+
   const onOpenMap = React.useCallback(() => {
-    const navigationUri = `google.navigation:q=${latitude},${longitude}`;
-    const geoUri = `geo:${latitude},${longitude}?q=${latitude},${longitude}`;
+    const navigationUri = `google.navigation:q=${center}`;
+    const geoUri = `geo:${latitude},${longitude}?q=${center}`;
 
     return Linking.openURL(navigationUri).catch(() => Linking.openURL(geoUri));
-  }, [latitude, longitude]);
+  }, [center, latitude, longitude]);
 
   return (
     <TouchableHighlight onPress={onOpenMap}>

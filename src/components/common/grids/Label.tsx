@@ -20,6 +20,7 @@ interface Props {
     | '900'
     | undefined;
   color?: string;
+  selectable?: boolean;
   textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify' | undefined;
 }
 
@@ -31,12 +32,14 @@ const Label: React.FC<Props> = ({
   children,
   color = colors.textPrimary,
   fontSize,
-  textAlign,
   fontWeight,
+  selectable,
   style,
+  textAlign,
 }) => {
   return (
     <Text
+      selectable={selectable}
       style={[styles.text, style, { color, fontSize, fontWeight, textAlign }]}>
       {children}
     </Text>

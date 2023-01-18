@@ -24,7 +24,7 @@ interface Props {
 }
 
 const MyAccountItem: React.FC<Props> = ({ account, navigation }) => {
-  const { fullAccountName, fullAccountAddress } = useAccountUtils(account);
+  const { fullAccountName } = useAccountUtils(account);
 
   const onItemPress = React.useCallback(() => {
     navigation.navigate('accountDetailsTab', { account });

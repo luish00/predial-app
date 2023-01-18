@@ -8,9 +8,10 @@ import {
 } from 'react-native';
 
 interface Props {
+  buttonStyle?: ViewStyle;
   image: ImageSourcePropType;
   onPress: () => void;
-  buttonStyle?: ViewStyle;
+  tintColor?: string;
 }
 
 const styles = StyleSheet.create({
@@ -20,13 +21,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const ButtonImage: React.FC<Props> = ({ buttonStyle, image, onPress }) => (
+const ButtonImage: React.FC<Props> = ({ buttonStyle, image, tintColor, onPress }) => (
   <TouchableHighlight
     style={buttonStyle}
     onPress={onPress}
     activeOpacity={0.2}
     underlayColor="transparent">
-    <Image style={styles.image} source={image} />
+    <Image style={[styles.image, { tintColor }]} source={image} />
   </TouchableHighlight>
 );
 

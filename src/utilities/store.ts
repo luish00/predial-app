@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import AsyncStorage from '@react-native-community/async-storage';
-import { AttachmentModel, AttachmentTaskStorage } from '../models/AttachmentModel';
+import {
+  AttachmentModel,
+  AttachmentTaskStorage,
+} from '../models/AttachmentModel';
 
 interface SetItem<T> {
   key: string;
@@ -9,7 +12,7 @@ interface SetItem<T> {
 }
 
 const STORAGE_KEY_NAME = '@Oidem:';
-const doNothing = () => { };
+const doNothing = () => {};
 
 enum Keys {
   USER_TOKEN = 'USER_TOKEN',

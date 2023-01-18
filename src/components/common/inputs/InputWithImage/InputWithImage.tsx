@@ -94,9 +94,11 @@ const InputWithImage: React.FC<InputProps> = ({
           {...rest}
         />
 
-        <View style={[styles.imageContainer, error && styles.inputError]}>
-          <ImageIcon source={image} width={30} height={30} />
-        </View>
+        {image && (
+          <View style={[styles.imageContainer, error && styles.inputError]}>
+            <ImageIcon source={image} width={30} height={30} />
+          </View>
+        )}
       </Row>
 
       {messageError && <Label color={colors.inputError}>{messageError}</Label>}

@@ -3,3 +3,4 @@ export * from './useApi';
 export * from './useReducerState';
 export * from '../redux/hooks/reduxHooks';
 export * from './useTaskLocalStorage';
+export * from './useOpenMap';

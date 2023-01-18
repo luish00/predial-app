@@ -13,6 +13,7 @@
     "build": "yarn make && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/material-top-tabs": "^6.3.0",

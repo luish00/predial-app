@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import { useAccountUtils } from '../../../../hooks/account/useAccountUtils';
 import { toCurrency } from '../../../../utilities/utils';
@@ -8,6 +9,7 @@ import {
   useAppDispatch,
   useAppSelector,
   useInputReducerState,
+  useOpenMap,
 } from '../../../../hooks';
 import { AccountDetailsProp } from '../../../../types';
 import { loadAccount } from '../../../../redux/slices/accountDetailsSlice';
@@ -16,26 +18,44 @@ import { Col, Container, Label } from '../../../common/grids';
 import { StaticMapImage } from '../../../common/images';
 import { InputForm, InputWithImage } from '../../../common/inputs';
 import { Row } from '../../../common/grids';
-import { PrimaryButton } from '../../../common/buttons/PrimaryButton';
+// import { PrimaryButton } from '../../../common/buttons/PrimaryButton';
 import { FormNextFocus } from '../../../common/form/FormNextFocus';
 
-import { editIcon, saveIcon } from '../../../../assets/icons';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { editIcon, mapIcon, saveIcon } from '../../../../assets/icons';
 import { useValidateInput } from '../../../common/form/hooks/useValidateInput';
 import colors from '../../../../colors';
 import { InputFormKeys, InputValidations } from './accountDetails.validation';
 import { ModalLoading } from '../../../common/modals';
 import { useUpdateAccount } from '../../../../services';
+import { ButtonImage } from '../../../common/buttons/ButtonImage';
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 32,
   },
+  direcion: {
+    marginBottom: 16,
+  },
   editButton: {
     paddingVertical: 16,
   },
+  flex1: {
+    flex: 1,
+  },
   cancelButton: {
     marginRight: 16,
+  },
+  mapButton: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderColor: colors.secondary,
+    borderRadius: 8,
+    borderWidth: 2,
+    height: 50,
+    justifyContent: 'center',
+    width: 50,
   },
 });
 
@@ -50,8 +70,7 @@ const AccountDetailsScreen: React.FC = () => {
   const { state: accountReducer, onChangeInput } =
     useInputReducerState<AccountDetailsProp>(accountDetails);
 
-  const { fullAccountName, fullAccountAddress } =
-    useAccountUtils(accountDetails);
+  const { fullAccountName } = useAccountUtils(accountDetails);
 
   const { formErrors, validateForm } = useValidateInput(
     InputValidations,
@@ -60,14 +79,18 @@ const AccountDetailsScreen: React.FC = () => {
 
   const { updateAccount } = useUpdateAccount(accountReducer?.Id);
 
+  const { onOpenNavigationMap } = useOpenMap();
+
   const account = useMemo(() => {
     return editMode ? accountReducer : accountDetails;
   }, [accountDetails, editMode, accountReducer]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onEditMode = useCallback(() => {
     setEditMode((prev: boolean) => !prev);
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSave = useCallback(async () => {
     if (!accountReducer) {
       return;
@@ -97,6 +120,20 @@ const AccountDetailsScreen: React.FC = () => {
       text1,
     });
   }, [accountReducer, validateForm, updateAccount, dispatch]);
+
+  const onCopyDirirection = useCallback((direction: string | undefined) => {
+    if (!direction) {
+      return;
+    }
+
+    Clipboard.setString(direction);
+
+    Toast.show({
+      type: 'info',
+      text1: 'Se copió la dirección',
+      text2: direction,
+    });
+  }, []);
 
   return (
     <>
@@ -199,21 +236,55 @@ const AccountDetailsScreen: React.FC = () => {
             //   value={fullAccountAddress}
             // />
             <>
-              <InputWithImage
-                editable={false}
-                label="Dirección"
-                nativeID="Street"
-                returnKeyType="next"
-                value={account?.Street}
-              />
+              <Row>
+                <Pressable
+                  onPress={() => onCopyDirirection(account?.Street)}
+                  style={styles.flex1}>
+                  <View>
+                    <InputWithImage
+                      editable={false}
+                      label="Dirección del predio"
+                      nativeID="Street"
+                      returnKeyType="next"
+                      value={account?.Street}
+                    />
+                  </View>
+                </Pressable>
 
-              <InputWithImage
-                editable={false}
-                label="Dirección de notificación"
-                nativeID="NotificationLocation"
-                returnKeyType="next"
-                value={account?.NotificationLocation}
-              />
+                <ButtonImage
+                  image={mapIcon}
+                  tintColor={colors.textPrimary}
+                  onPress={() => onOpenNavigationMap(account?.Street || '')}
+                  buttonStyle={styles.mapButton}
+                />
+              </Row>
+
+              <Row>
+                <Pressable
+                  onPress={() =>
+                    onCopyDirirection(account?.NotificationLocation)
+                  }
+                  style={styles.flex1}>
+                  <View>
+                    <InputWithImage
+                      editable={false}
+                      label="Dirección de notificación"
+                      nativeID="NotificationLocation"
+                      returnKeyType="next"
+                      value={account?.NotificationLocation}
+                    />
+                  </View>
+                </Pressable>
+
+                <ButtonImage
+                  image={mapIcon}
+                  tintColor={colors.textPrimary}
+                  onPress={() =>
+                    onOpenNavigationMap(account?.NotificationLocation || '')
+                  }
+                  buttonStyle={styles.mapButton}
+                />
+              </Row>
             </>
           )}
 
@@ -248,10 +319,23 @@ const AccountDetailsScreen: React.FC = () => {
         </FormNextFocus>
 
         {!editMode && (
-          <StaticMapImage
-            latitude={account?.Latitud}
-            longitude={account?.Longitud}
-          />
+          <>
+            <Col>
+              <Label fontSize={30} textAlign="center">
+                Dirección del predio
+              </Label>
+
+              <Label style={styles.direcion} fontSize={20} selectable>
+                {account?.Street}
+              </Label>
+            </Col>
+
+            <StaticMapImage
+              direction={account?.NotificationLocation}
+              latitude={account?.Latitud}
+              longitude={account?.Longitud}
+            />
+          </>
         )}
 
         <Col>

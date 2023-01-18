@@ -12,6 +12,7 @@ import searchIcon from './search.png';
 import unCheckedRadioWhiteIcon from './radio-button-unchecked-white.png';
 import unCheckIcon from './uncheck.png';
 import eventIcon from './event.png';
+import mapIcon from './map.png';
 
 export {
   accountIcon,
@@ -22,6 +23,7 @@ export {
   editIcon,
   emailIcon,
   eventIcon,
+  mapIcon,
   passwordIcon,
   repeatWhiteIcon,
   saveIcon,

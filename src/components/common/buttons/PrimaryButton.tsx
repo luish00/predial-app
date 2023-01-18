@@ -1,5 +1,5 @@
 import AnimatedLottieView from 'lottie-react-native';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   ImageSourcePropType,
   Text,

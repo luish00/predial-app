@@ -9,7 +9,7 @@ export const useOpenMap = () => {
       return;
     }
 
-    console.log('query', query)
+    console.log('query', query);
 
     const navigationUri = `google.ya:q=${query}`;
     const urlMap = `${URL_MAP}${query}`;

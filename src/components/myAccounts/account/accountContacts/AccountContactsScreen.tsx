@@ -8,7 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { ContactProp } from '../../../../types';
 
-import { useCreateContact, useGetAccountContacts, useGetAccounts } from '../../../../services';
+import { useCreateContact, useGetAccountContacts } from '../../../../services';
 
 import { FabButton } from '../../../common/buttons/FabButton';
 import { ListEmpty } from '../../../common/lists';
@@ -42,7 +42,7 @@ const AccountContactsScreen: React.FC = () => {
     resetAccountService,
   } = useCreateContact();
 
-  const { isRefreshing, onRreshContacts} = useGetAccountContacts({
+  const { isRefreshing, onRreshContacts } = useGetAccountContacts({
     id: accountDetails?.Id ? String(accountDetails.Id) : '',
     autoLoad: false,
   });

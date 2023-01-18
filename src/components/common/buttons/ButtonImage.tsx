@@ -21,7 +21,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const ButtonImage: React.FC<Props> = ({ buttonStyle, image, tintColor, onPress }) => (
+const ButtonImage: React.FC<Props> = ({
+  buttonStyle,
+  image,
+  tintColor,
+  onPress,
+}) => (
   <TouchableHighlight
     style={buttonStyle}
     onPress={onPress}

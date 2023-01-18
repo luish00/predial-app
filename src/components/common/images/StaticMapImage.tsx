@@ -37,7 +37,7 @@ const StaticMapImage: React.FC<Props> = ({
   const center = latitude
     ? `${latitude},${longitude}`
     : `Mazatlan, ${directionEncode}`;
-  const latLong = latitude ? `|${latitude},${longitude}` : '';
+
   const params = {
     center,
     zoom: 16,
